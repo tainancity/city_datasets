@@ -1,0 +1,13 @@
+.htaccess
+Config/core.php
+Config/database.php
+tmp/*
+webroot/media/*
+webroot/.htaccess
+webroot/css/cc_*
+webroot/js/cc_*
+webroot/js/c/*
+
+error
+stats
+nbproject

@@ -15,15 +15,6 @@
                 echo __('Add 資料集', true);
                 ?></legend>
             <?php
-            foreach ($belongsToModels AS $key => $model) {
-                echo $this->Form->input('Dataset.' . $model['foreignKey'], array(
-                    'type' => 'select',
-                    'label' => $model['label'],
-                    'options' => $$key,
-                    'div' => 'form-group',
-                    'class' => 'form-control',
-                ));
-            }
             echo $this->Form->input('Dataset.name', array(
                 'label' => '名稱',
                 'div' => 'form-group',

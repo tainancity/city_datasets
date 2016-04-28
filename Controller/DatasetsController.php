@@ -135,88 +135,58 @@ class DatasetsController extends AppController {
     }
 
     function admin_view($id = null) {
-        if (!$id || !$this->data = $this->Dataset->read(null, $id)) {
+        if (!$id || !$this->data = $this->Dataset->read(null, hex2bin($id))) {
             $this->Session->setFlash(__('Please do following links in the page', true));
             $this->redirect(array('action' => 'index'));
         }
     }
 
-    function admin_add($foreignModel = null, $foreignId = 0) {
-        $foreignId = intval($foreignId);
-        $foreignKeys = array(
-            'Organization' => 'Organization_id',
-        );
-        if (array_key_exists($foreignModel, $foreignKeys) && $foreignId > 0) {
-            if (!empty($this->data)) {
-                $this->data['Dataset'][$foreignKeys[$foreignModel]] = $foreignId;
-            }
-        } else {
-            $foreignModel = '';
-        }
+    function admin_add($parentId = null) {
         if (!empty($this->data)) {
+            $dataToSave = $this->data;
+            if (!empty($parentId)) {
+                $dataToSave['Dataset']['parent_id'] = hex2bin($parentId);
+            }
             $this->Dataset->create();
-            if ($this->Dataset->save($this->data)) {
+            if ($this->Dataset->save($dataToSave)) {
                 $this->Session->setFlash(__('The data has been saved', true));
                 $this->redirect(array('action' => 'index'));
             } else {
                 $this->Session->setFlash(__('Something was wrong during saving, please try again', true));
             }
         }
-        $this->set('foreignId', $foreignId);
-        $this->set('foreignModel', $foreignModel);
-
-        $belongsToModels = array(
-            'listOrganization' => array(
-                'label' => '組織',
-                'modelName' => 'Organization',
-                'foreignKey' => 'Organization_id',
-            ),
-        );
-
-        foreach ($belongsToModels AS $key => $model) {
-            if ($foreignModel == $model['modelName']) {
-                unset($belongsToModels[$key]);
-                continue;
-            }
-            $this->set($key, $this->Dataset->$model['modelName']->find('list'));
-        }
-        $this->set('belongsToModels', $belongsToModels);
     }
 
     function admin_edit($id = null) {
-        if (!$id && empty($this->data)) {
+        if (!empty($id)) {
+            $item = $this->Dataset->read(null, hex2bin($id));
+        }
+        if (empty($item)) {
             $this->Session->setFlash(__('Please do following links in the page', true));
             $this->redirect($this->referer());
         }
         if (!empty($this->data)) {
-            if ($this->Dataset->save($this->data)) {
+            $dataToSave = $this->data;
+            $this->Dataset->id = $dataToSave['Dataset']['id'] = hex2bin($id);
+            if (!empty($dataToSave['Dataset']['parent_id'])) {
+                $dataToSave['Dataset']['parent_id'] = hex2bin($dataToSave['Dataset']['parent_id']);
+            }
+            if ($this->Dataset->save($dataToSave)) {
                 $this->Session->setFlash(__('The data has been saved', true));
                 $this->redirect(array('action' => 'index'));
             } else {
                 $this->Session->setFlash(__('Something was wrong during saving, please try again', true));
             }
+        } else {
+            $this->data = $item;
         }
         $this->set('id', $id);
-        $this->data = $this->Dataset->read(null, $id);
-
-        $belongsToModels = array(
-            'listOrganization' => array(
-                'label' => '組織',
-                'modelName' => 'Organization',
-                'foreignKey' => 'Organization_id',
-            ),
-        );
-
-        foreach ($belongsToModels AS $key => $model) {
-            $this->set($key, $this->Dataset->$model['modelName']->find('list'));
-        }
-        $this->set('belongsToModels', $belongsToModels);
     }
 
     function admin_delete($id = null) {
         if (!$id) {
             $this->Session->setFlash(__('Please do following links in the page', true));
-        } else if ($this->Dataset->delete($id)) {
+        } else if ($this->Dataset->delete(hex2bin($id))) {
             $this->Session->setFlash(__('The data has been deleted', true));
         }
         $this->redirect(array('action' => 'index'));

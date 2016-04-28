@@ -8,6 +8,7 @@
             <?php
             echo $this->Form->input('Tag.id');
             echo $this->Form->input('Tag.parent_id', array(
+                'type' => 'text',
                 'label' => '父項目',
                 'div' => 'form-group',
                 'class' => 'form-control',

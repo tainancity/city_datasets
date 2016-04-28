@@ -6,11 +6,6 @@
                 echo __('Add 標籤', true);
                 ?></legend>
             <?php
-            echo $this->Form->input('Tag.parent_id', array(
-                'label' => '父項目',
-                'div' => 'form-group',
-                'class' => 'form-control',
-            ));
             echo $this->Form->input('Tag.name', array(
                 'label' => '名稱',
                 'div' => 'form-group',

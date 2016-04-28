@@ -7,15 +7,6 @@
                 ?></legend>
             <?php
             echo $this->Form->input('Dataset.id');
-            foreach ($belongsToModels AS $key => $model) {
-                echo $this->Form->input('Dataset.' . $model['foreignKey'], array(
-                    'type' => 'select',
-                    'label' => $model['label'],
-                    'options' => $$key,
-                    'div' => 'form-group',
-                    'class' => 'form-control',
-                ));
-            }
             echo $this->Form->input('Dataset.parent_id', array(
                 'type' => 'text',
                 'label' => '父項目',

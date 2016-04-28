@@ -34,7 +34,9 @@ class Organization extends AppModel {
 
     public function afterFind($results, $primary = false) {
         foreach ($results AS $k => $v) {
-            $results[$k][$this->name]['id'] = bin2hex($results[$k][$this->name]['id']);
+            if (isset($results[$k][$this->name]['id'])) {
+                $results[$k][$this->name]['id'] = bin2hex($results[$k][$this->name]['id']);
+            }
             if (!empty($results[$k][$this->name]['parent_id'])) {
                 $results[$k][$this->name]['parent_id'] = bin2hex($results[$k][$this->name]['parent_id']);
             }

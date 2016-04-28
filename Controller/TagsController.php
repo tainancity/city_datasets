@@ -70,7 +70,7 @@ class TagsController extends AppController {
     }
 
     function view($id = null) {
-        if (!$id || !$this->data = $this->Tag->read(null, $id)) {
+        if (!$id || !$this->data = $this->Tag->read(null, hex2bin($id))) {
             $this->Session->setFlash(__('Please do following links in the page', true));
             $this->redirect(array('action' => 'index'));
         }
@@ -157,16 +157,20 @@ class TagsController extends AppController {
     }
 
     function admin_view($id = null) {
-        if (!$id || !$this->data = $this->Tag->read(null, $id)) {
+        if (!$id || !$this->data = $this->Tag->read(null, hex2bin($id))) {
             $this->Session->setFlash(__('Please do following links in the page', true));
             $this->redirect(array('action' => 'index'));
         }
     }
 
-    function admin_add() {
+    function admin_add($parentId = null) {
         if (!empty($this->data)) {
+            $dataToSave = $this->data;
+            if (!empty($parentId)) {
+                $dataToSave['Tag']['parent_id'] = hex2bin($parentId);
+            }
             $this->Tag->create();
-            if ($this->Tag->save($this->data)) {
+            if ($this->Tag->save($dataToSave)) {
                 $this->Session->setFlash(__('The data has been saved', true));
                 $this->redirect(array('action' => 'index'));
             } else {
@@ -176,26 +180,35 @@ class TagsController extends AppController {
     }
 
     function admin_edit($id = null) {
-        if (!$id && empty($this->data)) {
+        if (!empty($id)) {
+            $item = $this->Tag->read(null, hex2bin($id));
+        }
+        if (empty($item)) {
             $this->Session->setFlash(__('Please do following links in the page', true));
-            $this->redirect($this->referer());
+            $this->redirect('/');
         }
         if (!empty($this->data)) {
-            if ($this->Tag->save($this->data)) {
+            $dataToSave = $this->data;
+            $this->Tag->id = $dataToSave['Tag']['id'] = hex2bin($id);
+            if (!empty($dataToSave['Tag']['parent_id'])) {
+                $dataToSave['Tag']['parent_id'] = hex2bin($dataToSave['Tag']['parent_id']);
+            }
+            if ($this->Tag->save($dataToSave)) {
                 $this->Session->setFlash(__('The data has been saved', true));
                 $this->redirect(array('action' => 'index'));
             } else {
                 $this->Session->setFlash(__('Something was wrong during saving, please try again', true));
             }
+        } else {
+            $this->data = $item;
         }
         $this->set('id', $id);
-        $this->data = $this->Tag->read(null, $id);
     }
 
     function admin_delete($id = null) {
         if (!$id) {
             $this->Session->setFlash(__('Please do following links in the page', true));
-        } else if ($this->Tag->delete($id)) {
+        } else if ($this->Tag->delete(hex2bin($id))) {
             $this->Session->setFlash(__('The data has been deleted', true));
         }
         $this->redirect(array('action' => 'index'));

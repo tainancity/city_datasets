@@ -34,22 +34,6 @@
             }
             ?>&nbsp;
         </div>
-        <div class="col-md-2">左</div>
-        <div class="col-md-9"><?php
-            if ($this->data['Organization']['lft']) {
-
-                echo $this->data['Organization']['lft'];
-            }
-            ?>&nbsp;
-        </div>
-        <div class="col-md-2">右</div>
-        <div class="col-md-9"><?php
-            if ($this->data['Organization']['rght']) {
-
-                echo $this->data['Organization']['rght'];
-            }
-            ?>&nbsp;
-        </div>
     </div>
     <div class="btn-group">
         <?php echo $this->Html->link(__('組織 List', true), array('action' => 'index'), array('class' => 'btn btn-default')); ?>

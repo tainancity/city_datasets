@@ -26,22 +26,6 @@
             }
             ?>&nbsp;
         </div>
-        <div class="col-md-2">左</div>
-        <div class="col-md-9">&nbsp;<?php
-            if ($this->data['Tag']['lft']) {
-
-                echo $this->data['Tag']['lft'];
-            }
-            ?>&nbsp;
-        </div>
-        <div class="col-md-2">右</div>
-        <div class="col-md-9">&nbsp;<?php
-            if ($this->data['Tag']['rght']) {
-
-                echo $this->data['Tag']['rght'];
-            }
-            ?>&nbsp;
-        </div>
     </div>
     <hr />
     <div class="btn-group">

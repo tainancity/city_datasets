@@ -18,8 +18,6 @@
                 <th><?php echo $this->Paginator->sort('Tag.parent_id', '父項目', array('url' => $url)); ?></th>
                 <th><?php echo $this->Paginator->sort('Tag.name', '名稱', array('url' => $url)); ?></th>
                 <th><?php echo $this->Paginator->sort('Tag.model', 'Model', array('url' => $url)); ?></th>
-                <th><?php echo $this->Paginator->sort('Tag.lft', '左', array('url' => $url)); ?></th>
-                <th><?php echo $this->Paginator->sort('Tag.rght', '右', array('url' => $url)); ?></th>
                 <th class="actions"><?php echo __('Action', true); ?></th>
             </tr>
         </thead>
@@ -42,12 +40,6 @@
                         ?></td>
                     <td><?php
                         echo $item['Tag']['model'];
-                        ?></td>
-                    <td><?php
-                        echo $item['Tag']['lft'];
-                        ?></td>
-                    <td><?php
-                        echo $item['Tag']['rght'];
                         ?></td>
                     <td>
                         <div class="btn-group">

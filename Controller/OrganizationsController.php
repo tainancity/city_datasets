@@ -133,8 +133,9 @@ class OrganizationsController extends AppController {
         }
     }
 
-    function admin_add() {
+    function admin_add($parentId = null) {
         if (!empty($this->data)) {
+            $dataToSave = $this->data;
             $this->Organization->create();
             if ($this->Organization->save($this->data)) {
                 $this->Session->setFlash(__('The data has been saved', true));

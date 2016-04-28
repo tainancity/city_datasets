@@ -21,16 +21,6 @@
                 'div' => 'form-group',
                 'class' => 'form-control',
             ));
-            echo $this->Form->input('Tag.lft', array(
-                'label' => '左',
-                'div' => 'form-group',
-                'class' => 'form-control',
-            ));
-            echo $this->Form->input('Tag.rght', array(
-                'label' => '右',
-                'div' => 'form-group',
-                'class' => 'form-control',
-            ));
             ?>
         </fieldset>
     </div>

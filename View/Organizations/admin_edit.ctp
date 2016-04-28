@@ -19,6 +19,7 @@
                 'class' => 'form-control',
             ));
             echo $this->Form->input('Organization.foreign_id', array(
+                'type' => 'text',
                 'label' => '原始編號',
                 'div' => 'form-group',
                 'class' => 'form-control',

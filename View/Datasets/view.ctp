@@ -46,22 +46,6 @@
             }
             ?>&nbsp;
         </div>
-        <div class="col-md-2">左</div>
-        <div class="col-md-9"><?php
-            if ($this->data['Dataset']['lft']) {
-
-                echo $this->data['Dataset']['lft'];
-            }
-            ?>&nbsp;
-        </div>
-        <div class="col-md-2">右</div>
-        <div class="col-md-9"><?php
-            if ($this->data['Dataset']['rght']) {
-
-                echo $this->data['Dataset']['rght'];
-            }
-            ?>&nbsp;
-        </div>
         <div class="col-md-2">建立時間</div>
         <div class="col-md-9"><?php
             if ($this->data['Dataset']['created']) {

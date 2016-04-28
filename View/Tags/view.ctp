@@ -26,22 +26,6 @@
             }
             ?>&nbsp;
         </div>
-        <div class="col-md-2">左</div>
-        <div class="col-md-9"><?php
-            if ($this->data['Tag']['lft']) {
-
-                echo $this->data['Tag']['lft'];
-            }
-            ?>&nbsp;
-        </div>
-        <div class="col-md-2">右</div>
-        <div class="col-md-9"><?php
-            if ($this->data['Tag']['rght']) {
-
-                echo $this->data['Tag']['rght'];
-            }
-            ?>&nbsp;
-        </div>
     </div>
     <div class="btn-group">
         <?php echo $this->Html->link(__('標籤 List', true), array('action' => 'index'), array('class' => 'btn btn-default')); ?>

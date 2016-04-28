@@ -26,9 +26,6 @@
                 <th><?php echo $this->Paginator->sort('Dataset.name', '名稱', array('url' => $url)); ?></th>
                 <th><?php echo $this->Paginator->sort('Dataset.foreign_id', '原始編號', array('url' => $url)); ?></th>
                 <th><?php echo $this->Paginator->sort('Dataset.foreign_uri', '原始網址', array('url' => $url)); ?></th>
-                <th><?php echo $this->Paginator->sort('Dataset.lft', '左', array('url' => $url)); ?></th>
-                <th><?php echo $this->Paginator->sort('Dataset.rght', '右', array('url' => $url)); ?></th>
-                <th><?php echo $this->Paginator->sort('Dataset.created', '建立時間', array('url' => $url)); ?></th>
                 <th><?php echo $this->Paginator->sort('Dataset.modified', '更新時間', array('url' => $url)); ?></th>
                 <th class="actions"><?php echo __('Action', true); ?></th>
             </tr>
@@ -68,15 +65,6 @@
                         ?></td>
                     <td><?php
                         echo $item['Dataset']['foreign_uri'];
-                        ?></td>
-                    <td><?php
-                        echo $item['Dataset']['lft'];
-                        ?></td>
-                    <td><?php
-                        echo $item['Dataset']['rght'];
-                        ?></td>
-                    <td><?php
-                        echo $item['Dataset']['created'];
                         ?></td>
                     <td><?php
                         echo $item['Dataset']['modified'];

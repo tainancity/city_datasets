@@ -8,8 +8,7 @@ class OrganizationsController extends AppController {
     public $paginate = array();
     public $helpers = array();
 
-    function index($foreignModel = null, $foreignId = 0) {
-        $foreignId = intval($foreignId);
+    function index($foreignModel = null, $foreignId = null) {
         $foreignKeys = array();
 
 
@@ -61,8 +60,7 @@ class OrganizationsController extends AppController {
         }
     }
 
-    function admin_index($foreignModel = null, $foreignId = 0, $op = null) {
-        $foreignId = intval($foreignId);
+    function admin_index($foreignModel = null, $foreignId = null, $op = null) {
         $foreignKeys = array();
 
 
@@ -184,7 +182,7 @@ class OrganizationsController extends AppController {
         $this->redirect(array('action' => 'index'));
     }
 
-    function admin_habtmSet($foreignModel = null, $foreignId = 0, $id = 0, $switch = null) {
+    function admin_habtmSet($foreignModel = null, $foreignId = null, $id = null, $switch = null) {
         $habtmKeys = array(
             'Tag' => array(
                 'associationForeignKey' => 'Tag_id',
@@ -193,8 +191,6 @@ class OrganizationsController extends AppController {
             ),
         );
         $foreignModel = array_key_exists($foreignModel, $habtmKeys) ? $foreignModel : null;
-        $foreignId = intval($foreignId);
-        $id = intval($id);
         $switch = in_array($switch, array('on', 'off')) ? $switch : null;
         if (empty($foreignModel) || $foreignId <= 0 || $id <= 0 || empty($switch)) {
             $this->set('habtmMessage', __('Wrong Parameters'));

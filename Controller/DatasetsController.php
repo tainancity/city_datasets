@@ -8,8 +8,7 @@ class DatasetsController extends AppController {
     public $paginate = array();
     public $helpers = array();
 
-    function index($foreignModel = null, $foreignId = 0) {
-        $foreignId = intval($foreignId);
+    function index($foreignModel = null, $foreignId = null) {
         $foreignKeys = array();
 
         $foreignKeys = array(
@@ -65,8 +64,7 @@ class DatasetsController extends AppController {
         }
     }
 
-    function admin_index($foreignModel = null, $foreignId = 0, $op = null) {
-        $foreignId = intval($foreignId);
+    function admin_index($foreignModel = null, $foreignId = null, $op = null) {
         $foreignKeys = array();
 
         $foreignKeys = array(
@@ -192,17 +190,18 @@ class DatasetsController extends AppController {
         $this->redirect(array('action' => 'index'));
     }
 
-    function admin_habtmSet($foreignModel = null, $foreignId = 0, $id = 0, $switch = null) {
+    function admin_habtmSet($foreignModel = null, $foreignId = null, $id = null, $switch = null) {
         $habtmKeys = array(
             'Tag' => array(
-                'associationForeignKey' => 'Tag_id',
-                'foreignKey' => 'Dataset_id',
-                'alias' => 'DatasetsTag',
+                'associationForeignKey' => 'tag_id',
+                'foreignKey' => 'foreign_id',
+                'alias' => 'LinksTag',
+                'conditions' => array(
+                    'LinksTag.model' => 'Dataset',
+                ),
             ),
         );
         $foreignModel = array_key_exists($foreignModel, $habtmKeys) ? $foreignModel : null;
-        $foreignId = intval($foreignId);
-        $id = intval($id);
         $switch = in_array($switch, array('on', 'off')) ? $switch : null;
         if (empty($foreignModel) || $foreignId <= 0 || $id <= 0 || empty($switch)) {
             $this->set('habtmMessage', __('Wrong Parameters'));

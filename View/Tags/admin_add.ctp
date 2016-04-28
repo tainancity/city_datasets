@@ -12,6 +12,11 @@
                 'class' => 'form-control',
             ));
             echo $this->Form->input('Tag.model', array(
+                'type' => 'select',
+                'options' => array(
+                    'Organization' => 'Organization',
+                    'Dataset' => 'Dataset',
+                ),
                 'label' => 'Model',
                 'div' => 'form-group',
                 'class' => 'form-control',

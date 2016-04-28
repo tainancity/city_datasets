@@ -26,6 +26,13 @@ class Tag extends AppModel {
             'className' => 'Organization',
         ),
     );
+    var $hasMany = array(
+        'LinksTag' => array(
+            'foreignKey' => 'tag_id',
+            'dependent' => true,
+            'className' => 'LinksTag',
+        ),
+    );
 
     public function beforeSave($options = array()) {
         if (false === $this->id && empty($this->data[$this->name]['id'])) {

@@ -8,8 +8,7 @@ class TagsController extends AppController {
     public $paginate = array();
     public $helpers = array();
 
-    function index($foreignModel = null, $foreignId = 0) {
-        $foreignId = intval($foreignId);
+    function index($foreignModel = null, $foreignId = null) {
         $foreignKeys = array();
 
 
@@ -76,48 +75,53 @@ class TagsController extends AppController {
         }
     }
 
-    function admin_index($foreignModel = null, $foreignId = 0, $op = null) {
-        $foreignId = intval($foreignId);
+    function admin_index($foreignModel = null, $foreignId = null, $op = null) {
         $foreignKeys = array();
 
 
         $habtmKeys = array(
-            'Dataset' => 'Dataset_id',
-            'Organization' => 'Organization_id',
+            'Dataset' => 'foreign_id',
+            'Organization' => 'foreign_id',
         );
         $foreignKeys = array_merge($habtmKeys, $foreignKeys);
 
         $scope = array();
-        if (array_key_exists($foreignModel, $foreignKeys) && $foreignId > 0) {
+        if (array_key_exists($foreignModel, $foreignKeys) && !empty($foreignId)) {
             $scope['Tag.' . $foreignKeys[$foreignModel]] = $foreignId;
 
             $joins = array(
                 'Dataset' => array(
                     0 => array(
-                        'table' => 'datasets_tags',
-                        'alias' => 'DatasetsTag',
+                        'table' => 'links_tags',
+                        'alias' => 'LinksTag',
                         'type' => 'inner',
-                        'conditions' => array('DatasetsTag.Tag_id = Tag.id'),
+                        'conditions' => array(
+                            'LinksTag.tag_id = Tag.id',
+                            'LinksTag.model' => 'Dataset',
+                        ),
                     ),
                     1 => array(
                         'table' => 'datasets',
                         'alias' => 'Dataset',
                         'type' => 'inner',
-                        'conditions' => array('DatasetsTag.Dataset_id = Dataset.id'),
+                        'conditions' => array('LinksTag.foreign_id = Dataset.id'),
                     ),
                 ),
                 'Organization' => array(
                     0 => array(
-                        'table' => 'organizations_tags',
-                        'alias' => 'OrganizationsTag',
+                        'table' => 'links_tags',
+                        'alias' => 'LinksTag',
                         'type' => 'inner',
-                        'conditions' => array('OrganizationsTag.Tag_id = Tag.id'),
+                        'conditions' => array(
+                            'LinksTag.tag_id = Tag.id',
+                            'LinksTag.model' => 'Organization',
+                        ),
                     ),
                     1 => array(
                         'table' => 'organizations',
                         'alias' => 'Organization',
                         'type' => 'inner',
-                        'conditions' => array('OrganizationsTag.Organization_id = Organization.id'),
+                        'conditions' => array('LinksTag.foreign_id = Organization.id'),
                     ),
                 ),
             );
@@ -128,8 +132,12 @@ class TagsController extends AppController {
                     $this->paginate['Tag']['joins'] = $joins[$foreignModel];
                 }
             }
-        } else {
-            $foreignModel = '';
+        }
+        if (!empty($foreignModel)) {
+            $scope['Tag.model'] = $foreignModel;
+        }
+        if (!empty($foreignId)) {
+            $scope['LinksTag.foreign_id'] = hex2bin($foreignId);
         }
         $this->set('scope', $scope);
         $this->paginate['Tag']['limit'] = 20;
@@ -214,30 +222,35 @@ class TagsController extends AppController {
         $this->redirect(array('action' => 'index'));
     }
 
-    function admin_habtmSet($foreignModel = null, $foreignId = 0, $id = 0, $switch = null) {
+    function admin_habtmSet($foreignModel = null, $foreignId = null, $id = null, $switch = null) {
         $habtmKeys = array(
             'Dataset' => array(
-                'associationForeignKey' => 'Dataset_id',
-                'foreignKey' => 'Tag_id',
-                'alias' => 'DatasetsTag',
+                'associationForeignKey' => 'foreign_id',
+                'foreignKey' => 'tag_id',
+                'alias' => 'LinksTag',
+                'conditions' => array(
+                    'LinksTag.model' => 'Dataset',
+                ),
             ),
             'Organization' => array(
-                'associationForeignKey' => 'Organization_id',
-                'foreignKey' => 'Tag_id',
-                'alias' => 'OrganizationsTag',
+                'associationForeignKey' => 'foreign_id',
+                'foreignKey' => 'tag_id',
+                'alias' => 'LinksTag',
+                'conditions' => array(
+                    'LinksTag.model' => 'Organization',
+                ),
             ),
         );
         $foreignModel = array_key_exists($foreignModel, $habtmKeys) ? $foreignModel : null;
-        $foreignId = intval($foreignId);
-        $id = intval($id);
         $switch = in_array($switch, array('on', 'off')) ? $switch : null;
-        if (empty($foreignModel) || $foreignId <= 0 || $id <= 0 || empty($switch)) {
+        if (empty($foreignModel) || empty($foreignId) || empty($id) || empty($switch)) {
             $this->set('habtmMessage', __('Wrong Parameters'));
         } else {
             $habtmModel = &$this->Tag->$habtmKeys[$foreignModel]['alias'];
             $conditions = array(
                 $habtmKeys[$foreignModel]['associationForeignKey'] => $foreignId,
                 $habtmKeys[$foreignModel]['foreignKey'] => $id,
+                'model' => $foreignModel,
             );
             $status = ($habtmModel->find('count', array(
                         'conditions' => $conditions,

@@ -17,6 +17,7 @@
                 ));
             }
             echo $this->Form->input('Dataset.parent_id', array(
+                'type' => 'text',
                 'label' => '父項目',
                 'div' => 'form-group',
                 'class' => 'form-control',
@@ -33,26 +34,6 @@
             ));
             echo $this->Form->input('Dataset.foreign_uri', array(
                 'label' => '原始網址',
-                'div' => 'form-group',
-                'class' => 'form-control',
-            ));
-            echo $this->Form->input('Dataset.lft', array(
-                'label' => '左',
-                'div' => 'form-group',
-                'class' => 'form-control',
-            ));
-            echo $this->Form->input('Dataset.rght', array(
-                'label' => '右',
-                'div' => 'form-group',
-                'class' => 'form-control',
-            ));
-            echo $this->Form->input('Dataset.created', array(
-                'label' => '建立時間',
-                'div' => 'form-group',
-                'class' => 'form-control',
-            ));
-            echo $this->Form->input('Dataset.modified', array(
-                'label' => '更新時間',
                 'div' => 'form-group',
                 'class' => 'form-control',
             ));

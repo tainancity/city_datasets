@@ -5,8 +5,7 @@ App::uses('AppModel', 'Model');
 class Organization extends AppModel {
 
     var $name = 'Organization';
-    var $actsAs = array(
-    );
+    var $actsAs = array('Tree');
     var $hasAndBelongsToMany = array(
         'Tag' => array(
             'joinTable' => 'links_tags',
@@ -25,9 +24,5 @@ class Organization extends AppModel {
             'className' => 'Dataset',
         ),
     );
-
-    function afterSave($created, $options = array()) {
-        
-    }
 
 }

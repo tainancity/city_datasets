@@ -8,6 +8,7 @@
             <?php
             echo $this->Form->input('Organization.id');
             echo $this->Form->input('Organization.parent_id', array(
+                'type' => 'text',
                 'label' => '父項目',
                 'div' => 'form-group',
                 'class' => 'form-control',
@@ -24,16 +25,6 @@
             ));
             echo $this->Form->input('Organization.foreign_uri', array(
                 'label' => '原始網址',
-                'div' => 'form-group',
-                'class' => 'form-control',
-            ));
-            echo $this->Form->input('Organization.lft', array(
-                'label' => '左',
-                'div' => 'form-group',
-                'class' => 'form-control',
-            ));
-            echo $this->Form->input('Organization.rght', array(
-                'label' => '右',
                 'div' => 'form-group',
                 'class' => 'form-control',
             ));

@@ -18,8 +18,8 @@
     <table class="table table-bordered" id="DatasetsIndexTable">
         <thead>
             <tr>
-                <?php if (empty($scope['Dataset.Organization_id'])): ?>
-                    <th><?php echo $this->Paginator->sort('Dataset.Organization_id', '組織', array('url' => $url)); ?></th>
+                <?php if (empty($scope['Dataset.organization_id'])): ?>
+                    <th><?php echo $this->Paginator->sort('Dataset.organization_id', '組織', array('url' => $url)); ?></th>
                 <?php endif; ?>
 
                 <th><?php echo $this->Paginator->sort('Dataset.parent_id', '父項目', array('url' => $url)); ?></th>
@@ -43,7 +43,7 @@
                 }
                 ?>
                 <tr<?php echo $class; ?>>
-                    <?php if (empty($scope['Dataset.Organization_id'])): ?>
+                    <?php if (empty($scope['Dataset.organization_id'])): ?>
                         <td><?php
                             if (empty($item['Organization']['id'])) {
                                 echo '--';

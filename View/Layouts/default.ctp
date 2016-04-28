@@ -3,7 +3,7 @@
     <head>
         <?php echo $this->Html->charset(); ?>
         <title>
-            city_datasets::
+            縣市開放資料集索引::
             <?php echo $title_for_layout; ?>
         </title><?php
         echo $this->Html->meta('icon');
@@ -20,13 +20,13 @@
     <body>
         <div class="container">
             <div id="header">
-                <h1><?php echo $this->Html->link('city_datasets', '/'); ?></h1>
+                <h1><?php echo $this->Html->link('縣市開放資料集索引', '/'); ?></h1>
             </div>
             <div id="content">
                 <div class="btn-group">
                     <?php if ($this->Session->read('Auth.User.id')): ?>
-                        <?php echo $this->Html->link('資料集', '/admin/datasets', array('class' => 'btn btn-default')); ?>
                         <?php echo $this->Html->link('組織', '/admin/organizations', array('class' => 'btn btn-default')); ?>
+                        <?php echo $this->Html->link('資料集', '/admin/datasets', array('class' => 'btn btn-default')); ?>
                         <?php echo $this->Html->link('標籤', '/admin/tags', array('class' => 'btn btn-default')); ?>
                         <?php echo $this->Html->link('Members', '/admin/members', array('class' => 'btn btn-default')); ?>
                         <?php echo $this->Html->link('Groups', '/admin/groups', array('class' => 'btn btn-default')); ?>

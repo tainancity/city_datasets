@@ -5,8 +5,7 @@ App::uses('AppModel', 'Model');
 class Tag extends AppModel {
 
     var $name = 'Tag';
-    var $actsAs = array(
-    );
+    var $actsAs = array('Tree');
     var $hasAndBelongsToMany = array(
         'Dataset' => array(
             'joinTable' => 'links_tags',

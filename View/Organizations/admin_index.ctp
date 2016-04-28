@@ -22,13 +22,10 @@ if (!isset($url)) {
                     echo '<th>&nbsp;</th>';
                 }
                 ?>
-
                 <th><?php echo $this->Paginator->sort('Organization.parent_id', '父項目', array('url' => $url)); ?></th>
                 <th><?php echo $this->Paginator->sort('Organization.name', '名稱', array('url' => $url)); ?></th>
                 <th><?php echo $this->Paginator->sort('Organization.foreign_id', '原始編號', array('url' => $url)); ?></th>
                 <th><?php echo $this->Paginator->sort('Organization.foreign_uri', '原始網址', array('url' => $url)); ?></th>
-                <th><?php echo $this->Paginator->sort('Organization.lft', '左', array('url' => $url)); ?></th>
-                <th><?php echo $this->Paginator->sort('Organization.rght', '右', array('url' => $url)); ?></th>
                 <th class="actions"><?php echo __('Action', true); ?></th>
             </tr>
         </thead>
@@ -65,12 +62,6 @@ if (!isset($url)) {
                         ?></td>
                     <td><?php
                         echo $item['Organization']['foreign_uri'];
-                        ?></td>
-                    <td><?php
-                        echo $item['Organization']['lft'];
-                        ?></td>
-                    <td><?php
-                        echo $item['Organization']['rght'];
                         ?></td>
                     <td>
                         <div class="btn-group">

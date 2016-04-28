@@ -26,17 +26,14 @@ if (!empty($foreignId) && !empty($foreignModel)) {
                     echo '<th>&nbsp;</th>';
                 }
                 ?>
-                <?php if (empty($scope['Dataset.Organization_id'])): ?>
-                    <th><?php echo $this->Paginator->sort('Dataset.Organization_id', '組織', array('url' => $url)); ?></th>
+                <?php if (empty($scope['Dataset.organization_id'])): ?>
+                    <th><?php echo $this->Paginator->sort('Dataset.organization_id', '組織', array('url' => $url)); ?></th>
                 <?php endif; ?>
 
                 <th><?php echo $this->Paginator->sort('Dataset.parent_id', '父項目', array('url' => $url)); ?></th>
                 <th><?php echo $this->Paginator->sort('Dataset.name', '名稱', array('url' => $url)); ?></th>
                 <th><?php echo $this->Paginator->sort('Dataset.foreign_id', '原始編號', array('url' => $url)); ?></th>
                 <th><?php echo $this->Paginator->sort('Dataset.foreign_uri', '原始網址', array('url' => $url)); ?></th>
-                <th><?php echo $this->Paginator->sort('Dataset.lft', '左', array('url' => $url)); ?></th>
-                <th><?php echo $this->Paginator->sort('Dataset.rght', '右', array('url' => $url)); ?></th>
-                <th><?php echo $this->Paginator->sort('Dataset.created', '建立時間', array('url' => $url)); ?></th>
                 <th><?php echo $this->Paginator->sort('Dataset.modified', '更新時間', array('url' => $url)); ?></th>
                 <th class="actions"><?php echo __('Action', true); ?></th>
             </tr>
@@ -62,7 +59,7 @@ if (!empty($foreignId) && !empty($foreignModel)) {
                         echo '<div id="messageSet' . $item['Dataset']['id'] . '"></div></td>';
                     }
                     ?>
-                    <?php if (empty($scope['Dataset.Organization_id'])): ?>
+                    <?php if (empty($scope['Dataset.organization_id'])): ?>
                         <td><?php
                             if (empty($item['Organization']['id'])) {
                                 echo '--';
@@ -87,15 +84,6 @@ if (!empty($foreignId) && !empty($foreignModel)) {
                         ?></td>
                     <td><?php
                         echo $item['Dataset']['foreign_uri'];
-                        ?></td>
-                    <td><?php
-                        echo $item['Dataset']['lft'];
-                        ?></td>
-                    <td><?php
-                        echo $item['Dataset']['rght'];
-                        ?></td>
-                    <td><?php
-                        echo $item['Dataset']['created'];
                         ?></td>
                     <td><?php
                         echo $item['Dataset']['modified'];

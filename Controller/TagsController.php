@@ -133,7 +133,31 @@ class TagsController extends AppController {
     }
 
     function admin_view($id = null) {
-        if (!$id || !$this->data = $this->Tag->read(null, hex2bin($id))) {
+        if (!empty($id)) {
+            $this->data = $this->Tag->find('first', array(
+                'conditions' => array(
+                    'Tag.id' => hex2bin($id),
+                ),
+            ));
+            $items = $this->Tag->{$this->data['Tag']['model']}->find('all', array(
+                'conditions' => array(
+                    'LinksTag.tag_id' => hex2bin($id),
+                ),
+                'joins' => array(
+                    array(
+                        'table' => 'links_tags',
+                        'alias' => 'LinksTag',
+                        'type' => 'inner',
+                        'conditions' => array(
+                            'LinksTag.model' => $this->data['Tag']['model'],
+                            "LinksTag.foreign_id = {$this->data['Tag']['model']}.id",
+                        ),
+                    ),
+                ),
+            ));
+            $this->set('items', $items);
+        }
+        if (empty($this->data)) {
             $this->Session->setFlash('請依照網址指示操作');
             $this->redirect(array('action' => 'index'));
         }

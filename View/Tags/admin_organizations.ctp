@@ -28,7 +28,7 @@
         echo '<ul class="sortable droptrue" data-tag-id="' . $item['Tag']['id'] . '" id="tagList' . $item['Tag']['id'] . '">';
         foreach ($item['Organization'] AS $organization) {
             echo '<li class="ui-state-default" data-tag-id="' . $item['Tag']['id'] . '" id="' . $organization['Organization']['id'] . '">';
-            echo $this->Html->link($organization['Organization']['name'] . ' - ' . $organization['Parent']['name'], '/admin/datasets/view/' . $organization['Organization']['id'], array('target' => '_blank'));
+            echo $this->Html->link($organization['Organization']['name'] . ' - ' . $organization['Parent']['name'], '/admin/organizations/view/' . $organization['Organization']['id'], array('target' => '_blank'));
             echo '</li>';
         }
         echo '</ul>';

@@ -30,8 +30,14 @@ class DatasetsController extends AppController {
                     'Dataset.name LIKE' => "%{$keyword}%",
                 ),
             ));
+            $organizations = array();
             foreach ($items AS $item) {
-                $item['Dataset']['label'] = $item['Dataset']['value'] = $item['Dataset']['name'];
+                if (!isset($organizations[$item['Dataset']['organization_id']])) {
+                    $path = $this->Dataset->Organization->getPath($item['Dataset']['organization_id'], array('name'));
+                    $organizations[$item['Dataset']['organization_id']] = implode(' > ', Set::extract('{n}.Organization.name', $path));
+                }
+                $item['Dataset']['label'] = implode(' > ', array($organizations[$item['Dataset']['organization_id']], $item['Dataset']['name']));
+                $item['Dataset']['value'] = $item['Dataset']['name'];
                 $result['result'][] = $item['Dataset'];
             }
         }

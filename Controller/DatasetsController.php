@@ -8,128 +8,46 @@ class DatasetsController extends AppController {
     public $paginate = array();
     public $helpers = array();
 
-    function index($foreignModel = null, $foreignId = null) {
-        $foreignKeys = array();
-
-        $foreignKeys = array(
-            'Organization' => 'Organization_id',
-        );
-
-
-        $habtmKeys = array(
-            'Tag' => 'Tag_id',
-        );
-        $foreignKeys = array_merge($habtmKeys, $foreignKeys);
-
-        $scope = array();
-        if (array_key_exists($foreignModel, $foreignKeys) && $foreignId > 0) {
-            $scope['Dataset.' . $foreignKeys[$foreignModel]] = $foreignId;
-
-            $joins = array(
-                'Tag' => array(
-                    0 => array(
-                        'table' => 'datasets_tags',
-                        'alias' => 'DatasetsTag',
-                        'type' => 'inner',
-                        'conditions' => array('DatasetsTag.Dataset_id = Dataset.id'),
-                    ),
-                    1 => array(
-                        'table' => 'tags',
-                        'alias' => 'Tag',
-                        'type' => 'inner',
-                        'conditions' => array('DatasetsTag.Tag_id = Tag.id'),
-                    ),
-                ),
-            );
-            if (array_key_exists($foreignModel, $habtmKeys)) {
-                unset($scope['Dataset.' . $foreignKeys[$foreignModel]]);
-                $scope[$joins[$foreignModel][0]['alias'] . '.' . $foreignKeys[$foreignModel]] = $foreignId;
-                $this->paginate['Dataset']['joins'] = $joins[$foreignModel];
-            }
-        } else {
-            $foreignModel = '';
-        }
-        $this->set('scope', $scope);
-        $this->paginate['Dataset']['limit'] = 20;
-        $items = $this->paginate($this->Dataset, $scope);
-        $this->set('items', $items);
-        $this->set('foreignId', $foreignId);
-        $this->set('foreignModel', $foreignModel);
-    }
-
-    function view($id = null) {
-        if (!$id || !$this->data = $this->Dataset->read(null, $id)) {
-            $this->Session->setFlash(__('Please do following links in the page', true));
-            $this->redirect(array('action' => 'index'));
+    public function beforeFilter() {
+        parent::beforeFilter();
+        if (isset($this->Auth)) {
+            $this->Auth->allow(array('q', 'index'));
         }
     }
 
-    function admin_index($foreignModel = null, $foreignId = null, $op = null) {
-        $foreignKeys = array();
-
-        $foreignKeys = array(
-            'Organization' => 'Organization_id',
+    public function q($keyword = '') {
+        $this->autoRender = false;
+        $this->response->type('json');
+        $keyword = trim($keyword);
+        $result = array(
+            'keyword' => $keyword,
+            'result' => array(),
         );
-
-
-        $habtmKeys = array(
-            'Tag' => 'Tag_id',
-        );
-        $foreignKeys = array_merge($habtmKeys, $foreignKeys);
-
-        $scope = array();
-        if (array_key_exists($foreignModel, $foreignKeys) && $foreignId > 0) {
-            $scope['Dataset.' . $foreignKeys[$foreignModel]] = $foreignId;
-
-            $joins = array(
-                'Tag' => array(
-                    0 => array(
-                        'table' => 'datasets_tags',
-                        'alias' => 'DatasetsTag',
-                        'type' => 'inner',
-                        'conditions' => array('DatasetsTag.Dataset_id = Dataset.id'),
-                    ),
-                    1 => array(
-                        'table' => 'tags',
-                        'alias' => 'Tag',
-                        'type' => 'inner',
-                        'conditions' => array('DatasetsTag.Tag_id = Tag.id'),
-                    ),
+        if (!empty($keyword)) {
+            $items = $this->Dataset->find('all', array(
+                'conditions' => array(
+                    'Dataset.parent_id IS NULL',
+                    'Dataset.name LIKE' => "%{$keyword}%",
                 ),
-            );
-            if (array_key_exists($foreignModel, $habtmKeys)) {
-                unset($scope['Dataset.' . $foreignKeys[$foreignModel]]);
-                if ($op != 'set') {
-                    $scope[$joins[$foreignModel][0]['alias'] . '.' . $foreignKeys[$foreignModel]] = $foreignId;
-                    $this->paginate['Dataset']['joins'] = $joins[$foreignModel];
-                }
+            ));
+            foreach ($items AS $item) {
+                $item['Dataset']['label'] = $item['Dataset']['value'] = $item['Dataset']['name'];
+                $result['result'][] = $item['Dataset'];
             }
+        }
+        if (!isset($_GET['pretty'])) {
+            $this->response->body(json_encode($result));
         } else {
-            $foreignModel = '';
+            $this->response->body(json_encode($result, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
         }
-        $this->set('scope', $scope);
-        $this->paginate['Dataset']['limit'] = 20;
-        $items = $this->paginate($this->Dataset, $scope);
+    }
 
-        if ($op == 'set' && !empty($joins[$foreignModel]) && !empty($foreignModel) && !empty($foreignId) && !empty($items)) {
-            foreach ($items AS $key => $item) {
-                $items[$key]['option'] = $this->Dataset->find('count', array(
-                    'joins' => $joins[$foreignModel],
-                    'conditions' => array(
-                        'Dataset.id' => $item['Dataset']['id'],
-                        $foreignModel . '.id' => $foreignId,
-                    ),
-                ));
-                if ($items[$key]['option'] > 0) {
-                    $items[$key]['option'] = 1;
-                }
-            }
-            $this->set('op', $op);
-        }
+    function index() {
+        
+    }
 
-        $this->set('items', $items);
-        $this->set('foreignId', $foreignId);
-        $this->set('foreignModel', $foreignModel);
+    function view() {
+        
     }
 
     function admin_view($id = null) {

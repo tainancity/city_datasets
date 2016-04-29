@@ -8,71 +8,46 @@ class TagsController extends AppController {
     public $paginate = array();
     public $helpers = array();
 
-    function index($foreignModel = null, $foreignId = null) {
-        $foreignKeys = array();
-
-
-        $habtmKeys = array(
-            'Dataset' => 'Dataset_id',
-            'Organization' => 'Organization_id',
-        );
-        $foreignKeys = array_merge($habtmKeys, $foreignKeys);
-
-        $scope = array();
-        if (array_key_exists($foreignModel, $foreignKeys) && $foreignId > 0) {
-            $scope['Tag.' . $foreignKeys[$foreignModel]] = $foreignId;
-
-            $joins = array(
-                'Dataset' => array(
-                    0 => array(
-                        'table' => 'datasets_tags',
-                        'alias' => 'DatasetsTag',
-                        'type' => 'inner',
-                        'conditions' => array('DatasetsTag.Tag_id = Tag.id'),
-                    ),
-                    1 => array(
-                        'table' => 'datasets',
-                        'alias' => 'Dataset',
-                        'type' => 'inner',
-                        'conditions' => array('DatasetsTag.Dataset_id = Dataset.id'),
-                    ),
-                ),
-                'Organization' => array(
-                    0 => array(
-                        'table' => 'organizations_tags',
-                        'alias' => 'OrganizationsTag',
-                        'type' => 'inner',
-                        'conditions' => array('OrganizationsTag.Tag_id = Tag.id'),
-                    ),
-                    1 => array(
-                        'table' => 'organizations',
-                        'alias' => 'Organization',
-                        'type' => 'inner',
-                        'conditions' => array('OrganizationsTag.Organization_id = Organization.id'),
-                    ),
-                ),
-            );
-            if (array_key_exists($foreignModel, $habtmKeys)) {
-                unset($scope['Tag.' . $foreignKeys[$foreignModel]]);
-                $scope[$joins[$foreignModel][0]['alias'] . '.' . $foreignKeys[$foreignModel]] = $foreignId;
-                $this->paginate['Tag']['joins'] = $joins[$foreignModel];
-            }
-        } else {
-            $foreignModel = '';
+    public function beforeFilter() {
+        parent::beforeFilter();
+        if (isset($this->Auth)) {
+            $this->Auth->allow(array('q', 'index'));
         }
-        $this->set('scope', $scope);
-        $this->paginate['Tag']['limit'] = 20;
-        $items = $this->paginate($this->Tag, $scope);
-        $this->set('items', $items);
-        $this->set('foreignId', $foreignId);
-        $this->set('foreignModel', $foreignModel);
+    }
+
+    public function q($model = '', $keyword = '') {
+        $this->autoRender = false;
+        $this->response->type('json');
+        $keyword = trim($keyword);
+        $result = array(
+            'keyword' => $keyword,
+            'result' => array(),
+        );
+        if (!empty($keyword)) {
+            $items = $this->Tag->find('all', array(
+                'conditions' => array(
+                    'Tag.model' => $model,
+                    'Tag.name LIKE' => "%{$keyword}%",
+                ),
+            ));
+            foreach ($items AS $item) {
+                $item['Tag']['label'] = $item['Tag']['value'] = $item['Tag']['name'];
+                $result['result'][] = $item['Tag'];
+            }
+        }
+        if (!isset($_GET['pretty'])) {
+            $this->response->body(json_encode($result));
+        } else {
+            $this->response->body(json_encode($result, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+        }
+    }
+
+    function index() {
+        
     }
 
     function view($id = null) {
-        if (!$id || !$this->data = $this->Tag->read(null, hex2bin($id))) {
-            $this->Session->setFlash(__('Please do following links in the page', true));
-            $this->redirect(array('action' => 'index'));
-        }
+        
     }
 
     function admin_index($foreignModel = null, $foreignId = null, $op = null) {

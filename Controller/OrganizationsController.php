@@ -8,56 +8,46 @@ class OrganizationsController extends AppController {
     public $paginate = array();
     public $helpers = array();
 
-    function index($foreignModel = null, $foreignId = null) {
-        $foreignKeys = array();
-
-
-        $habtmKeys = array(
-            'Tag' => 'Tag_id',
-        );
-        $foreignKeys = array_merge($habtmKeys, $foreignKeys);
-
-        $scope = array();
-        if (array_key_exists($foreignModel, $foreignKeys) && $foreignId > 0) {
-            $scope['Organization.' . $foreignKeys[$foreignModel]] = $foreignId;
-
-            $joins = array(
-                'Tag' => array(
-                    0 => array(
-                        'table' => 'organizations_tags',
-                        'alias' => 'OrganizationsTag',
-                        'type' => 'inner',
-                        'conditions' => array('OrganizationsTag.Organization_id = Organization.id'),
-                    ),
-                    1 => array(
-                        'table' => 'tags',
-                        'alias' => 'Tag',
-                        'type' => 'inner',
-                        'conditions' => array('OrganizationsTag.Tag_id = Tag.id'),
-                    ),
-                ),
-            );
-            if (array_key_exists($foreignModel, $habtmKeys)) {
-                unset($scope['Organization.' . $foreignKeys[$foreignModel]]);
-                $scope[$joins[$foreignModel][0]['alias'] . '.' . $foreignKeys[$foreignModel]] = $foreignId;
-                $this->paginate['Organization']['joins'] = $joins[$foreignModel];
-            }
-        } else {
-            $foreignModel = '';
+    public function beforeFilter() {
+        parent::beforeFilter();
+        if (isset($this->Auth)) {
+            $this->Auth->allow(array('q', 'index'));
         }
-        $this->set('scope', $scope);
-        $this->paginate['Organization']['limit'] = 20;
-        $items = $this->paginate($this->Organization, $scope);
-        $this->set('items', $items);
-        $this->set('foreignId', $foreignId);
-        $this->set('foreignModel', $foreignModel);
     }
 
-    function view($id = null) {
-        if (!$id || !$this->data = $this->Organization->read(null, $id)) {
-            $this->Session->setFlash(__('Please do following links in the page', true));
-            $this->redirect(array('action' => 'index'));
+    public function q($keyword = '') {
+        $this->autoRender = false;
+        $this->response->type('json');
+        $keyword = trim($keyword);
+        $result = array(
+            'keyword' => $keyword,
+            'result' => array(),
+        );
+        if (!empty($keyword)) {
+            $items = $this->Organization->find('all', array(
+                'conditions' => array(
+                    'Organization.parent_id IS NOT NULL',
+                    'Organization.name LIKE' => "%{$keyword}%",
+                ),
+            ));
+            foreach ($items AS $item) {
+                $item['Organization']['label'] = $item['Organization']['value'] = $item['Organization']['name'];
+                $result['result'][] = $item['Organization'];
+            }
         }
+        if (!isset($_GET['pretty'])) {
+            $this->response->body(json_encode($result));
+        } else {
+            $this->response->body(json_encode($result, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+        }
+    }
+
+    function index() {
+        
+    }
+
+    function view() {
+        
     }
 
     function admin_index($foreignModel = null, $foreignId = null, $op = null) {

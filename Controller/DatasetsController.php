@@ -247,4 +247,34 @@ class DatasetsController extends AppController {
         }
     }
 
+    public function admin_tags() {
+        $scope = array(
+            'Dataset.parent_id IS NULL',
+            'LinksTag.id IS NULL',
+        );
+        $this->paginate['Dataset']['limit'] = 20;
+        $this->paginate['Dataset']['joins'] = array(
+            array(
+                'table' => 'links_tags',
+                'alias' => 'LinksTag',
+                'type' => 'left',
+                'conditions' => array('LinksTag.foreign_id = Dataset.id'),
+            ),
+        );
+        $items = $this->paginate($this->Data, $scope);
+        $organizations = array();
+        foreach ($items AS $k => $item) {
+            if (!isset($organizations[$item['Dataset']['organization_id']])) {
+                $path = $this->Dataset->Organization->getPath($item['Dataset']['organization_id'], array('name'));
+                $organizations[$item['Dataset']['organization_id']] = implode(' > ', Set::extract('{n}.Organization.name', $path));
+            }
+            $items[$k]['Organization'] = array(
+                'id' => $item['Dataset']['organization_id'],
+                'name' => $organizations[$item['Dataset']['organization_id']],
+            );
+        }
+        $this->set('url', array());
+        $this->set('items', $items);
+    }
+
 }

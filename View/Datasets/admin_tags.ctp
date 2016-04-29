@@ -1,19 +1,9 @@
-<div id="DatasetsAdminIndex">
-    <?php
-    $links = array(
-        $this->Html->link('資料集', '/admin/datasets/index'),
-    );
-    if (!empty($path)) {
-        foreach ($path AS $item) {
-            $links[] = $this->Html->link($item['Dataset']['name'], array('action' => 'index', $item['Dataset']['id']));
-        }
-    }
-    ?>
-    <h2><?php echo implode(' > ', $links); ?></h2>
+<div id="DatasetsAdminTags">
+    <h2>待標籤資料集</h2>
     <div class="btn-group">
         <?php echo $this->Html->link('新增', array('action' => 'add'), array('class' => 'btn btn-default')); ?>
-        <?php echo $this->Html->link('列表', array('action' => 'index'), array('class' => 'btn btn-primary')); ?>
-        <?php echo $this->Html->link('待標籤', array('action' => 'tags'), array('class' => 'btn btn-default')); ?>
+        <?php echo $this->Html->link('列表', array('action' => 'index'), array('class' => 'btn btn-default')); ?>
+        <?php echo $this->Html->link('待標籤', array('action' => 'tags'), array('class' => 'btn btn-primary')); ?>
     </div>
     <div><?php
         echo $this->Paginator->counter(array(
@@ -21,7 +11,7 @@
         ));
         ?></div>
     <div class="paging"><?php echo $this->element('paginator'); ?></div>
-    <table class="table table-bordered" id="DatasetsAdminIndexTable">
+    <table class="table table-bordered" id="DatasetsAdminTagsTable">
         <thead>
             <tr>
                 <?php
@@ -29,12 +19,9 @@
                     echo '<th>&nbsp;</th>';
                 }
                 ?>
-                <th><?php echo $this->Paginator->sort('Dataset.organization_id', '組織', array('url' => $url)); ?></th>
-                <th><?php echo $this->Paginator->sort('Dataset.name', '名稱', array('url' => $url)); ?></th>
-                <th><?php echo $this->Paginator->sort('Dataset.foreign_id', '原始編號', array('url' => $url)); ?></th>
-                <th><?php echo $this->Paginator->sort('Dataset.foreign_uri', '原始網址', array('url' => $url)); ?></th>
+                <th>組織</th>
+                <th>名稱</th>
                 <th><?php echo $this->Paginator->sort('Dataset.modified', '更新時間', array('url' => $url)); ?></th>
-                <th class="actions">操作</th>
             </tr>
         </thead>
         <tbody>
@@ -55,34 +42,21 @@
                                 'controller' => 'organizations',
                                 'action' => 'view',
                                 $item['Organization']['id']
-                            ));
+                            ), array('target' => '_blank'));
                         }
                         ?></td>
                     <td><?php
-                        echo $this->Html->link($item['Dataset']['name'], array('action' => 'index', $item['Dataset']['id']));
-                        ?></td>
-                    <td><?php
-                        echo $item['Dataset']['foreign_id'];
-                        ?></td>
-                    <td><?php
-                        echo $item['Dataset']['foreign_uri'];
+                        echo $this->Html->link($item['Dataset']['name'], array('action' => 'view', $item['Dataset']['id']), array('target' => '_blank'));
                         ?></td>
                     <td><?php
                         echo $item['Dataset']['modified'];
                         ?></td>
-                    <td>
-                        <div class="btn-group">
-                            <?php echo $this->Html->link('檢視', array('action' => 'view', $item['Dataset']['id']), array('class' => 'btn btn-default')); ?>
-                            <?php echo $this->Html->link('編輯', array('action' => 'edit', $item['Dataset']['id']), array('class' => 'btn btn-default')); ?>
-                            <?php echo $this->Html->link('刪除', array('action' => 'delete', $item['Dataset']['id']), array('class' => 'btn btn-default'), '確定要刪除？'); ?>
-                        </div>
-                    </td>
                 </tr>
             <?php } // End of foreach ($items as $item) {  ?>
         </tbody>
     </table>
     <div class="paging"><?php echo $this->element('paginator'); ?></div>
-    <div id="DatasetsAdminIndexPanel"></div>
+    <div id="DatasetsAdminTagsPanel"></div>
     <script type="text/javascript">
         //<![CDATA[
         $(function () {
@@ -90,7 +64,7 @@
 if (!empty($op)) {
     $remoteUrl = $this->Html->url(array('action' => 'habtmSet', $foreignModel, $foreignId));
     ?>
-                $('#DatasetsAdminIndexTable input.habtmSet').click(function () {
+                $('#DatasetsAdminTagsTable input.habtmSet').click(function () {
                     var remoteUrl = '<?php echo $remoteUrl; ?>/' + this.value + '/';
                     if (this.checked == true) {
                         remoteUrl = remoteUrl + 'on';

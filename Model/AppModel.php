@@ -20,14 +20,4 @@ class AppModel extends Model {
         }
     }
 
-    public function getUUID() {
-        if (function_exists('uuid_create')) {
-            $uuid = uuid_create();
-        } else {
-            App::uses('String', 'Utility');
-            $uuid = String::uuid();
-        }
-        return str_replace('-', '', $uuid);
-    }
-
 }

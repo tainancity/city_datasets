@@ -115,7 +115,7 @@ class OrganizationsController extends AppController {
     }
 
     function admin_view($id = null) {
-        if (!$id || !$this->data = $this->Organization->read(null, hex2bin($id))) {
+        if (!$id || !$this->data = $this->Organization->read(null, $id)) {
             $this->Session->setFlash('請依照網址指示操作');
             $this->redirect(array('action' => 'index'));
         }
@@ -125,7 +125,7 @@ class OrganizationsController extends AppController {
         if (!empty($this->data)) {
             $dataToSave = $this->data;
             if (!empty($parentId)) {
-                $dataToSave['Organization']['parent_id'] = hex2bin($parentId);
+                $dataToSave['Organization']['parent_id'] = $parentId;
             }
             $this->Organization->create();
             if ($this->Organization->save($dataToSave)) {
@@ -139,7 +139,7 @@ class OrganizationsController extends AppController {
 
     function admin_edit($id = null) {
         if (!empty($id)) {
-            $item = $this->Organization->read(null, hex2bin($id));
+            $item = $this->Organization->read(null, $id);
         }
         if (empty($item)) {
             $this->Session->setFlash('請依照網址指示操作');
@@ -147,9 +147,9 @@ class OrganizationsController extends AppController {
         }
         if (!empty($this->data)) {
             $dataToSave = $this->data;
-            $this->Organization->id = $dataToSave['Organization']['id'] = hex2bin($id);
+            $this->Organization->id = $dataToSave['Organization']['id'] = $id;
             if (!empty($dataToSave['Organization']['parent_id'])) {
-                $dataToSave['Organization']['parent_id'] = hex2bin($dataToSave['Organization']['parent_id']);
+                $dataToSave['Organization']['parent_id'] = $dataToSave['Organization']['parent_id'];
             }
             if ($this->Organization->save($dataToSave)) {
                 $this->Session->setFlash('資料已經儲存');
@@ -166,7 +166,7 @@ class OrganizationsController extends AppController {
     function admin_delete($id = null) {
         if (!$id) {
             $this->Session->setFlash('請依照網址指示操作');
-        } else if ($this->Organization->delete(hex2bin($id))) {
+        } else if ($this->Organization->delete($id)) {
             $this->Session->setFlash('資料已經刪除');
         }
         $this->redirect(array('action' => 'index'));

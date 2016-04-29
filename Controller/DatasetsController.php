@@ -119,7 +119,7 @@ class DatasetsController extends AppController {
     }
 
     function admin_view($id = null) {
-        if (!$id || !$this->data = $this->Dataset->read(null, hex2bin($id))) {
+        if (!$id || !$this->data = $this->Dataset->read(null, $id)) {
             $this->Session->setFlash('請依照網址指示操作');
             $this->redirect(array('action' => 'index'));
         }
@@ -129,7 +129,7 @@ class DatasetsController extends AppController {
         if (!empty($this->data)) {
             $dataToSave = $this->data;
             if (!empty($parentId)) {
-                $dataToSave['Dataset']['parent_id'] = hex2bin($parentId);
+                $dataToSave['Dataset']['parent_id'] = $parentId;
             }
             $this->Dataset->create();
             if ($this->Dataset->save($dataToSave)) {
@@ -143,7 +143,7 @@ class DatasetsController extends AppController {
 
     function admin_edit($id = null) {
         if (!empty($id)) {
-            $item = $this->Dataset->read(null, hex2bin($id));
+            $item = $this->Dataset->read(null, $id);
         }
         if (empty($item)) {
             $this->Session->setFlash('請依照網址指示操作');
@@ -151,9 +151,9 @@ class DatasetsController extends AppController {
         }
         if (!empty($this->data)) {
             $dataToSave = $this->data;
-            $this->Dataset->id = $dataToSave['Dataset']['id'] = hex2bin($id);
+            $this->Dataset->id = $dataToSave['Dataset']['id'] = $id;
             if (!empty($dataToSave['Dataset']['parent_id'])) {
-                $dataToSave['Dataset']['parent_id'] = hex2bin($dataToSave['Dataset']['parent_id']);
+                $dataToSave['Dataset']['parent_id'] = $dataToSave['Dataset']['parent_id'];
             }
             if ($this->Dataset->save($dataToSave)) {
                 $this->Session->setFlash('資料已經儲存');
@@ -170,7 +170,7 @@ class DatasetsController extends AppController {
     function admin_delete($id = null) {
         if (!$id) {
             $this->Session->setFlash('請依照網址指示操作');
-        } else if ($this->Dataset->delete(hex2bin($id))) {
+        } else if ($this->Dataset->delete($id)) {
             $this->Session->setFlash('資料已經刪除');
         }
         $this->redirect(array('action' => 'index'));

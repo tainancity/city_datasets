@@ -80,9 +80,9 @@ DROP TABLE IF EXISTS `datasets`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `datasets` (
-  `id` binary(16) NOT NULL,
-  `organization_id` binary(16) NOT NULL,
-  `parent_id` binary(16) DEFAULT NULL,
+  `id` char(36) NOT NULL,
+  `organization_id` char(36) NOT NULL,
+  `parent_id` char(36) DEFAULT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `foreign_id` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
   `foreign_uri` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -135,10 +135,10 @@ DROP TABLE IF EXISTS `links_tags`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `links_tags` (
-  `id` binary(16) NOT NULL,
+  `id` char(36) NOT NULL,
   `model` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `foreign_id` binary(16) DEFAULT NULL,
-  `tag_id` binary(16) DEFAULT NULL,
+  `foreign_id` char(36) DEFAULT NULL,
+  `tag_id` char(36) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -170,8 +170,8 @@ DROP TABLE IF EXISTS `organizations`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `organizations` (
-  `id` binary(16) NOT NULL,
-  `parent_id` binary(16) DEFAULT NULL,
+  `id` char(36) NOT NULL,
+  `parent_id` char(36) DEFAULT NULL,
   `name` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
   `foreign_id` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
   `foreign_uri` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -189,8 +189,8 @@ DROP TABLE IF EXISTS `tags`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tags` (
-  `id` binary(16) NOT NULL,
-  `parent_id` binary(16) DEFAULT NULL,
+  `id` char(36) NOT NULL,
+  `parent_id` char(36) DEFAULT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `model` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
   `lft` bigint(16) DEFAULT NULL,

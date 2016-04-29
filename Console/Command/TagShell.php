@@ -31,7 +31,7 @@ class TagShell extends AppShell {
                         'parent_id' => $orgRoots[$info['filename']],
                         'name' => $org,
                 )));
-                $organizationId = bin2hex($this->Tag->Organization->getInsertID());
+                $organizationId = $this->Tag->Organization->getInsertID();
                 if (!isset($data['datasets'])) {
                     continue;
                 }

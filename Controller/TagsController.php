@@ -99,7 +99,7 @@ class TagsController extends AppController {
             if (array_key_exists($foreignModel, $habtmKeys)) {
                 unset($scope['Tag.' . $foreignKeys[$foreignModel]]);
                 if ($op != 'set') {
-                    $scope[$joins[$foreignModel][0]['alias'] . '.' . $foreignKeys[$foreignModel]] = hex2bin($foreignId);
+                    $scope[$joins[$foreignModel][0]['alias'] . '.' . $foreignKeys[$foreignModel]] = $foreignId;
                     $this->paginate['Tag']['joins'] = $joins[$foreignModel];
                 }
             }
@@ -116,8 +116,8 @@ class TagsController extends AppController {
                 $items[$key]['option'] = $this->Tag->find('count', array(
                     'joins' => $joins[$foreignModel],
                     'conditions' => array(
-                        'Tag.id' => hex2bin($item['Tag']['id']),
-                        $foreignModel . '.id' => hex2bin($foreignId),
+                        'Tag.id' => $item['Tag']['id'],
+                        $foreignModel . '.id' => $foreignId,
                     ),
                 ));
                 if ($items[$key]['option'] > 0) {
@@ -136,12 +136,12 @@ class TagsController extends AppController {
         if (!empty($id)) {
             $this->data = $this->Tag->find('first', array(
                 'conditions' => array(
-                    'Tag.id' => hex2bin($id),
+                    'Tag.id' => $id,
                 ),
             ));
             $items = $this->Tag->{$this->data['Tag']['model']}->find('all', array(
                 'conditions' => array(
-                    'LinksTag.tag_id' => hex2bin($id),
+                    'LinksTag.tag_id' => $id,
                 ),
                 'joins' => array(
                     array(
@@ -167,7 +167,7 @@ class TagsController extends AppController {
         if (!empty($this->data)) {
             $dataToSave = $this->data;
             if (!empty($parentId)) {
-                $dataToSave['Tag']['parent_id'] = hex2bin($parentId);
+                $dataToSave['Tag']['parent_id'] = $parentId;
             }
             $this->Tag->create();
             if ($this->Tag->save($dataToSave)) {
@@ -177,7 +177,7 @@ class TagsController extends AppController {
                 } else {
                     echo json_encode(array(
                         'result' => 'ok',
-                        'id' => bin2hex($this->Tag->getInsertID()),
+                        'id' => $this->Tag->getInsertID(),
                     ));
                     exit();
                 }
@@ -196,7 +196,7 @@ class TagsController extends AppController {
 
     function admin_edit($id = null) {
         if (!empty($id)) {
-            $item = $this->Tag->read(null, hex2bin($id));
+            $item = $this->Tag->read(null, $id);
         }
         if (empty($item)) {
             $this->Session->setFlash('請依照網址指示操作');
@@ -204,9 +204,9 @@ class TagsController extends AppController {
         }
         if (!empty($this->data)) {
             $dataToSave = $this->data;
-            $this->Tag->id = $dataToSave['Tag']['id'] = hex2bin($id);
+            $this->Tag->id = $dataToSave['Tag']['id'] = $id;
             if (!empty($dataToSave['Tag']['parent_id'])) {
-                $dataToSave['Tag']['parent_id'] = hex2bin($dataToSave['Tag']['parent_id']);
+                $dataToSave['Tag']['parent_id'] = $dataToSave['Tag']['parent_id'];
             }
             if ($this->Tag->save($dataToSave)) {
                 if (!$this->request->isAjax()) {
@@ -238,7 +238,7 @@ class TagsController extends AppController {
     function admin_delete($id = null) {
         if (!$id) {
             $this->Session->setFlash('請依照網址指示操作');
-        } else if ($this->Tag->delete(hex2bin($id))) {
+        } else if ($this->Tag->delete($id)) {
             $this->Session->setFlash('資料已經刪除');
         }
         $this->redirect(array('action' => 'index'));
@@ -291,7 +291,7 @@ class TagsController extends AppController {
                 $result = true;
                 foreach ($links AS $link) {
                     if ($result) {
-                        $result = $this->Tag->LinksTag->delete(hex2bin($link));
+                        $result = $this->Tag->LinksTag->delete($link);
                     }
                 }
                 if ($result) {
@@ -313,7 +313,7 @@ class TagsController extends AppController {
                 'fields' => array('Dataset.id', 'Dataset.name', 'Organization.parent_id'),
                 'contain' => array('Organization'),
                 'conditions' => array(
-                    'LinksTag.tag_id' => hex2bin($item['Tag']['id']),
+                    'LinksTag.tag_id' => $item['Tag']['id'],
                 ),
                 'joins' => array(
                     array(
@@ -329,7 +329,7 @@ class TagsController extends AppController {
             ));
             foreach ($items[$k]['Dataset'] AS $dk => $dv) {
                 if (!isset($organizations[$items[$k]['Dataset'][$dk]['Organization']['parent_id']])) {
-                    $this->Tag->Organization->id = hex2bin($items[$k]['Dataset'][$dk]['Organization']['parent_id']);
+                    $this->Tag->Organization->id = $items[$k]['Dataset'][$dk]['Organization']['parent_id'];
                     $organizations[$items[$k]['Dataset'][$dk]['Organization']['parent_id']] = $this->Tag->Organization->field('name');
                 }
                 $items[$k]['Dataset'][$dk]['Organization']['name'] = $organizations[$items[$k]['Dataset'][$dk]['Organization']['parent_id']];
@@ -348,7 +348,7 @@ class TagsController extends AppController {
                 'contain' => array('Parent'),
                 'conditions' => array(
                     'Organization.parent_id IS NOT NULL',
-                    'LinksTag.tag_id' => hex2bin($item['Tag']['id']),
+                    'LinksTag.tag_id' => $item['Tag']['id'],
                 ),
                 'joins' => array(
                     array(

@@ -147,9 +147,24 @@ class DatasetsController extends AppController {
     }
 
     function admin_view($id = null) {
-        if (!$id || !$this->data = $this->Dataset->read(null, $id)) {
+        if (!empty($id)) {
+            $item = $this->Dataset->find('first', array(
+                'conditions' => array(
+                    'Dataset.id' => $id,
+                ),
+                'contain' => array('Tag'),
+            ));
+            $path = $this->Dataset->Organization->getPath($item['Dataset']['organization_id'], array('name'));
+            $item['Organization'] = array(
+                'id' => $item['Dataset']['organization_id'],
+                'name' => implode(' > ', Set::extract('{n}.Organization.name', $path)),
+            );
+        }
+        if (empty($item)) {
             $this->Session->setFlash('請依照網址指示操作');
             $this->redirect(array('action' => 'index'));
+        } else {
+            $this->data = $item;
         }
     }
 

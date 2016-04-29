@@ -6,6 +6,12 @@ class Organization extends AppModel {
 
     var $name = 'Organization';
     var $actsAs = array('Tree');
+    public $belongsTo = array(
+        'Parent' => array(
+            'foreignKey' => 'parent_id',
+            'className' => 'Organization',
+        ),
+    );
     var $hasAndBelongsToMany = array(
         'Tag' => array(
             'joinTable' => 'links_tags',

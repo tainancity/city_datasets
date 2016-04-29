@@ -314,4 +314,32 @@ class TagsController extends AppController {
         $this->set('items', $items);
     }
 
+    public function admin_organizations() {
+        $scope = array('Tag.model' => 'Organization');
+        $this->paginate['Tag']['limit'] = 20;
+        $items = $this->paginate($this->Tag, $scope);
+        foreach ($items AS $k => $item) {
+            $items[$k]['Organization'] = $this->Tag->Organization->find('all', array(
+                'fields' => array('Organization.id', 'Organization.name', 'Parent.name'),
+                'contain' => array('Parent'),
+                'conditions' => array(
+                    'Organization.parent_id IS NOT NULL',
+                    'LinksTag.tag_id' => hex2bin($item['Tag']['id']),
+                ),
+                'joins' => array(
+                    array(
+                        'table' => 'links_tags',
+                        'alias' => 'LinksTag',
+                        'type' => 'inner',
+                        'conditions' => array(
+                            'LinksTag.foreign_id = Organization.id',
+                            'LinksTag.model' => 'Organization',
+                        ),
+                    ),
+                ),
+            ));
+        }
+        $this->set('items', $items);
+    }
+
 }

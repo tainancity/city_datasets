@@ -281,7 +281,7 @@ class TagsController extends AppController {
 
     public function admin_datasets() {
         $scope = array('Tag.model' => 'Dataset');
-        $this->paginate['Tag']['limit'] = 20;
+        $this->paginate['Tag']['limit'] = 9;
         $items = $this->paginate($this->Tag, $scope);
         $organizations = array();
         foreach ($items AS $k => $item) {
@@ -316,7 +316,7 @@ class TagsController extends AppController {
 
     public function admin_organizations() {
         $scope = array('Tag.model' => 'Organization');
-        $this->paginate['Tag']['limit'] = 20;
+        $this->paginate['Tag']['limit'] = 9;
         $items = $this->paginate($this->Tag, $scope);
         foreach ($items AS $k => $item) {
             $items[$k]['Organization'] = $this->Tag->Organization->find('all', array(

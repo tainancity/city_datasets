@@ -42,6 +42,9 @@ class Dataset extends AppModel {
             if (!empty($results[$k][$this->name]['parent_id'])) {
                 $results[$k][$this->name]['parent_id'] = bin2hex($results[$k][$this->name]['parent_id']);
             }
+            if (isset($results[$k][$this->name]['organization_id'])) {
+                $results[$k][$this->name]['organization_id'] = bin2hex($results[$k][$this->name]['organization_id']);
+            }
         }
         return parent::afterFind($results, $primary);
     }

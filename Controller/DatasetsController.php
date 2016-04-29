@@ -50,6 +50,74 @@ class DatasetsController extends AppController {
         
     }
 
+    function admin_index($foreignModel = null, $foreignId = null, $op = null) {
+        $foreignKeys = array();
+
+        $foreignKeys = array(
+            'Organization' => 'Organization_id',
+        );
+
+
+        $habtmKeys = array(
+            'Tag' => 'Tag_id',
+        );
+        $foreignKeys = array_merge($habtmKeys, $foreignKeys);
+
+        $scope = array();
+        if (array_key_exists($foreignModel, $foreignKeys) && $foreignId > 0) {
+            $scope['Dataset.' . $foreignKeys[$foreignModel]] = $foreignId;
+
+            $joins = array(
+                'Tag' => array(
+                    0 => array(
+                        'table' => 'datasets_tags',
+                        'alias' => 'DatasetsTag',
+                        'type' => 'inner',
+                        'conditions' => array('DatasetsTag.Dataset_id = Dataset.id'),
+                    ),
+                    1 => array(
+                        'table' => 'tags',
+                        'alias' => 'Tag',
+                        'type' => 'inner',
+                        'conditions' => array('DatasetsTag.Tag_id = Tag.id'),
+                    ),
+                ),
+            );
+            if (array_key_exists($foreignModel, $habtmKeys)) {
+                unset($scope['Dataset.' . $foreignKeys[$foreignModel]]);
+                if ($op != 'set') {
+                    $scope[$joins[$foreignModel][0]['alias'] . '.' . $foreignKeys[$foreignModel]] = $foreignId;
+                    $this->paginate['Dataset']['joins'] = $joins[$foreignModel];
+                }
+            }
+        } else {
+            $foreignModel = '';
+        }
+        $this->set('scope', $scope);
+        $this->paginate['Dataset']['limit'] = 20;
+        $items = $this->paginate($this->Dataset, $scope);
+
+        if ($op == 'set' && !empty($joins[$foreignModel]) && !empty($foreignModel) && !empty($foreignId) && !empty($items)) {
+            foreach ($items AS $key => $item) {
+                $items[$key]['option'] = $this->Dataset->find('count', array(
+                    'joins' => $joins[$foreignModel],
+                    'conditions' => array(
+                        'Dataset.id' => $item['Dataset']['id'],
+                        $foreignModel . '.id' => $foreignId,
+                    ),
+                ));
+                if ($items[$key]['option'] > 0) {
+                    $items[$key]['option'] = 1;
+                }
+            }
+            $this->set('op', $op);
+        }
+
+        $this->set('items', $items);
+        $this->set('foreignId', $foreignId);
+        $this->set('foreignModel', $foreignModel);
+    }
+
     function admin_view($id = null) {
         if (!$id || !$this->data = $this->Dataset->read(null, hex2bin($id))) {
             $this->Session->setFlash(__('Please do following links in the page', true));

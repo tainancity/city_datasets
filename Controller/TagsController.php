@@ -147,10 +147,25 @@ class TagsController extends AppController {
             }
             $this->Tag->create();
             if ($this->Tag->save($dataToSave)) {
-                $this->Session->setFlash(__('The data has been saved', true));
-                $this->redirect(array('action' => 'index'));
+                if (!$this->request->isAjax()) {
+                    $this->Session->setFlash(__('The data has been saved', true));
+                    $this->redirect(array('action' => 'index'));
+                } else {
+                    echo json_encode(array(
+                        'result' => 'ok',
+                        'id' => bin2hex($this->Tag->getInsertID()),
+                    ));
+                    exit();
+                }
             } else {
-                $this->Session->setFlash(__('Something was wrong during saving, please try again', true));
+                if (!$this->request->isAjax()) {
+                    $this->Session->setFlash(__('Something was wrong during saving, please try again', true));
+                } else {
+                    echo json_encode(array(
+                        'result' => 'error',
+                    ));
+                    exit();
+                }
             }
         }
     }
@@ -170,10 +185,25 @@ class TagsController extends AppController {
                 $dataToSave['Tag']['parent_id'] = hex2bin($dataToSave['Tag']['parent_id']);
             }
             if ($this->Tag->save($dataToSave)) {
-                $this->Session->setFlash(__('The data has been saved', true));
-                $this->redirect(array('action' => 'index'));
+                if (!$this->request->isAjax()) {
+                    $this->Session->setFlash(__('The data has been saved', true));
+                    $this->redirect(array('action' => 'index'));
+                } else {
+                    echo json_encode(array(
+                        'result' => 'ok',
+                        'id' => $id,
+                    ));
+                    exit();
+                }
             } else {
-                $this->Session->setFlash(__('Something was wrong during saving, please try again', true));
+                if (!$this->request->isAjax()) {
+                    $this->Session->setFlash(__('Something was wrong during saving, please try again', true));
+                } else {
+                    echo json_encode(array(
+                        'result' => 'error',
+                    ));
+                    exit();
+                }
             }
         } else {
             $this->data = $item;
@@ -247,6 +277,41 @@ class TagsController extends AppController {
                 }
             }
         }
+    }
+
+    public function admin_datasets() {
+        $scope = array('Tag.model' => 'Dataset');
+        $this->paginate['Tag']['limit'] = 20;
+        $items = $this->paginate($this->Tag, $scope);
+        $organizations = array();
+        foreach ($items AS $k => $item) {
+            $items[$k]['Dataset'] = $this->Tag->Dataset->find('all', array(
+                'fields' => array('Dataset.id', 'Dataset.name', 'Organization.parent_id'),
+                'contain' => array('Organization'),
+                'conditions' => array(
+                    'LinksTag.tag_id' => hex2bin($item['Tag']['id']),
+                ),
+                'joins' => array(
+                    array(
+                        'table' => 'links_tags',
+                        'alias' => 'LinksTag',
+                        'type' => 'inner',
+                        'conditions' => array(
+                            'LinksTag.foreign_id = Dataset.id',
+                            'LinksTag.model' => 'Dataset',
+                        ),
+                    ),
+                ),
+            ));
+            foreach ($items[$k]['Dataset'] AS $dk => $dv) {
+                if (!isset($organizations[$items[$k]['Dataset'][$dk]['Organization']['parent_id']])) {
+                    $this->Tag->Organization->id = hex2bin($items[$k]['Dataset'][$dk]['Organization']['parent_id']);
+                    $organizations[$items[$k]['Dataset'][$dk]['Organization']['parent_id']] = $this->Tag->Organization->field('name');
+                }
+                $items[$k]['Dataset'][$dk]['Organization']['name'] = $organizations[$items[$k]['Dataset'][$dk]['Organization']['parent_id']];
+            }
+        }
+        $this->set('items', $items);
     }
 
 }

@@ -1,17 +1,12 @@
+<?php
+if (!isset($url)) {
+    $url = array();
+}
+?>
 <div id="OrganizationsAdminIndex">
-    <?php
-    $links = array(
-        $this->Html->link('組織', '/admin/organizations/index'),
-    );
-    if (!empty($path)) {
-        foreach ($path AS $item) {
-            $links[] = $this->Html->link($item['Organization']['name'], array('action' => 'index', $item['Organization']['id']));
-        }
-    }
-    ?>
-    <h2><?php echo implode(' > ', $links); ?></h2>
+    <h2><?php echo __('組織', true); ?></h2>
     <div class="btn-group">
-        <?php echo $this->Html->link('新增', array('action' => 'add', $parentId), array('class' => 'btn btn-default')); ?>
+        <?php echo $this->Html->link('新增', array('action' => 'add'), array('class' => 'btn btn-default')); ?>
     </div>
     <div><?php
         echo $this->Paginator->counter(array(
@@ -22,6 +17,12 @@
     <table class="table table-bordered" id="OrganizationsAdminIndexTable">
         <thead>
             <tr>
+                <?php
+                if (!empty($op)) {
+                    echo '<th>&nbsp;</th>';
+                }
+                ?>
+                <th><?php echo $this->Paginator->sort('Organization.parent_id', '父項目', array('url' => $url)); ?></th>
                 <th><?php echo $this->Paginator->sort('Organization.name', '名稱', array('url' => $url)); ?></th>
                 <th><?php echo $this->Paginator->sort('Organization.foreign_id', '原始編號', array('url' => $url)); ?></th>
                 <th><?php echo $this->Paginator->sort('Organization.foreign_uri', '原始網址', array('url' => $url)); ?></th>
@@ -38,15 +39,30 @@
                 }
                 ?>
                 <tr<?php echo $class; ?>>
+                    <?php
+                    if (!empty($op)) {
+                        echo '<td>';
+                        $options = array('value' => $item['Organization']['id'], 'class' => 'habtmSet');
+                        if ($item['option'] == 1) {
+                            $options['checked'] = 'checked';
+                        }
+                        echo $this->Form->checkbox('Set.' . $item['Organization']['id'], $options);
+                        echo '<div id="messageSet' . $item['Organization']['id'] . '"></div></td>';
+                    }
+                    ?>
+
                     <td><?php
-            echo $this->Html->link($item['Organization']['name'], array('action' => 'index', $item['Organization']['id']));
-                ?></td>
+                        echo $item['Organization']['parent_id'];
+                        ?></td>
                     <td><?php
-                    echo $item['Organization']['foreign_id'];
-                ?></td>
+                        echo $item['Organization']['name'];
+                        ?></td>
                     <td><?php
-                    echo $item['Organization']['foreign_uri'];
-                ?></td>
+                        echo $item['Organization']['foreign_id'];
+                        ?></td>
+                    <td><?php
+                        echo $item['Organization']['foreign_uri'];
+                        ?></td>
                     <td>
                         <div class="btn-group">
                             <?php echo $this->Html->link('檢視', array('action' => 'view', $item['Organization']['id']), array('class' => 'btn btn-default')); ?>
@@ -55,7 +71,7 @@
                         </div>
                     </td>
                 </tr>
-            <?php } // End of foreach ($items as $item) {   ?>
+            <?php } // End of foreach ($items as $item) {  ?>
         </tbody>
     </table>
     <div class="paging"><?php echo $this->element('paginator'); ?></div>

@@ -27,13 +27,15 @@
         ++$teno_o_organ_index;
         echo '<div class="col-md-3 list">';
         echo '<input type=text class="col-md-12 tagName" value="' . $item['Tag']['name'] . '" data-id="' . $item['Tag']['id'] . '" />';
-        echo '<ul class="sortable droptrue" data-tag-id="' . $item['Tag']['id'] . '" >';
+        echo '<ul class="sortable droptrue" data-tag-id="' . $item['Tag']['id'] . '" id="tagList' . $item['Tag']['id'] . '">';
         foreach ($item['Dataset'] AS $dataset) {
             echo '<li class="ui-state-default" data-tag-id="' . $item['Tag']['id'] . '" id="' . $dataset['Dataset']['id'] . '">';
             echo $this->Html->link($dataset['Dataset']['name'] . ' - ' . $dataset['Organization']['name'], '/admin/datasets/view/' . $dataset['Dataset']['id'], array('target' => '_blank'));
             echo '</li>';
         }
-        echo '</ul></div>';
+        echo '</ul>';
+        echo '<input type=text class="col-md-12 tagItem" placeholder="新增資料項" data-id="' . $item['Tag']['id'] . '" />';
+        echo '</div>';
     }
     ?>
     <div class="clearfix"></div>
@@ -73,6 +75,25 @@
             },
             select: function (event, ui) {
                 selectedItem = ui.item;
+            },
+            minLength: 1
+        });
+        $('input.tagItem').autocomplete({
+            source: function (request, response) {
+                currentTerm = request.term;
+                $.ajax({
+                    url: queryUrl + request.term,
+                    dataType: "json",
+                    data: {},
+                    success: function (data) {
+                        response(data.result);
+                    }
+                });
+            },
+            select: function (event, ui) {
+                var tagId = $(this).attr('data-id');
+                $.get(tagSetUrl + ui.item.id + '/' + tagId + '/on');
+                $('#tagList' + tagId).append('<li class="ui-state-default" data-tag-id="' + tagId + '" id="' + ui.item.id + '">' + ui.item.name + '</li>');
             },
             minLength: 1
         });

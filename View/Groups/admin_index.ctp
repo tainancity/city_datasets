@@ -4,14 +4,14 @@
         <?php if ($parentId > 0): ?>
             <?php echo $this->Html->link(__('Upper level', true), array('action' => 'index', $upperLevelId), array('class' => 'btn')); ?>
         <?php endif; ?>
-        <?php echo $this->Html->link(__('New', true), array('action' => 'add', $parentId), array('class' => 'btn dialogControl')); ?>
+        <?php echo $this->Html->link(__('New', true), array('action' => 'add', $parentId), array('class' => 'btn')); ?>
         <?php echo $this->Html->link(__('Members', true), array('controller' => 'members'), array('class' => 'btn')); ?>
         <?php echo $this->Html->link(__('Group Permissions', true), array('controller' => 'group_permissions'), array('class' => 'btn')); ?>
     </div>
     <p>
         <?php
         echo $this->Paginator->counter(array(
-            'format' => __('Page {:page} of {:pages}, showing {:current} records out of {:count} total, starting on record {:start}, ending on {:end}')
+            'format' => __('第 {:page} 頁 / 共 {:pages} 頁，總數： {:count}  筆')
         ));
         ?>
     </p>
@@ -39,8 +39,8 @@
                 </td>
                 <td>
                     <div class="btn-group">
-                        <?php echo $this->Html->link(__('Edit', true), array('action' => 'edit', $group['Group']['id']), array('class' => 'btn btn-default dialogControl')); ?>
-                        <?php echo $this->Html->link(__('Delete', true), array('action' => 'delete', $group['Group']['id']), array('class' => 'btn btn-default'), __('Delete the item, sure?', true)); ?>
+                        <?php echo $this->Html->link('編輯', array('action' => 'edit', $group['Group']['id']), array('class' => 'btn btn-default')); ?>
+                        <?php echo $this->Html->link('刪除', array('action' => 'delete', $group['Group']['id']), array('class' => 'btn btn-default'), '確定要刪除？'); ?>
                         <?php echo $this->Html->link(__('Sub group', true), array('action' => 'index', $group['Group']['id']), array('class' => 'btn btn-default')); ?>
                         <?php
                         if ($group['Group']['id'] != 1) {

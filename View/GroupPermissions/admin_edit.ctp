@@ -59,7 +59,7 @@
         ?>
     </fieldset>
     <?php
-    echo $this->Form->end(__('Submit', true));
+    echo $this->Form->end('儲存');
     echo $this->Html->scriptBlock('$(function() {
     $(\'#acoPush\').click(function() {
         var acoValue = $(\'#GroupPermissionAcos\').val();

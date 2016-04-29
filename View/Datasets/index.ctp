@@ -11,7 +11,7 @@
         }
 
         echo $this->Paginator->counter(array(
-            'format' => __('Page {:page} of {:pages}, showing {:current} records out of {:count} total, starting on record {:start}, ending on {:end}')
+            'format' => __('第 {:page} 頁 / 共 {:pages} 頁，總數： {:count}  筆')
         ));
         ?></p>
     <div class="paging"><?php echo $this->element('paginator'); ?></div>
@@ -27,7 +27,7 @@
                 <th><?php echo $this->Paginator->sort('Dataset.foreign_id', '原始編號', array('url' => $url)); ?></th>
                 <th><?php echo $this->Paginator->sort('Dataset.foreign_uri', '原始網址', array('url' => $url)); ?></th>
                 <th><?php echo $this->Paginator->sort('Dataset.modified', '更新時間', array('url' => $url)); ?></th>
-                <th class="actions"><?php echo __('Action', true); ?></th>
+                <th class="actions">操作</th>
             </tr>
         </thead>
         <tbody>
@@ -71,7 +71,7 @@
                         ?></td>
                     <td>
                         <div class="btn-group">
-                            <?php echo $this->Html->link(__('View', true), array('action' => 'view', $item['Dataset']['id']), array('class' => 'btn btn-default DatasetsIndexControl')); ?>
+                            <?php echo $this->Html->link('檢視', array('action' => 'view', $item['Dataset']['id']), array('class' => 'btn btn-default DatasetsIndexControl')); ?>
                         </div>
                     </td>
                 </tr>

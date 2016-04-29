@@ -116,7 +116,7 @@ class OrganizationsController extends AppController {
 
     function admin_view($id = null) {
         if (!$id || !$this->data = $this->Organization->read(null, hex2bin($id))) {
-            $this->Session->setFlash(__('Please do following links in the page', true));
+            $this->Session->setFlash('請依照網址指示操作');
             $this->redirect(array('action' => 'index'));
         }
     }
@@ -129,10 +129,10 @@ class OrganizationsController extends AppController {
             }
             $this->Organization->create();
             if ($this->Organization->save($dataToSave)) {
-                $this->Session->setFlash(__('The data has been saved', true));
+                $this->Session->setFlash('資料已經儲存');
                 $this->redirect(array('action' => 'index'));
             } else {
-                $this->Session->setFlash(__('Something was wrong during saving, please try again', true));
+                $this->Session->setFlash('資料儲存失敗，請重試');
             }
         }
     }
@@ -142,7 +142,7 @@ class OrganizationsController extends AppController {
             $item = $this->Organization->read(null, hex2bin($id));
         }
         if (empty($item)) {
-            $this->Session->setFlash(__('Please do following links in the page', true));
+            $this->Session->setFlash('請依照網址指示操作');
             $this->redirect('/');
         }
         if (!empty($this->data)) {
@@ -152,10 +152,10 @@ class OrganizationsController extends AppController {
                 $dataToSave['Organization']['parent_id'] = hex2bin($dataToSave['Organization']['parent_id']);
             }
             if ($this->Organization->save($dataToSave)) {
-                $this->Session->setFlash(__('The data has been saved', true));
+                $this->Session->setFlash('資料已經儲存');
                 $this->redirect(array('action' => 'index'));
             } else {
-                $this->Session->setFlash(__('Something was wrong during saving, please try again', true));
+                $this->Session->setFlash('資料儲存失敗，請重試');
             }
         } else {
             $this->data = $item;
@@ -165,9 +165,9 @@ class OrganizationsController extends AppController {
 
     function admin_delete($id = null) {
         if (!$id) {
-            $this->Session->setFlash(__('Please do following links in the page', true));
+            $this->Session->setFlash('請依照網址指示操作');
         } else if ($this->Organization->delete(hex2bin($id))) {
-            $this->Session->setFlash(__('The data has been deleted', true));
+            $this->Session->setFlash('資料已經刪除');
         }
         $this->redirect(array('action' => 'index'));
     }
@@ -194,19 +194,19 @@ class OrganizationsController extends AppController {
                         'conditions' => $conditions,
                     ))) ? 'on' : 'off';
             if ($status == $switch) {
-                $this->set('habtmMessage', __('Duplicated operactions', true));
+                $this->set('habtmMessage', '操作重複');
             } else if ($switch == 'on') {
                 $habtmModel->create();
                 if ($habtmModel->save(array($habtmKeys[$foreignModel]['alias'] => $conditions))) {
-                    $this->set('habtmMessage', __('Updated', true));
+                    $this->set('habtmMessage', '已更新');
                 } else {
-                    $this->set('habtmMessage', __('Update failed', true));
+                    $this->set('habtmMessage', '更新失敗');
                 }
             } else {
                 if ($habtmModel->deleteAll($conditions)) {
-                    $this->set('habtmMessage', __('Updated', true));
+                    $this->set('habtmMessage', '已更新');
                 } else {
-                    $this->set('habtmMessage', __('Update failed', true));
+                    $this->set('habtmMessage', '更新失敗');
                 }
             }
         }

@@ -1,7 +1,7 @@
 <div id="MembersAdminIndex">
     <h2><?php echo __('Members', true); ?></h2>
     <div class="btn-group">
-        <?php echo $this->Html->link('新增', array('action' => 'add'), array('class' => 'btn dialogControl')); ?>
+        <?php echo $this->Html->link('新增', array('action' => 'add'), array('class' => 'btn')); ?>
         <?php echo $this->Html->link('群組', array('controller' => 'groups'), array('class' => 'btn')); ?>
         <?php echo $this->Html->link('權限更新', array('action' => 'acos'), array('class' => 'btn')); ?>
     </div>

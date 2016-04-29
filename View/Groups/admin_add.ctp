@@ -6,7 +6,7 @@
         echo $this->Form->input('name', array('label' => __('Name', true)));
         ?>
     </fieldset>
-    <?php echo $this->Form->end(__('Submit', true)); ?>
+    <?php echo $this->Form->end('儲存'); ?>
 </div>
 <div class="actions">
     <ul>

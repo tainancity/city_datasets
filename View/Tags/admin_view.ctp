@@ -28,14 +28,6 @@
         </div>
     </div>
     <hr />
-    <div class="btn-group">
-        <?php echo $this->Html->link(__('Delete', true), array('action' => 'delete', $this->Form->value('Tag.id')), array('class' => 'btn btn-default'), __('Delete the item, sure?', true)); ?>
-        <?php echo $this->Html->link(__('標籤 List', true), array('action' => 'index'), array('class' => 'btn btn-default')); ?>
-        <?php echo $this->Html->link(__('View Related 資料集', true), array('controller' => 'datasets', 'action' => 'index', 'Tag', $this->data['Tag']['id']), array('class' => 'btn btn-default TagsAdminViewControl')); ?>
-        <?php echo $this->Html->link(__('Set Related 資料集', true), array('controller' => 'datasets', 'action' => 'index', 'Tag', $this->data['Tag']['id'], 'set'), array('class' => 'btn btn-default TagsAdminViewControl')); ?>
-        <?php echo $this->Html->link(__('View Related 組織', true), array('controller' => 'organizations', 'action' => 'index', 'Tag', $this->data['Tag']['id']), array('class' => 'btn btn-default TagsAdminViewControl')); ?>
-        <?php echo $this->Html->link(__('Set Related 組織', true), array('controller' => 'organizations', 'action' => 'index', 'Tag', $this->data['Tag']['id'], 'set'), array('class' => 'btn btn-default TagsAdminViewControl')); ?>
-    </div>
     <div id="TagsAdminViewPanel"></div>
     <?php
     echo $this->Html->scriptBlock('

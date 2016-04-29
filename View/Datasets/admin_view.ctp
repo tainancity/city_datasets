@@ -65,22 +65,15 @@
     </div>
     <hr />
     <div class="btn-group">
-        <?php echo $this->Html->link(__('Delete', true), array('action' => 'delete', $this->Form->value('Dataset.id')), array('class' => 'btn btn-default'), __('Delete the item, sure?', true)); ?>
-        <?php echo $this->Html->link(__('資料集 List', true), array('action' => 'index'), array('class' => 'btn btn-default')); ?>
-        <?php echo $this->Html->link(__('View Related 標籤', true), array('controller' => 'tags', 'action' => 'index', 'Dataset', $this->data['Dataset']['id']), array('class' => 'btn btn-default DatasetsAdminViewControl')); ?>
-        <?php echo $this->Html->link(__('Set Related 標籤', true), array('controller' => 'tags', 'action' => 'index', 'Dataset', $this->data['Dataset']['id'], 'set'), array('class' => 'btn btn-default DatasetsAdminViewControl')); ?>
+        <?php echo $this->Html->link('檢視標籤', array('controller' => 'tags', 'action' => 'index', 'Dataset', $this->data['Dataset']['id']), array('class' => 'btn btn-default DatasetsAdminViewControl')); ?>
+        <?php echo $this->Html->link('設定標籤', array('controller' => 'tags', 'action' => 'index', 'Dataset', $this->data['Dataset']['id'], 'set'), array('class' => 'btn btn-default DatasetsAdminViewControl')); ?>
     </div>
     <div id="DatasetsAdminViewPanel"></div>
-    <?php
-    echo $this->Html->scriptBlock('
-
-');
-    ?>
     <script type="text/javascript">
         //<![CDATA[
         $(function () {
             $('a.DatasetsAdminViewControl').click(function () {
-                $('#DatasetsAdminViewPanel').parent().load(this.href);
+                $('#DatasetsAdminViewPanel').load(this.href);
                 return false;
             });
         });

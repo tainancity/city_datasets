@@ -6,11 +6,11 @@ if (!isset($url)) {
 <div id="TagsAdminIndex">
     <h2><?php echo __('標籤', true); ?></h2>
     <div class="btn-group">
-        <?php echo $this->Html->link(__('Add', true), array('action' => 'add'), array('class' => 'btn btn-default dialogControl')); ?>
+        <?php echo $this->Html->link('新增', array('action' => 'add'), array('class' => 'btn btn-default')); ?>
     </div>
     <div><?php
         echo $this->Paginator->counter(array(
-            'format' => __('Page {:page} of {:pages}, showing {:current} records out of {:count} total, starting on record {:start}, ending on {:end}')
+            'format' => __('第 {:page} 頁 / 共 {:pages} 頁，總數： {:count}  筆')
         ));
         ?></div>
     <div class="paging"><?php echo $this->element('paginator'); ?></div>
@@ -22,11 +22,10 @@ if (!isset($url)) {
                     echo '<th>&nbsp;</th>';
                 }
                 ?>
-
                 <th><?php echo $this->Paginator->sort('Tag.parent_id', '父項目', array('url' => $url)); ?></th>
                 <th><?php echo $this->Paginator->sort('Tag.name', '名稱', array('url' => $url)); ?></th>
                 <th><?php echo $this->Paginator->sort('Tag.model', 'Model', array('url' => $url)); ?></th>
-                <th class="actions"><?php echo __('Action', true); ?></th>
+                <th class="actions">操作</th>
             </tr>
         </thead>
         <tbody>
@@ -62,9 +61,9 @@ if (!isset($url)) {
                         ?></td>
                     <td>
                         <div class="btn-group">
-                            <?php echo $this->Html->link(__('View', true), array('action' => 'view', $item['Tag']['id']), array('class' => 'btn btn-default dialogControl')); ?>
-                            <?php echo $this->Html->link(__('Edit', true), array('action' => 'edit', $item['Tag']['id']), array('class' => 'btn btn-default dialogControl')); ?>
-                            <?php echo $this->Html->link(__('Delete', true), array('action' => 'delete', $item['Tag']['id']), array('class' => 'btn btn-default'), __('Delete the item, sure?', true)); ?>
+                            <?php echo $this->Html->link('檢視', array('action' => 'view', $item['Tag']['id']), array('class' => 'btn btn-default')); ?>
+                            <?php echo $this->Html->link('編輯', array('action' => 'edit', $item['Tag']['id']), array('class' => 'btn btn-default')); ?>
+                            <?php echo $this->Html->link('刪除', array('action' => 'delete', $item['Tag']['id']), array('class' => 'btn btn-default'), '確定要刪除？'); ?>
                         </div>
                     </td>
                 </tr>

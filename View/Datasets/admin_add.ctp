@@ -1,4 +1,5 @@
 <div id="DatasetsAdminAdd">
+    <h3>新增資料集</h3>
     <?php
     $url = array();
     if (!empty($foreignId) && !empty($foreignModel)) {
@@ -10,31 +11,26 @@
     echo $this->Form->create('Dataset', array('type' => 'file', 'url' => $url));
     ?>
     <div class="Datasets form">
-        <fieldset>
-            <legend><?php
-                echo __('Add 資料集', true);
-                ?></legend>
-            <?php
-            echo $this->Form->input('Dataset.name', array(
-                'label' => '名稱',
-                'div' => 'form-group',
-                'class' => 'form-control',
-            ));
-            echo $this->Form->input('Dataset.foreign_id', array(
-                'type' => 'text',
-                'label' => '原始編號',
-                'div' => 'form-group',
-                'class' => 'form-control',
-            ));
-            echo $this->Form->input('Dataset.foreign_uri', array(
-                'label' => '原始網址',
-                'div' => 'form-group',
-                'class' => 'form-control',
-            ));
-            ?>
-        </fieldset>
+        <?php
+        echo $this->Form->input('Dataset.name', array(
+            'label' => '名稱',
+            'div' => 'form-group',
+            'class' => 'form-control',
+        ));
+        echo $this->Form->input('Dataset.foreign_id', array(
+            'type' => 'text',
+            'label' => '原始編號',
+            'div' => 'form-group',
+            'class' => 'form-control',
+        ));
+        echo $this->Form->input('Dataset.foreign_uri', array(
+            'label' => '原始網址',
+            'div' => 'form-group',
+            'class' => 'form-control',
+        ));
+        ?>
     </div>
     <?php
-    echo $this->Form->end(__('Submit', true));
+    echo $this->Form->end('儲存');
     ?>
 </div>

@@ -31,6 +31,18 @@ class LinksTag extends AppModel {
         return parent::beforeSave($options);
     }
 
+    public function beforeFind($query) {
+        $binaryKeys = array('tag_id', 'foreign_id');
+        foreach ($query['conditions'] AS $k => $v) {
+            foreach ($binaryKeys AS $binaryKey) {
+                if (false !== strpos($k, $binaryKey)) {
+                    $query['conditions'][$k] = hex2bin($v);
+                }
+            }
+        }
+        return $query;
+    }
+
     public function afterFind($results, $primary = false) {
         $binaryKeys = array('id', 'tag_id', 'foreign_id');
         foreach ($results AS $k => $v) {

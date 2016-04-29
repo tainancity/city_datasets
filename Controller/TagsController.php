@@ -77,8 +77,6 @@ class TagsController extends AppController {
 
     function admin_index($foreignModel = null, $foreignId = null, $op = null) {
         $foreignKeys = array();
-
-
         $habtmKeys = array(
             'Dataset' => 'foreign_id',
             'Organization' => 'foreign_id',
@@ -87,8 +85,6 @@ class TagsController extends AppController {
 
         $scope = array();
         if (array_key_exists($foreignModel, $foreignKeys) && !empty($foreignId)) {
-            $scope['Tag.' . $foreignKeys[$foreignModel]] = $foreignId;
-
             $joins = array(
                 'Dataset' => array(
                     0 => array(
@@ -128,16 +124,13 @@ class TagsController extends AppController {
             if (array_key_exists($foreignModel, $habtmKeys)) {
                 unset($scope['Tag.' . $foreignKeys[$foreignModel]]);
                 if ($op != 'set') {
-                    $scope[$joins[$foreignModel][0]['alias'] . '.' . $foreignKeys[$foreignModel]] = $foreignId;
+                    $scope[$joins[$foreignModel][0]['alias'] . '.' . $foreignKeys[$foreignModel]] = hex2bin($foreignId);
                     $this->paginate['Tag']['joins'] = $joins[$foreignModel];
                 }
             }
         }
         if (!empty($foreignModel)) {
             $scope['Tag.model'] = $foreignModel;
-        }
-        if (!empty($foreignId)) {
-            $scope['LinksTag.foreign_id'] = hex2bin($foreignId);
         }
         $this->set('scope', $scope);
         $this->paginate['Tag']['limit'] = 20;
@@ -148,8 +141,8 @@ class TagsController extends AppController {
                 $items[$key]['option'] = $this->Tag->find('count', array(
                     'joins' => $joins[$foreignModel],
                     'conditions' => array(
-                        'Tag.id' => $item['Tag']['id'],
-                        $foreignModel . '.id' => $foreignId,
+                        'Tag.id' => hex2bin($item['Tag']['id']),
+                        $foreignModel . '.id' => hex2bin($foreignId),
                     ),
                 ));
                 if ($items[$key]['option'] > 0) {
@@ -246,26 +239,33 @@ class TagsController extends AppController {
         if (empty($foreignModel) || empty($foreignId) || empty($id) || empty($switch)) {
             $this->set('habtmMessage', __('Wrong Parameters'));
         } else {
-            $habtmModel = &$this->Tag->$habtmKeys[$foreignModel]['alias'];
             $conditions = array(
-                $habtmKeys[$foreignModel]['associationForeignKey'] => $foreignId,
-                $habtmKeys[$foreignModel]['foreignKey'] => $id,
+                'tag_id' => $id,
+                'foreign_id' => $foreignId,
                 'model' => $foreignModel,
             );
-            $status = ($habtmModel->find('count', array(
-                        'conditions' => $conditions,
-                    ))) ? 'on' : 'off';
+            $links = $this->Tag->LinksTag->find('list', array(
+                'fields' => array('LinksTag.id', 'LinksTag.id'),
+                'conditions' => $conditions,
+            ));
+            $status = !empty($links) ? 'on' : 'off';
             if ($status == $switch) {
                 $this->set('habtmMessage', __('Duplicated operactions', true));
             } else if ($switch == 'on') {
-                $habtmModel->create();
-                if ($habtmModel->save(array($habtmKeys[$foreignModel]['alias'] => $conditions))) {
+                $this->Tag->LinksTag->create();
+                if ($this->Tag->LinksTag->save(array('LinksTag' => $conditions))) {
                     $this->set('habtmMessage', __('Updated', true));
                 } else {
                     $this->set('habtmMessage', __('Update failed', true));
                 }
             } else {
-                if ($habtmModel->deleteAll($conditions)) {
+                $result = true;
+                foreach ($links AS $link) {
+                    if ($result) {
+                        $result = $this->Tag->LinksTag->delete(hex2bin($link));
+                    }
+                }
+                if ($result) {
                     $this->set('habtmMessage', __('Updated', true));
                 } else {
                     $this->set('habtmMessage', __('Update failed', true));

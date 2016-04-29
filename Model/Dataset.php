@@ -23,10 +23,13 @@ class Dataset extends AppModel {
             'className' => 'Organization',
         ),
     );
-    
+
     public function beforeSave($options = array()) {
         if (false === $this->id && empty($this->data[$this->name]['id'])) {
             $this->id = $this->data[$this->name]['id'] = hex2bin($this->getUUID());
+        }
+        if (isset($this->data[$this->name]['organization_id'])) {
+            $this->data[$this->name]['organization_id'] = hex2bin($this->data[$this->name]['organization_id']);
         }
         return parent::beforeSave($options);
     }

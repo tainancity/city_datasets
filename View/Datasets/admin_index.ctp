@@ -14,7 +14,7 @@ if (!empty($foreignId) && !empty($foreignModel)) {
     </div>
     <div><?php
         echo $this->Paginator->counter(array(
-            'format' => __('第 {:page} 頁 / 共 {:pages} 頁，總數： {:count}  筆')
+            'format' => '第 {:page} 頁 / 共 {:pages} 頁，總數： {:count}  筆'
         ));
         ?></div>
     <div class="paging"><?php echo $this->element('paginator'); ?></div>

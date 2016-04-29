@@ -11,7 +11,7 @@
         }
 
         echo $this->Paginator->counter(array(
-            'format' => __('第 {:page} 頁 / 共 {:pages} 頁，總數： {:count}  筆')
+            'format' => '第 {:page} 頁 / 共 {:pages} 頁，總數： {:count}  筆'
         ));
         ?></p>
     <div class="paging"><?php echo $this->element('paginator'); ?></div>

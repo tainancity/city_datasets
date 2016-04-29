@@ -4,13 +4,14 @@ if (!isset($url)) {
 }
 ?>
 <div id="TagsAdminIndex">
-    <h2><?php echo __('標籤', true); ?></h2>
+    <h2>標籤</h2>
     <div class="btn-group">
         <?php echo $this->Html->link('新增', array('action' => 'add'), array('class' => 'btn btn-default')); ?>
+        <?php echo $this->Html->link('資料集', array('action' => 'datasets'), array('class' => 'btn btn-default')); ?>
     </div>
     <div><?php
         echo $this->Paginator->counter(array(
-            'format' => __('第 {:page} 頁 / 共 {:pages} 頁，總數： {:count}  筆')
+            'format' => '第 {:page} 頁 / 共 {:pages} 頁，總數： {:count}  筆'
         ));
         ?></div>
     <div class="paging"><?php echo $this->element('paginator'); ?></div>

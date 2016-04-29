@@ -15,20 +15,27 @@ foreach ($items AS $item) {
     echo '<input type=text class="col-md-12 tagName" value="' . $item['Tag']['name'] . '" data-id="' . $item['Tag']['id'] . '" />';
     echo '<ul class="sortable droptrue" data-tag-id="' . $item['Tag']['id'] . '" >';
     foreach ($item['Dataset'] AS $dataset) {
-        echo '<li class="ui-state-default" data-tag-id="' . $item['Tag']['id'] . '" id="' . $dataset['Dataset']['id'] . '"><a href="' . $dataset['Dataset']['id'] . '" target=_balnk><span class=city>' . $dataset['Dataset']['name'] . '</span> - ' . $dataset['Organization']['name'] . '</a></li>';
+        echo '<li class="ui-state-default" data-tag-id="' . $item['Tag']['id'] . '" id="' . $dataset['Dataset']['id'] . '">';
+        echo $this->Html->link($dataset['Dataset']['name'] . ' - ' . $dataset['Organization']['name'], '/admin/datasets/view/' . $dataset['Dataset']['id'], array('target' => '_blank'));
+        echo '</li>';
     }
     echo '</ul></div>';
 }
 ?>
 <div class="clearfix"></div>
-<div id="savemsg" style="display: none;">已儲存</div>
 <hr />
-<div class="form-group">
-    <input type="text" id="datasetHelper" class="form-control" />
-    <a href="#" id="tagAdd" class="btn btn-default">新增標籤</a>
+<div class="col-md-12">
+    <div class="col-md-6">
+        <input type="text" id="datasetHelper" class="form-control" />
+    </div>
+    <div class="col-md-6">
+        <a href="#" id="tagAdd" class="btn btn-default">新增標籤</a>
+    </div>
 </div>
+<div id="savemsg" style="display: none;">已儲存</div>
 <div class="paging"><?php echo $this->element('paginator'); ?></div>
 <script>
+    var currentUrl = '<?php echo $this->Html->url(array()); ?>';
     var queryUrl = '<?php echo $this->Html->url('/datasets/q/'); ?>';
     var tagAddUrl = '<?php echo $this->Html->url('/admin/tags/add/'); ?>';
     var tagEditUrl = '<?php echo $this->Html->url('/admin/tags/edit/'); ?>';
@@ -60,7 +67,9 @@ foreach ($items AS $item) {
                     name: $('input#datasetHelper').val()
                 }}, function (r) {
                 if (r.result === 'ok') {
-                    $.get(tagSetUrl + selectedItem.id + '/' + r.id + '/on');
+                    $.get(tagSetUrl + selectedItem.id + '/' + r.id + '/on', {}, function () {
+                        location.href = currentUrl;
+                    });
                 }
             }, 'json');
             return false;
@@ -89,6 +98,7 @@ foreach ($items AS $item) {
                     $(ui.draggable).detach().appendTo(this);//先把項目移過去
                     $.get(tagSetUrl + datasetId + '/' + oTagId + '/off');
                     $.get(tagSetUrl + datasetId + '/' + nTagId + '/on');
+                    showsave();
                 }
             }
         });
@@ -96,7 +106,6 @@ foreach ($items AS $item) {
     });
     function showsave()
     {
-
         $('#savemsg').show();
         setTimeout(function () {
             $('#savemsg').fadeOut();

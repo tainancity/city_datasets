@@ -31,7 +31,9 @@ class OrganizationsController extends AppController {
                 ),
             ));
             foreach ($items AS $item) {
-                $item['Organization']['label'] = $item['Organization']['value'] = $item['Organization']['name'];
+                $path = $this->Organization->getPath($item['Organization']['id'], array('name'));
+                $item['Organization']['label'] = implode(' > ', Set::extract('{n}.Organization.name', $path));
+                $item['Organization']['value'] = $item['Organization']['name'];
                 $result['result'][] = $item['Organization'];
             }
         }

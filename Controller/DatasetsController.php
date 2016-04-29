@@ -56,7 +56,29 @@ class DatasetsController extends AppController {
         
     }
 
-    function admin_index($foreignModel = null, $foreignId = null, $op = null) {
+    public function admin_index($parentId = null) {
+        $scope = array(
+            'Dataset.parent_id' => $parentId,
+        );
+        $items = $this->paginate($this->Dataset, $scope);
+        $organizations = array();
+        foreach ($items AS $k => $item) {
+            if (!isset($organizations[$item['Dataset']['organization_id']])) {
+                $path = $this->Dataset->Organization->getPath($item['Dataset']['organization_id'], array('name'));
+                $organizations[$item['Dataset']['organization_id']] = implode(' > ', Set::extract('{n}.Organization.name', $path));
+            }
+            $items[$k]['Organization'] = array(
+                'id' => $item['Dataset']['organization_id'],
+                'name' => $organizations[$item['Dataset']['organization_id']],
+            );
+        }
+        $this->set('path', $this->Dataset->getPath($parentId, array('id', 'name')));
+        $this->set('parentId', $parentId);
+        $this->set('items', $items);
+        $this->set('url', array($parentId));
+    }
+
+    function admin_list($foreignModel = null, $foreignId = null, $op = null) {
         $foreignKeys = array();
 
         $foreignKeys = array(

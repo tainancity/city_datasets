@@ -54,6 +54,7 @@
 <script>
     var currentUrl = '<?php echo $this->Html->url(array()); ?>';
     var queryUrl = '<?php echo $this->Html->url('/datasets/q/'); ?>';
+    var viewUrl = '<?php echo $this->Html->url('/admin/datasets/view/'); ?>';
     var tagAddUrl = '<?php echo $this->Html->url('/admin/tags/add/'); ?>';
     var tagEditUrl = '<?php echo $this->Html->url('/admin/tags/edit/'); ?>';
     var tagSetUrl = '<?php echo $this->Html->url('/admin/tags/habtmSet/Dataset/'); ?>';

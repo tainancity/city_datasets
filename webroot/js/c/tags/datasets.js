@@ -32,7 +32,7 @@ $(function () {
         select: function (event, ui) {
             var tagId = $(this).attr('data-id');
             $.get(tagSetUrl + ui.item.id + '/' + tagId + '/on');
-            $('#tagList' + tagId).append('<li class="ui-state-default" data-tag-id="' + tagId + '" id="' + ui.item.id + '">' + ui.item.name + '</li>');
+            $('#tagList' + tagId).append('<li class="ui-state-default" data-tag-id="' + tagId + '" id="' + ui.item.id + '"><a href="' + viewUrl + ui.item.id + '" target="_blank">' + ui.item.name + '</a></li>');
         },
         minLength: 1
     });

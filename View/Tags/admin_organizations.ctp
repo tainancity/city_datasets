@@ -75,6 +75,7 @@
 <script>
     var currentUrl = '<?php echo $this->Html->url(array()); ?>';
     var queryUrl = '<?php echo $this->Html->url('/organizations/q/'); ?>';
+    var viewUrl = '<?php echo $this->Html->url('/admin/organizations/view/'); ?>';
     var tagAddUrl = '<?php echo $this->Html->url('/admin/tags/add/'); ?>';
     var tagEditUrl = '<?php echo $this->Html->url('/admin/tags/edit/'); ?>';
 	var tagDelUrl = '<?php echo $this->Html->url('/admin/tags/delete/'); ?>';

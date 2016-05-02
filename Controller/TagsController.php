@@ -132,7 +132,7 @@ class TagsController extends AppController {
         $this->set('foreignModel', $foreignModel);
     }
 
-    function admin_view($id = null) {
+    public function admin_view_organization($id = null) {
         if (!empty($id)) {
             $this->data = $this->Tag->find('first', array(
                 'conditions' => array(
@@ -161,7 +161,44 @@ class TagsController extends AppController {
                 $items[$k][$tagModel]['name'] = implode(' > ', Set::extract("{n}.{$tagModel}.name", $path));
             }
             $this->set('items', $items);
-            $this->view = 'admin_view' . $tagModel;
+        }
+        if (empty($this->data)) {
+            $this->Session->setFlash('請依照網址指示操作');
+            $this->redirect(array('action' => 'index'));
+        }
+    }
+
+    public function admin_view_dataset($id = null) {
+        if (!empty($id)) {
+            $this->data = $this->Tag->find('first', array(
+                'conditions' => array(
+                    'Tag.id' => $id,
+                ),
+            ));
+            $tagModel = $this->data['Tag']['model'];
+            $items = $this->Tag->{$tagModel}->find('all', array(
+                'conditions' => array(
+                    'LinksTag.tag_id' => $id,
+                ),
+                'joins' => array(
+                    array(
+                        'table' => 'links_tags',
+                        'alias' => 'LinksTag',
+                        'type' => 'inner',
+                        'conditions' => array(
+                            'LinksTag.model' => $tagModel,
+                            "LinksTag.foreign_id = {$tagModel}.id",
+                        ),
+                    ),
+                ),
+            ));
+            foreach ($items AS $k => $item) {
+                $path = $this->Tag->Organization->getPath($items[$k][$tagModel]['organization_id'], array('id', 'name'));
+                $items[$k]['Organization'] = array(
+                    'name' => implode(' > ', Set::extract("{n}.Organization.name", $path)),
+                );
+            }
+            $this->set('items', $items);
         }
         if (empty($this->data)) {
             $this->Session->setFlash('請依照網址指示操作');

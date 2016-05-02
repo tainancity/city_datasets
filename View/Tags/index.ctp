@@ -39,7 +39,7 @@
                         echo $item['Tag']['name'];
                         ?></td>
                     <td><?php
-                        echo $item['Tag']['model'];
+                        echo tag_to_str($item['Tag']['model']);//defined in Config/bootstrap.php
                         ?></td>
                     <td>
                         <div class="btn-group">

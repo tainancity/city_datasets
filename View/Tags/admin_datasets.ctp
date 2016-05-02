@@ -1,13 +1,3 @@
-<style>
-    .list{  margin: 5px; float: left; background: #eee; padding: 5px;}
-    .list_all{  margin: 5px;  background: #eee; padding: 5px;overflow:hidden;}
-    ul{ list-style-type: none; margin: 0px;padding: 5px; }
-    .list li{ margin: 5px; padding: 2px; font-size: 15px;  }
-    .list_all li { margin: 5px; padding: 2px; font-size: 15px; width: 200px; float:left}
-    input{font-size:18px;}
-    .link{text-decoration:none;color:#fff;background:#BD0000}
-    #savemsg{display:none;position:fixed;padding:20px;width:100px;text-align:center;background:rgba(200,200,200,0.8);border:2px solid #333;top:45%;left:45%}
-</style>
 <div id="TagsAdminIndex">
     <h2>標籤</h2>
     <div class="btn-group">
@@ -27,8 +17,8 @@
     $teno_o_organ_index = 0;
     foreach ($items AS $item) {
         ++$teno_o_organ_index;
-        echo '<div class="col-md-3 list">';
-        echo '<input type=text class="col-md-12 tagName" value="' . $item['Tag']['name'] . '" data-id="' . $item['Tag']['id'] . '" />';
+        echo '<div class="list">';
+        echo '<input type=text class="tagName" value="' . $item['Tag']['name'] . '" data-id="' . $item['Tag']['id'] . '" size=15 />';
         echo '<ul class="sortable droptrue" data-tag-id="' . $item['Tag']['id'] . '" id="tagList' . $item['Tag']['id'] . '">';
         foreach ($item['Dataset'] AS $dataset) {
             echo '<li class="ui-state-default" data-tag-id="' . $item['Tag']['id'] . '" id="' . $dataset['Dataset']['id'] . '">';
@@ -36,7 +26,7 @@
             echo '</li>';
         }
         echo '</ul>';
-        echo '<input type=text class="col-md-12 tagItem" placeholder="新增資料項" data-id="' . $item['Tag']['id'] . '" />';
+        echo '<input type=text class="col-md-12 tagItem" placeholder="新增資料項" data-id="' . $item['Tag']['id'] . '" size=15 />';
         echo '</div>';
     }
     ?>

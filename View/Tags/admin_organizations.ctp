@@ -47,6 +47,7 @@
         </div>
         <div class="col-md-6">
             <a href="#" id="tagAdd" class="btn btn-default">新增標籤</a>
+			<input name="auto_btn" id="auto_btn" type="checkbox" value=1 checked >自動篩選
         </div>
     </div>
 	
@@ -55,14 +56,14 @@
 	<?php
 	echo '<div class=list_all>';
     echo '尚未歸類組織';
-	echo '<div style="text-align:right"><input name="org_ids_all" id="org_ids_all" type="checkbox" value=1  >全選</div>';
+	echo '<div style="text-align:right"><input name="item_ids_all" id="item_ids_all" type="checkbox" value=1  >全選</div>';
     echo '<ul class="sortable droptrue" id="list_all_ul" data-tag-id="" >';
 	$teno_o_organ_index = 0;
 	//print_r($allOrganizations);
     foreach ($allOrganizations AS $allOrganization) {
 
             echo '<li class="ui-state-default" data-tag-id="" id="'.$allOrganization['Organization']['id'].'">';
-			echo '<input name="org_ids" class="org_ids" type="checkbox" value=1 org_id="'.$allOrganization['Organization']['id'].'">';
+			echo '<input name="item_ids" class="item_ids" type="checkbox" value=1 item_id="'.$allOrganization['Organization']['id'].'">';
             echo $this->Html->link($allOrganization['Organization']['name']. ' - ' . $allOrganization['Parent']['name'] , '/admin/datasets/view/' . $allOrganization['Organization']['id'], array('target' => '_blank'));
 			echo '</li>';
         

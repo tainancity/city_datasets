@@ -63,7 +63,13 @@ if (!isset($url)) {
                         ?></td>
                     <td>
                         <div class="btn-group">
-                            <?php echo $this->Html->link('檢視', array('action' => 'view', $item['Tag']['id']), array('class' => 'btn btn-default')); ?>
+                            <?php
+                            if ($item['Tag']['model'] === 'Organization') {
+                                echo $this->Html->link('檢視', array('action' => 'view_organization', $item['Tag']['id']), array('class' => 'btn btn-default'));
+                            } else {
+                                echo $this->Html->link('檢視', array('action' => 'view_dataset', $item['Tag']['id']), array('class' => 'btn btn-default'));
+                            }
+                            ?>
                             <?php echo $this->Html->link('編輯', array('action' => 'edit', $item['Tag']['id']), array('class' => 'btn btn-default')); ?>
                             <?php echo $this->Html->link('刪除', array('action' => 'delete', $item['Tag']['id']), array('class' => 'btn btn-default'), '確定要刪除？'); ?>
                         </div>

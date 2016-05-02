@@ -1,8 +1,10 @@
 <div id="TagsAdminView">
-    <h3><?php echo implode(' > ', array(
-        $this->Html->link('標籤', '/admin/tags/index'),
-        $this->data['Tag']['name'] . ' / ' . $this->data['Tag']['model'],
-    )); ?></h3><hr />
+    <h3><?php
+        echo implode(' > ', array(
+            $this->Html->link('標籤', '/admin/tags/index'),
+            $this->data['Tag']['name'] . ' / ' . $this->data['Tag']['model'],
+        ));
+        ?></h3><hr />
     <table class="table table-bordered" id="TagsAdminIndexTable">
         <thead>
             <tr>
@@ -21,15 +23,30 @@
                 ?>
                 <tr<?php echo $class; ?>>
                     <td><?php
-                        echo $item['Organization']['name'];
+                        echo $this->Html->link($item['Organization']['name'], '/admin/organizations/view/' . $item['Organization']['id']);
                         ?></td>
                     <td>
                         <div class="btn-group">
-                            <?php echo $this->Html->link('檢視', array('controller' => 'organizations', 'action' => 'view', $item['Organization']['id']), array('class' => 'btn btn-default')); ?>
+                            <a href="#" class="removeTag btn btn-default" data-tag-id="<?php echo $this->data['Tag']['id']; ?>" data-id="<?php echo $item['Organization']['id']; ?>">移除</a>
                         </div>
                     </td>
                 </tr>
-            <?php } // End of foreach ($items as $item) {  ?>
+            <?php } // End of foreach ($items as $item) {   ?>
         </tbody>
     </table>
 </div>
+<script>
+    var tagSetUrl = '<?php echo $this->Html->url('/admin/tags/habtmSet/Organization/'); ?>';
+    var clickedLine = null;
+    $(function () {
+        $('a.removeTag').click(function () {
+            var organizationId = $(this).attr('data-id');
+            var tagId = $(this).attr('data-tag-id');
+            clickedLine = $(this).parents('tr');
+            $.get(tagSetUrl + organizationId + '/' + tagId + '/off', {}, function () {
+                clickedLine.remove();
+            });
+            return false;
+        });
+    })
+</script>

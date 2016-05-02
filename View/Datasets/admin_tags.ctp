@@ -42,7 +42,7 @@
                                 'controller' => 'organizations',
                                 'action' => 'view',
                                 $item['Organization']['id']
-                            ), array('target' => '_blank'));
+                                    ), array('target' => '_blank'));
                         }
                         ?></td>
                     <td><?php

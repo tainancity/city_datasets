@@ -1,9 +1,9 @@
 <style>
     .list{  margin: 5px; float: left; background: #eee; padding: 5px;}
-	.list_all{  margin: 5px;  background: #eee; padding: 5px;overflow:hidden;}
+    .list_all{  margin: 5px;  background: #eee; padding: 5px;overflow:hidden;}
     ul{ list-style-type: none; margin: 0px;padding: 5px; }
     .list li{ margin: 5px; padding: 2px; font-size: 15px;  }
-	.list_all li { margin: 5px; padding: 2px; font-size: 15px; width: 200px; float:left}
+    .list_all li { margin: 5px; padding: 2px; font-size: 15px; width: 200px; float:left}
     input{font-size:18px;}
     .link{text-decoration:none;color:#fff;background:#BD0000}
     #savemsg{display:none;position:fixed;padding:20px;width:100px;text-align:center;background:rgba(200,200,200,0.8);border:2px solid #333;top:45%;left:45%}
@@ -48,24 +48,24 @@
         </div>
         <div class="col-md-6">
             <a href="#" id="tagAdd" class="btn btn-default">新增標籤</a>
-			<input name="auto_btn" id="auto_btn" type="checkbox" value=1 checked >自動篩選
+            <input name="auto_btn" id="auto_btn" type="checkbox" value=1 checked >自動篩選
         </div>
     </div>
-	
-	
-	<div class="clearfix"></div>
-	<hr />
-	<?php
-	echo '<div class=list_all>';
+
+
+    <div class="clearfix"></div>
+    <hr />
+    <?php
+    echo '<div class=list_all>';
     echo '相關的資料集';
-	echo '<div style="text-align:right"><input name="item_ids_all" id="item_ids_all" type="checkbox" value=1  >全選</div>';
+    echo '<div style="text-align:right"><input name="item_ids_all" id="item_ids_all" type="checkbox" value=1  >全選</div>';
     echo '<ul class="sortable droptrue" id="list_all_ul" data-tag-id="" >';
-	
-	echo '</ul></div>';
+
+    echo '</ul></div>';
     ?>
-	<div class="clearfix"></div>
-	
-	
+    <div class="clearfix"></div>
+
+
     <div id="savemsg" style="display: none;">已儲存</div>
     <div class="paging"><?php echo $this->element('paginator'); ?></div>
 </div>

@@ -22,7 +22,7 @@
         echo '<ul class="sortable droptrue" data-tag-id="' . $item['Tag']['id'] . '" >';
         foreach ($item['Organization'] AS $organization) {
             echo '<li class="ui-state-default" data-tag-id="' . $item['Tag']['id'] . '" id="' . $organization['Organization']['id'] . '">';
-            echo $this->Html->link($organization['Organization']['name'] . ' - ' . $organization['Parent']['name'], '/admin/datasets/view/' . $organization['Organization']['id'], array('target' => '_blank'));
+            echo $this->Html->link($organization['Organization']['name'] . ' - ' . city_to_str($organization['Parent']['name']), '/admin/datasets/view/' . $organization['Organization']['id'], array('target' => '_blank'));
             echo '</li>';
         }
         echo '</ul></div>';
@@ -54,7 +54,7 @@
 
         echo '<li class="ui-state-default" data-tag-id="" id="' . $allOrganization['Organization']['id'] . '">';
         echo '<input name="item_ids" class="item_ids" type="checkbox" value=1 item_id="' . $allOrganization['Organization']['id'] . '">';
-        echo $this->Html->link($allOrganization['Organization']['name'] . ' - ' . $allOrganization['Parent']['name'], '/admin/datasets/view/' . $allOrganization['Organization']['id'], array('target' => '_blank'));
+        echo $this->Html->link($allOrganization['Organization']['name'] . ' - ' . city_to_str($allOrganization['Parent']['name']), '/admin/datasets/view/' . $allOrganization['Organization']['id'], array('target' => '_blank'));
         echo '</li>';
     }
     echo '</ul></div>';

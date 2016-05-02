@@ -22,7 +22,7 @@
         echo '<ul class="sortable droptrue" data-tag-id="' . $item['Tag']['id'] . '" id="tagList' . $item['Tag']['id'] . '">';
         foreach ($item['Dataset'] AS $dataset) {
             echo '<li class="ui-state-default" data-tag-id="' . $item['Tag']['id'] . '" id="' . $dataset['Dataset']['id'] . '">';
-            echo $this->Html->link($dataset['Dataset']['name'] . ' - ' . $dataset['Organization']['name'], '/admin/datasets/view/' . $dataset['Dataset']['id'], array('target' => '_blank'));
+            echo $this->Html->link($dataset['Dataset']['name'] . ' - ' . city_to_str($dataset['Organization']['name']), '/admin/datasets/view/' . $dataset['Dataset']['id'], array('target' => '_blank'));
             echo '</li>';
         }
         echo '</ul>';

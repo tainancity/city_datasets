@@ -139,7 +139,8 @@ class TagsController extends AppController {
                     'Tag.id' => $id,
                 ),
             ));
-            $items = $this->Tag->{$this->data['Tag']['model']}->find('all', array(
+            $tagModel = $this->data['Tag']['model'];
+            $items = $this->Tag->{$tagModel}->find('all', array(
                 'conditions' => array(
                     'LinksTag.tag_id' => $id,
                 ),
@@ -149,13 +150,18 @@ class TagsController extends AppController {
                         'alias' => 'LinksTag',
                         'type' => 'inner',
                         'conditions' => array(
-                            'LinksTag.model' => $this->data['Tag']['model'],
-                            "LinksTag.foreign_id = {$this->data['Tag']['model']}.id",
+                            'LinksTag.model' => $tagModel,
+                            "LinksTag.foreign_id = {$tagModel}.id",
                         ),
                     ),
                 ),
             ));
+            foreach ($items AS $k => $item) {
+                $path = $this->Tag->{$tagModel}->getPath($items[$k][$tagModel]['id'], array('id', 'name'));
+                $items[$k][$tagModel]['name'] = implode(' > ', Set::extract("{n}.{$tagModel}.name", $path));
+            }
             $this->set('items', $items);
+            $this->view = 'admin_view' . $tagModel;
         }
         if (empty($this->data)) {
             $this->Session->setFlash('請依照網址指示操作');

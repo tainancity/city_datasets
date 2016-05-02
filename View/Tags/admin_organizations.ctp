@@ -1,7 +1,9 @@
 <style>
     .list{  margin: 5px; float: left; background: #eee; padding: 5px;}
+	.list_all{  margin: 5px;  background: #eee; padding: 5px;overflow:hidden;}
     ul{ list-style-type: none; margin: 0px;padding: 5px; }
-    .list li { margin: 5px; padding: 2px; font-size: 15px;  }
+    .list li{ margin: 5px; padding: 2px; font-size: 15px; width: 255px; }
+	.list_all li { margin: 5px; padding: 2px; font-size: 15px; width: 200px; float:left}
     input{font-size:18px;}
     .link{text-decoration:none;color:#fff;background:#BD0000}
     #savemsg{display:none;position:fixed;padding:20px;width:100px;text-align:center;background:rgba(200,200,200,0.8);border:2px solid #333;top:45%;left:45%}
@@ -35,6 +37,7 @@
     }
     ?>
     <div class="clearfix"></div>
+	
     <hr />
     <div class="col-md-12">
         <div class="col-md-6">
@@ -44,6 +47,26 @@
             <a href="#" id="tagAdd" class="btn btn-default">新增標籤</a>
         </div>
     </div>
+	
+	<div class="clearfix"></div>
+	<hr />
+	<?php
+	echo '<div class=list_all>';
+    echo '尚未歸類組織';
+    echo '<ul class="sortable droptrue" data-tag-id="" >';
+	$teno_o_organ_index = 0;
+	//print_r($allOrganizations);
+    foreach ($allOrganizations AS $allOrganization) {
+
+            echo '<li class="ui-state-default" data-tag-id="" id="'.$allOrganization['Organization']['id'].'">';
+             echo $this->Html->link($allOrganization['Organization']['name']. ' - ' . $allOrganization['Parent']['name'] , '/admin/datasets/view/' . $allOrganization['Organization']['id'], array('target' => '_blank'));
+			 echo '</li>';
+        
+    }
+	echo '</ul></div>';
+    ?>
+	<div class="clearfix"></div>
+	
     <div id="savemsg" style="display: none;">已儲存</div>
     <div class="paging"><?php echo $this->element('paginator'); ?></div>
 </div>
@@ -52,6 +75,7 @@
     var queryUrl = '<?php echo $this->Html->url('/organizations/q/'); ?>';
     var tagAddUrl = '<?php echo $this->Html->url('/admin/tags/add/'); ?>';
     var tagEditUrl = '<?php echo $this->Html->url('/admin/tags/edit/'); ?>';
+	var tagDelUrl = '<?php echo $this->Html->url('/admin/tags/delete/'); ?>';
     var tagSetUrl = '<?php echo $this->Html->url('/admin/tags/habtmSet/Organization/'); ?>';
 </script>
 <script>
@@ -98,6 +122,7 @@
                 }}, function () {
                 showsave();
             });
+			
         });
 
         $("ul.droptrue").droppable({
@@ -117,6 +142,16 @@
         });
 
     });
+	/*
+	function delete_nouse_tag()
+	{
+	$.post(tagDelUrl + "57231405-50e0-4c85-9ef8-01b4acb5b862", {Tag: {
+                    name: $(this).val()
+                }}, function () {
+                showsave();
+            });
+	}
+	*/
     function showsave()
     {
         $('#savemsg').show();

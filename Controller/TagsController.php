@@ -342,6 +342,7 @@ class TagsController extends AppController {
         $scope = array('Tag.model' => 'Organization');
         $this->paginate['Tag']['limit'] = 9;
         $items = $this->paginate($this->Tag, $scope);
+		$setted_org_id_a=array();
         foreach ($items AS $k => $item) {
             $items[$k]['Organization'] = $this->Tag->Organization->find('all', array(
                 'fields' => array('Organization.id', 'Organization.name', 'Parent.name'),
@@ -362,8 +363,34 @@ class TagsController extends AppController {
                     ),
                 ),
             ));
+			//將選過的元素挑出來,讓後續不會列在待選清單
+			foreach($items[$k]['Organization'] as $temp_item)
+			{
+				$setted_org_id_a[]=$temp_item['Organization']['id'];
+			}
+		
         }
         $this->set('items', $items);
+		
+		
+		
+		
+		//抓出所有組織(但不包含上面已選過的項目)
+		$setted_org_id = "'". implode("', '", $setted_org_id_a) ."'";
+		$allOrganization = $this->Tag->Organization->find('all', array(
+                'fields' => array('Organization.id', 'Organization.name', 'Parent.name'),
+                'contain' => array('Parent'),
+                'conditions' => array(
+                    'Organization.parent_id IS NOT NULL',
+					'Organization.name IS NOT NULL',
+					'Organization.name !=""',
+					'Organization.id not in ('.$setted_org_id.')',
+                ),
+               
+				'order' =>'Organization.name'
+				//'limit' => 10,
+            ));
+		$this->set('allOrganizations', $allOrganization);
     }
 
 }

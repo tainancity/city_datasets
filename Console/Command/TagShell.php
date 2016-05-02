@@ -26,15 +26,15 @@ class TagShell extends AppShell {
                 $orgRoots[$info['filename']] = $this->Tag->Organization->getInsertID();
             }
             foreach ($json AS $org => $data) {
+                if (!isset($data['datasets'])) {
+                    continue;
+                }
                 $this->Tag->Organization->create();
                 $this->Tag->Organization->save(array('Organization' => array(
                         'parent_id' => $orgRoots[$info['filename']],
                         'name' => $org,
                 )));
                 $organizationId = $this->Tag->Organization->getInsertID();
-                if (!isset($data['datasets'])) {
-                    continue;
-                }
                 foreach ($data['datasets'] AS $datasetId => $dataset) {
                     $this->Tag->Dataset->create();
                     $this->Tag->Dataset->save(array('Dataset' => array(

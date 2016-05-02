@@ -68,7 +68,7 @@
                         }
                         ?></td>
                     <td><?php
-                    echo $item['Dataset']['modified'];
+                        echo $item['Dataset']['modified'];
                         ?></td>
                     <td>
                         <div class="btn-group">

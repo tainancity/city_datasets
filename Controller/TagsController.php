@@ -162,6 +162,7 @@ class TagsController extends AppController {
             }
             $this->set('items', $items);
         }
+
         if (empty($this->data)) {
             $this->Session->setFlash('請依照網址指示操作');
             $this->redirect(array('action' => 'index'));
@@ -430,8 +431,8 @@ class TagsController extends AppController {
 					'Organization.id not in ('.$setted_org_id.')',
                 ),
                
-				'order' =>'Organization.name'
-				//'limit' => 10,
+				'order' =>'Organization.name',
+				'limit' => 50,
             ));
 		$this->set('allOrganizations', $allOrganization);
     }

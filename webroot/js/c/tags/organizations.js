@@ -9,6 +9,13 @@ $(function () {
                 data: {},
                 success: function (data) {
                     response(data.result);
+					$('#list_all_ul').html('');
+					for(i=0;i<data.result.length;i++)
+					{
+						console.log(data.result[i]);
+						//alert(data.result[i].id+data.result[i].label);
+						$('#list_all_ul').append('<li class="ui-state-default"  id="' + data.result[i].id + '"><input name="org_ids" class="org_ids" type="checkbox" value=1 org_id="'+data.result[i].id+'">' + data.result[i].label + '</li>');
+					}
                 }
             });
         },
@@ -33,20 +40,27 @@ $(function () {
             var tagId = $(this).attr('data-id');
             $.get(tagSetUrl + ui.item.id + '/' + tagId + '/on');
             $('#tagList' + tagId).append('<li class="ui-state-default" data-tag-id="' + tagId + '" id="' + ui.item.id + '"><a href="' + viewUrl + ui.item.id + '" target="_blank">' + ui.item.name + '</a></li>');
-        },
+	    },
         minLength: 1
     });
     $('a#tagAdd').click(function () {
         $.post(tagAddUrl, {Tag: {
                 model: 'Organization',
-                name: $('input#datasetHelper').val()
+                name: $('input#datasetHelper').val(),
             }}, function (r) {
             if (r.result === 'ok') {
+				$('[name="org_ids"]:checked').each(function() {
+				   $.get(tagSetUrl + $(this).attr('org_id') + '/' + r.id + '/on');
+				   console.log($(this).attr('org_id'));
+				});
+				setTimeout(function(){location.href = currentUrl},3000);//延遲3秒確認get都已經送出
+				/*
                 $.get(tagSetUrl + selectedItem.id + '/' + r.id + '/on', {}, function () {
                     location.href = currentUrl;
                 });
+				*/
             }
-        }, 'json');
+        }, 'json');		
         return false;
     });
     $("ul.droptrue").sortable({
@@ -77,7 +91,20 @@ $(function () {
             }
         }
     });
-
+	$('#org_ids_all').on("click",function(){
+		if($('#org_ids_all').prop( "checked" ))
+		{
+			
+			console.log("on");
+			$('.org_ids').prop('checked',true);
+			
+		}
+		else{
+			console.log("off");
+			$('.org_ids').prop('checked',false);
+		}
+		
+	});
 });
 function showsave()
 {

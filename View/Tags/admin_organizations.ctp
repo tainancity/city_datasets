@@ -55,14 +55,16 @@
 	<?php
 	echo '<div class=list_all>';
     echo '尚未歸類組織';
-    echo '<ul class="sortable droptrue" data-tag-id="" >';
+	echo '<div style="text-align:right"><input name="org_ids_all" id="org_ids_all" type="checkbox" value=1  >全選</div>';
+    echo '<ul class="sortable droptrue" id="list_all_ul" data-tag-id="" >';
 	$teno_o_organ_index = 0;
 	//print_r($allOrganizations);
     foreach ($allOrganizations AS $allOrganization) {
 
             echo '<li class="ui-state-default" data-tag-id="" id="'.$allOrganization['Organization']['id'].'">';
-             echo $this->Html->link($allOrganization['Organization']['name']. ' - ' . $allOrganization['Parent']['name'] , '/admin/datasets/view/' . $allOrganization['Organization']['id'], array('target' => '_blank'));
-			 echo '</li>';
+			echo '<input name="org_ids" class="org_ids" type="checkbox" value=1 org_id="'.$allOrganization['Organization']['id'].'">';
+            echo $this->Html->link($allOrganization['Organization']['name']. ' - ' . $allOrganization['Parent']['name'] , '/admin/datasets/view/' . $allOrganization['Organization']['id'], array('target' => '_blank'));
+			echo '</li>';
         
     }
 	echo '</ul></div>';

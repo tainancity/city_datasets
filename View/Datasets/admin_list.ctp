@@ -1,19 +1,16 @@
+<?php
+if (!isset($url)) {
+    $url = array();
+}
+
+if (!empty($foreignId) && !empty($foreignModel)) {
+    $url = array($foreignModel, $foreignId);
+}
+?>
 <div id="DatasetsAdminIndex">
-    <?php
-    $links = array(
-        $this->Html->link('資料集', '/admin/datasets/index'),
-    );
-    if (!empty($path)) {
-        foreach ($path AS $item) {
-            $links[] = $this->Html->link($item['Dataset']['name'], array('action' => 'index', $item['Dataset']['id']));
-        }
-    }
-    ?>
-    <h2><?php echo implode(' > ', $links); ?></h2>
+    <h2><?php echo __('資料集', true); ?></h2>
     <div class="btn-group">
-        <?php echo $this->Html->link('新增', array('action' => 'add'), array('class' => 'btn btn-default')); ?>
-        <?php echo $this->Html->link('列表', array('action' => 'index'), array('class' => 'btn btn-primary')); ?>
-        <?php echo $this->Html->link('待標籤', array('action' => 'tags'), array('class' => 'btn btn-default')); ?>
+        <?php echo $this->Html->link('新增', array_merge($url, array('action' => 'add')), array('class' => 'btn btn-default')); ?>
     </div>
     <div><?php
         echo $this->Paginator->counter(array(
@@ -29,7 +26,11 @@
                     echo '<th>&nbsp;</th>';
                 }
                 ?>
-                <th><?php echo $this->Paginator->sort('Dataset.organization_id', '組織', array('url' => $url)); ?></th>
+                <?php if (empty($scope['Dataset.organization_id'])): ?>
+                    <th><?php echo $this->Paginator->sort('Dataset.organization_id', '組織', array('url' => $url)); ?></th>
+                <?php endif; ?>
+
+                <th><?php echo $this->Paginator->sort('Dataset.parent_id', '父項目', array('url' => $url)); ?></th>
                 <th><?php echo $this->Paginator->sort('Dataset.name', '名稱', array('url' => $url)); ?></th>
                 <th><?php echo $this->Paginator->sort('Dataset.foreign_id', '原始編號', array('url' => $url)); ?></th>
                 <th><?php echo $this->Paginator->sort('Dataset.foreign_uri', '原始網址', array('url' => $url)); ?></th>
@@ -47,19 +48,36 @@
                 }
                 ?>
                 <tr<?php echo $class; ?>>
-                    <td><?php
-                        if (empty($item['Organization']['id'])) {
-                            echo '--';
-                        } else {
-                            echo $this->Html->link($item['Organization']['name'], array(
-                                'controller' => 'organizations',
-                                'action' => 'view',
-                                $item['Organization']['id']
-                            ));
+                    <?php
+                    if (!empty($op)) {
+                        echo '<td>';
+                        $options = array('value' => $item['Dataset']['id'], 'class' => 'habtmSet');
+                        if ($item['option'] == 1) {
+                            $options['checked'] = 'checked';
                         }
+                        echo $this->Form->checkbox('Set.' . $item['Dataset']['id'], $options);
+                        echo '<div id="messageSet' . $item['Dataset']['id'] . '"></div></td>';
+                    }
+                    ?>
+                    <?php if (empty($scope['Dataset.organization_id'])): ?>
+                        <td><?php
+                            if (empty($item['Organization']['id'])) {
+                                echo '--';
+                            } else {
+                                echo $this->Html->link($item['Organization']['id'], array(
+                                    'controller' => 'organizations',
+                                    'action' => 'view',
+                                    $item['Organization']['id']
+                                ));
+                            }
+                            ?></td>
+                    <?php endif; ?>
+
+                    <td><?php
+                        echo $item['Dataset']['parent_id'];
                         ?></td>
                     <td><?php
-                        echo $this->Html->link($item['Dataset']['name'], array('action' => 'index', $item['Dataset']['id']));
+                        echo $item['Dataset']['name'];
                         ?></td>
                     <td><?php
                         echo $item['Dataset']['foreign_id'];

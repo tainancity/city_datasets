@@ -30,8 +30,14 @@ class DatasetsController extends AppController {
                     'Dataset.name LIKE' => "%{$keyword}%",
                 ),
             ));
+            $organizations = array();
             foreach ($items AS $item) {
-                $item['Dataset']['label'] = $item['Dataset']['value'] = $item['Dataset']['name'];
+                if (!isset($organizations[$item['Dataset']['organization_id']])) {
+                    $path = $this->Dataset->Organization->getPath($item['Dataset']['organization_id'], array('name'));
+                    $organizations[$item['Dataset']['organization_id']] = implode(' > ', Set::extract('{n}.Organization.name', $path));
+                }
+                $item['Dataset']['label'] = implode(' > ', array($organizations[$item['Dataset']['organization_id']], $item['Dataset']['name']));
+                $item['Dataset']['value'] = $item['Dataset']['name'];
                 $result['result'][] = $item['Dataset'];
             }
         }
@@ -50,7 +56,29 @@ class DatasetsController extends AppController {
         
     }
 
-    function admin_index($foreignModel = null, $foreignId = null, $op = null) {
+    public function admin_index($parentId = null) {
+        $scope = array(
+            'Dataset.parent_id' => $parentId,
+        );
+        $items = $this->paginate($this->Dataset, $scope);
+        $organizations = array();
+        foreach ($items AS $k => $item) {
+            if (!isset($organizations[$item['Dataset']['organization_id']])) {
+                $path = $this->Dataset->Organization->getPath($item['Dataset']['organization_id'], array('name'));
+                $organizations[$item['Dataset']['organization_id']] = implode(' > ', Set::extract('{n}.Organization.name', $path));
+            }
+            $items[$k]['Organization'] = array(
+                'id' => $item['Dataset']['organization_id'],
+                'name' => $organizations[$item['Dataset']['organization_id']],
+            );
+        }
+        $this->set('path', $this->Dataset->getPath($parentId, array('id', 'name')));
+        $this->set('parentId', $parentId);
+        $this->set('items', $items);
+        $this->set('url', array($parentId));
+    }
+
+    function admin_list($foreignModel = null, $foreignId = null, $op = null) {
         $foreignKeys = array();
 
         $foreignKeys = array(
@@ -119,9 +147,24 @@ class DatasetsController extends AppController {
     }
 
     function admin_view($id = null) {
-        if (!$id || !$this->data = $this->Dataset->read(null, $id)) {
+        if (!empty($id)) {
+            $item = $this->Dataset->find('first', array(
+                'conditions' => array(
+                    'Dataset.id' => $id,
+                ),
+                'contain' => array('Tag'),
+            ));
+            $path = $this->Dataset->Organization->getPath($item['Dataset']['organization_id'], array('name'));
+            $item['Organization'] = array(
+                'id' => $item['Dataset']['organization_id'],
+                'name' => implode(' > ', Set::extract('{n}.Organization.name', $path)),
+            );
+        }
+        if (empty($item)) {
             $this->Session->setFlash('請依照網址指示操作');
             $this->redirect(array('action' => 'index'));
+        } else {
+            $this->data = $item;
         }
     }
 
@@ -217,6 +260,36 @@ class DatasetsController extends AppController {
                 }
             }
         }
+    }
+
+    public function admin_tags() {
+        $scope = array(
+            'Dataset.parent_id IS NULL',
+            'LinksTag.id IS NULL',
+        );
+        $this->paginate['Dataset']['limit'] = 20;
+        $this->paginate['Dataset']['joins'] = array(
+            array(
+                'table' => 'links_tags',
+                'alias' => 'LinksTag',
+                'type' => 'left',
+                'conditions' => array('LinksTag.foreign_id = Dataset.id'),
+            ),
+        );
+        $items = $this->paginate($this->Data, $scope);
+        $organizations = array();
+        foreach ($items AS $k => $item) {
+            if (!isset($organizations[$item['Dataset']['organization_id']])) {
+                $path = $this->Dataset->Organization->getPath($item['Dataset']['organization_id'], array('name'));
+                $organizations[$item['Dataset']['organization_id']] = implode(' > ', Set::extract('{n}.Organization.name', $path));
+            }
+            $items[$k]['Organization'] = array(
+                'id' => $item['Dataset']['organization_id'],
+                'name' => $organizations[$item['Dataset']['organization_id']],
+            );
+        }
+        $this->set('url', array());
+        $this->set('items', $items);
     }
 
 }

@@ -27,13 +27,15 @@
         ++$teno_o_organ_index;
         echo '<div class="col-md-3 list">';
         echo '<input type=text class="col-md-12 tagName" value="' . $item['Tag']['name'] . '" data-id="' . $item['Tag']['id'] . '" />';
-        echo '<ul class="sortable droptrue" data-tag-id="' . $item['Tag']['id'] . '" >';
+        echo '<ul class="sortable droptrue" data-tag-id="' . $item['Tag']['id'] . '" id="tagList' . $item['Tag']['id'] . '">';
         foreach ($item['Dataset'] AS $dataset) {
             echo '<li class="ui-state-default" data-tag-id="' . $item['Tag']['id'] . '" id="' . $dataset['Dataset']['id'] . '">';
             echo $this->Html->link($dataset['Dataset']['name'] . ' - ' . $dataset['Organization']['name'], '/admin/datasets/view/' . $dataset['Dataset']['id'], array('target' => '_blank'));
             echo '</li>';
         }
-        echo '</ul></div>';
+        echo '</ul>';
+        echo '<input type=text class="col-md-12 tagItem" placeholder="新增資料項" data-id="' . $item['Tag']['id'] . '" />';
+        echo '</div>';
     }
     ?>
     <div class="clearfix"></div>
@@ -56,74 +58,5 @@
     var tagEditUrl = '<?php echo $this->Html->url('/admin/tags/edit/'); ?>';
     var tagSetUrl = '<?php echo $this->Html->url('/admin/tags/habtmSet/Dataset/'); ?>';
 </script>
-<script>
-    var selectedItem = false;
-    $(function () {
-        $('input#datasetHelper').autocomplete({
-            source: function (request, response) {
-                currentTerm = request.term;
-                $.ajax({
-                    url: queryUrl + request.term,
-                    dataType: "json",
-                    data: {},
-                    success: function (data) {
-                        response(data.result);
-                    }
-                });
-            },
-            select: function (event, ui) {
-                selectedItem = ui.item;
-            },
-            minLength: 1
-        });
-        $('a#tagAdd').click(function () {
-            $.post(tagAddUrl, {Tag: {
-                    model: 'Dataset',
-                    name: $('input#datasetHelper').val()
-                }}, function (r) {
-                if (r.result === 'ok') {
-                    $.get(tagSetUrl + selectedItem.id + '/' + r.id + '/on', {}, function () {
-                        location.href = currentUrl;
-                    });
-                }
-            }, 'json');
-            return false;
-        });
-        $("ul.droptrue").sortable({
-            connectWith: "ul"
-        });
-
-        $('input.tagName').change(function () {
-            var tagId = $(this).attr('data-id');
-            $.post(tagEditUrl + tagId, {Tag: {
-                    name: $(this).val()
-                }}, function () {
-                showsave();
-            });
-        });
-
-        $("ul.droptrue").droppable({
-            tolerance: 'touch',
-            drop: function (event, ui) {
-                var oTagId = ui.draggable.attr('data-tag-id');
-                var nTagId = $(this).attr('data-tag-id');
-                var datasetId = ui.draggable.attr('id');
-                if (oTagId !== nTagId) {
-                    ui.draggable.attr('data-tag-id', nTagId);
-                    $(ui.draggable).detach().appendTo(this);//先把項目移過去
-                    $.get(tagSetUrl + datasetId + '/' + oTagId + '/off');
-                    $.get(tagSetUrl + datasetId + '/' + nTagId + '/on');
-                    showsave();
-                }
-            }
-        });
-
-    });
-    function showsave()
-    {
-        $('#savemsg').show();
-        setTimeout(function () {
-            $('#savemsg').fadeOut();
-        }, 2000);
-    }
-</script>
+<?php
+$this->Html->script('c/tags/datasets', array('inline' => false));

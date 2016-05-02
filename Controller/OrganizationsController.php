@@ -31,7 +31,9 @@ class OrganizationsController extends AppController {
                 ),
             ));
             foreach ($items AS $item) {
-                $item['Organization']['label'] = $item['Organization']['value'] = $item['Organization']['name'];
+                $path = $this->Organization->getPath($item['Organization']['id'], array('name'));
+                $item['Organization']['label'] = implode(' > ', Set::extract('{n}.Organization.name', $path));
+                $item['Organization']['value'] = $item['Organization']['name'];
                 $result['result'][] = $item['Organization'];
             }
         }
@@ -50,9 +52,19 @@ class OrganizationsController extends AppController {
         
     }
 
-    function admin_index($foreignModel = null, $foreignId = null, $op = null) {
-        $foreignKeys = array();
+    public function admin_index($parentId = null) {
+        $scope = array(
+            'Organization.parent_id' => $parentId,
+        );
+        $items = $this->paginate($this->Organization, $scope);
+        $this->set('path', $this->Organization->getPath($parentId, array('id', 'name')));
+        $this->set('parentId', $parentId);
+        $this->set('items', $items);
+        $this->set('url', array($parentId));
+    }
 
+    function admin_list($foreignModel = null, $foreignId = null, $op = null) {
+        $foreignKeys = array();
 
         $habtmKeys = array(
             'Tag' => 'Tag_id',

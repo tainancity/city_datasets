@@ -147,6 +147,7 @@ class OrganizationsController extends AppController {
                 $this->Session->setFlash('資料儲存失敗，請重試');
             }
         }
+        $this->set('parentId', $parentId);
     }
 
     function admin_edit($id = null) {
@@ -222,6 +223,32 @@ class OrganizationsController extends AppController {
                 }
             }
         }
+    }
+
+    public function admin_tags() {
+        $scope = array(
+            'Organization.parent_id IS NOT NULL',
+            'LinksTag.id IS NULL',
+        );
+        $this->paginate['Organization']['limit'] = 20;
+        $this->paginate['Organization']['joins'] = array(
+            array(
+                'table' => 'links_tags',
+                'alias' => 'LinksTag',
+                'type' => 'left',
+                'conditions' => array(
+                    'LinksTag.model' => 'Organization',
+                    'LinksTag.foreign_id = Organization.id',
+                ),
+            ),
+        );
+        $items = $this->paginate($this->Organization, $scope);
+        $organizations = array();
+        foreach ($items AS $k => $item) {
+            $items[$k]['Organization']['path'] = $this->Organization->getPath($item['Organization']['id'], array('name'));
+        }
+        $this->set('url', array());
+        $this->set('items', $items);
     }
 
 }

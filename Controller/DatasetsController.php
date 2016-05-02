@@ -273,10 +273,13 @@ class DatasetsController extends AppController {
                 'table' => 'links_tags',
                 'alias' => 'LinksTag',
                 'type' => 'left',
-                'conditions' => array('LinksTag.foreign_id = Dataset.id'),
+                'conditions' => array(
+                    'LinksTag.model' => 'Dataset',
+                    'LinksTag.foreign_id = Dataset.id',
+                ),
             ),
         );
-        $items = $this->paginate($this->Data, $scope);
+        $items = $this->paginate($this->Dataset, $scope);
         $organizations = array();
         foreach ($items AS $k => $item) {
             if (!isset($organizations[$item['Dataset']['organization_id']])) {

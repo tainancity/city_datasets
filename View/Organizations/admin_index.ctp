@@ -12,6 +12,8 @@
     <h2><?php echo implode(' > ', $links); ?></h2>
     <div class="btn-group">
         <?php echo $this->Html->link('新增', array('action' => 'add', $parentId), array('class' => 'btn btn-default')); ?>
+        <?php echo $this->Html->link('列表', array('action' => 'index'), array('class' => 'btn btn-primary')); ?>
+        <?php echo $this->Html->link('待標籤', array('action' => 'tags'), array('class' => 'btn btn-default')); ?>
     </div>
     <div><?php
         echo $this->Paginator->counter(array(
@@ -39,14 +41,14 @@
                 ?>
                 <tr<?php echo $class; ?>>
                     <td><?php
-            echo $this->Html->link($item['Organization']['name'], array('action' => 'index', $item['Organization']['id']));
-                ?></td>
+                        echo $this->Html->link($item['Organization']['name'], array('action' => 'index', $item['Organization']['id']));
+                        ?></td>
                     <td><?php
-                    echo $item['Organization']['foreign_id'];
-                ?></td>
+                        echo $item['Organization']['foreign_id'];
+                        ?></td>
                     <td><?php
-                    echo $item['Organization']['foreign_uri'];
-                ?></td>
+                        echo $item['Organization']['foreign_uri'];
+                        ?></td>
                     <td>
                         <div class="btn-group">
                             <?php echo $this->Html->link('檢視', array('action' => 'view', $item['Organization']['id']), array('class' => 'btn btn-default')); ?>

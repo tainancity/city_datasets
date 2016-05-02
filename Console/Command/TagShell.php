@@ -14,26 +14,31 @@ class TagShell extends AppShell {
                 'url' => 'http://data.tainan.gov.tw/',
                 'dataset' => 'http://data.tainan.gov.tw/dataset/',
                 'resource' => 'http://data.tainan.gov.tw/dataset/{DATASET_ID}/resource/{RESOURCE_ID}',
+                'org' => 'http://data.tainan.gov.tw/organization/',
             ),
             'taoyuan' => array(
                 'url' => 'http://data.tycg.gov.tw/',
-                'dataset' => 'http://data.tycg.gov.tw/opendata/datalist/datasetMeta?oid=',
-                'resource' => 'http://data.tycg.gov.tw/opendata/datalist/datasetMeta/preview?id={DATASET_ID}&rid={RESOURCE_ID}',
+                'dataset' => 'http://ckan.tycg.gov.tw/dataset/',
+                'resource' => 'http://ckan.tycg.gov.tw/dataset/{DATASET_ID}/resource/{RESOURCE_ID}',
+                'org' => 'http://ckan.tycg.gov.tw/organization/',
             ),
             'nantou' => array(
                 'url' => 'http://data.nantou.gov.tw/',
                 'dataset' => 'http://data.nantou.gov.tw/dataset/',
                 'resource' => 'http://data.nantou.gov.tw/dataset/{DATASET_ID}/resource/{RESOURCE_ID}',
+                'org' => 'http://data.tycg.gov.tw/organization/',
             ),
             'hccg' => array(
                 'url' => 'http://opendata.hccg.gov.tw/',
                 'dataset' => 'http://opendata.hccg.gov.tw/dataset/',
                 'resource' => 'http://opendata.hccg.gov.tw/dataset/{DATASET_ID}/resource/{RESOURCE_ID}',
+                'org' => 'http://opendata.hccg.gov.tw/organization/',
             ),
             'taipei' => array(
                 'url' => 'http://data.taipei/',
                 'dataset' => 'http://data.taipei/opendata/datalist/datasetMeta?oid=',
                 'resource' => 'http://data.taipei/opendata/datalist/datasetMeta/preview?id={DATASET_ID}&rid={RESOURCE_ID}',
+                'org' => 'http://data.taipei/opendata/datalist/datasetByOrg?oid=',
             ),
         );
         $orgRoots = $this->Tag->Organization->find('list', array(
@@ -58,16 +63,24 @@ class TagShell extends AppShell {
 
             foreach ($json AS $org => $data) {
                 $org = trim($org);
-                if (!isset($data['datasets']) || empty($org)) {
+                if (!isset($data['datasets'])) {
                     continue;
                 }
-                $this->Tag->Organization->create();
-                $this->Tag->Organization->save(array('Organization' => array(
-                        'parent_id' => $orgRoots[$info['filename']],
-                        'name' => $org,
-                )));
-                $organizationId = $this->Tag->Organization->getInsertID();
+                if (empty($org)) {
+                    $org = $orgRoots[$info['filename']];
+                }
+                $organizationId = false;
                 foreach ($data['datasets'] AS $datasetId => $dataset) {
+                    if (false === $organizationId) {
+                        $this->Tag->Organization->create();
+                        $this->Tag->Organization->save(array('Organization' => array(
+                                'parent_id' => $orgRoots[$info['filename']],
+                                'name' => $org,
+                                'foreign_id' => $dataset['organization_id'],
+                                'foreign_uri' => $baseConfig['org'] . $dataset['organization_id'],
+                        )));
+                        $organizationId = $this->Tag->Organization->getInsertID();
+                    }
                     $this->Tag->Dataset->create();
                     $this->Tag->Dataset->save(array('Dataset' => array(
                             'organization_id' => $organizationId,

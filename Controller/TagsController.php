@@ -159,8 +159,16 @@ class TagsController extends AppController {
             foreach ($items AS $k => $item) {
                 $path = $this->Tag->{$tagModel}->getPath($items[$k][$tagModel]['id'], array('id', 'name'));
                 $items[$k][$tagModel]['name'] = implode(' > ', Set::extract("{n}.{$tagModel}.name", $path));
+				$items[$k][$tagModel]['datasets'] =$this->Tag->Dataset->find('all', array(
+                'fields' => array('Dataset.id', 'Dataset.name'),
+                'conditions' => array(
+                    'organization_id' => $items[$k][$tagModel]['id'],
+                ),
+				));
             }
+			//print_r($items);
             $this->set('items', $items);
+			
         }
 
         if (empty($this->data)) {

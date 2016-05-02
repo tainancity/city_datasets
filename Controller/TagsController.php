@@ -166,7 +166,6 @@ class TagsController extends AppController {
                 ),
 				));
             }
-			//print_r($items);
             $this->set('items', $items);
 			
         }

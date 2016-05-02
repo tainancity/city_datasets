@@ -51,10 +51,13 @@
 		foreach ($item['Organization']['datasets'] as $item_datasets)
 		{
 			//print_r($item_datasets);
-			$msg_datasets.= '<div class="list_dataset">';
-			$msg_datasets.= $this->Html->link($item_datasets['Dataset']['name'], '/admin/datasets/view/' . $item_datasets['Dataset']['id'],array('target' => '_blank'));
-			$msg_datasets.= '</div>';
-			$packages++;
+			if($item_datasets['Dataset']['name']!="")
+			{
+				$msg_datasets.= '<div class="list_dataset">';
+				$msg_datasets.= $this->Html->link($item_datasets['Dataset']['name'], '/admin/datasets/view/' . $item_datasets['Dataset']['id'],array('target' => '_blank'));
+				$msg_datasets.= '</div>';
+				$packages++;
+			}
 		}
 		echo $this->Html->link($item['Organization']['name']."(".$packages.")", '/admin/organizations/view/' . $item['Organization']['id'],array('target' => '_blank'));
 		echo $msg_datasets;

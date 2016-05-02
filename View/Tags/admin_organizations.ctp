@@ -2,7 +2,7 @@
     .list{  margin: 5px; float: left; background: #eee; padding: 5px;}
 	.list_all{  margin: 5px;  background: #eee; padding: 5px;overflow:hidden;}
     ul{ list-style-type: none; margin: 0px;padding: 5px; }
-    .list li{ margin: 5px; padding: 2px; font-size: 15px; width: 255px; }
+    .list li{ margin: 5px; padding: 2px; font-size: 15px;  }
 	.list_all li { margin: 5px; padding: 2px; font-size: 15px; width: 200px; float:left}
     input{font-size:18px;}
     .link{text-decoration:none;color:#fff;background:#BD0000}
@@ -25,8 +25,10 @@
     $teno_o_organ_index = 0;
     foreach ($items AS $item) {
         ++$teno_o_organ_index;
-        echo '<div class="col-md-3 list">';
-        echo '<input type=text class="col-md-12 tagName" value="' . $item['Tag']['name'] . '" data-id="' . $item['Tag']['id'] . '" />';
+        //echo '<div class="col-md-3 list">';		
+        //echo '<input type=text class="col-md-12 tagName" value="' . $item['Tag']['name'] . '" data-id="' . $item['Tag']['id'] . '" />';
+		echo '<div class="list">';
+		echo '<input type=text class="tagName" value="' . $item['Tag']['name'] . '" data-id="' . $item['Tag']['id'] . '" />';
         echo '<ul class="sortable droptrue" data-tag-id="' . $item['Tag']['id'] . '" >';
         foreach ($item['Organization'] AS $organization) {
             echo '<li class="ui-state-default" data-tag-id="' . $item['Tag']['id'] . '" id="' . $organization['Organization']['id'] . '">';
@@ -78,85 +80,5 @@
 	var tagDelUrl = '<?php echo $this->Html->url('/admin/tags/delete/'); ?>';
     var tagSetUrl = '<?php echo $this->Html->url('/admin/tags/habtmSet/Organization/'); ?>';
 </script>
-<script>
-    var selectedItem = false;
-    $(function () {
-        $('input#datasetHelper').autocomplete({
-            source: function (request, response) {
-                currentTerm = request.term;
-                $.ajax({
-                    url: queryUrl + request.term,
-                    dataType: "json",
-                    data: {},
-                    success: function (data) {
-                        response(data.result);
-                    }
-                });
-            },
-            select: function (event, ui) {
-                selectedItem = ui.item;
-            },
-            minLength: 1
-        });
-        $('a#tagAdd').click(function () {
-            $.post(tagAddUrl, {Tag: {
-                    model: 'Organization',
-                    name: $('input#datasetHelper').val()
-                }}, function (r) {
-                if (r.result === 'ok') {
-                    $.get(tagSetUrl + selectedItem.id + '/' + r.id + '/on', {}, function () {
-                        location.href = currentUrl;
-                    });
-                }
-            }, 'json');
-            return false;
-        });
-        $("ul.droptrue").sortable({
-            connectWith: "ul"
-        });
-
-        $('input.tagName').change(function () {
-            var tagId = $(this).attr('data-id');
-            $.post(tagEditUrl + tagId, {Tag: {
-                    name: $(this).val()
-                }}, function () {
-                showsave();
-            });
-			
-        });
-
-        $("ul.droptrue").droppable({
-            tolerance: 'touch',
-            drop: function (event, ui) {
-                var oTagId = ui.draggable.attr('data-tag-id');
-                var nTagId = $(this).attr('data-tag-id');
-                var datasetId = ui.draggable.attr('id');
-                if (oTagId !== nTagId) {
-                    ui.draggable.attr('data-tag-id', nTagId);
-                    $(ui.draggable).detach().appendTo(this);//先把項目移過去
-                    $.get(tagSetUrl + datasetId + '/' + oTagId + '/off');
-                    $.get(tagSetUrl + datasetId + '/' + nTagId + '/on');
-                    showsave();
-                }
-            }
-        });
-
-    });
-	/*
-	function delete_nouse_tag()
-	{
-	$.post(tagDelUrl + "57231405-50e0-4c85-9ef8-01b4acb5b862", {Tag: {
-                    name: $(this).val()
-                }}, function () {
-                showsave();
-            });
-	}
-	*/
-    function showsave()
-    {
-        $('#savemsg').show();
-        setTimeout(function () {
-            $('#savemsg').fadeOut();
-        }, 2000);
-    }
-</script>
+<?php
+$this->Html->script('c/tags/organizations', array('inline' => false));

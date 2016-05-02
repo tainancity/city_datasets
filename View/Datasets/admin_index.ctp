@@ -32,7 +32,6 @@
                 <th><?php echo $this->Paginator->sort('Dataset.organization_id', '組織', array('url' => $url)); ?></th>
                 <th><?php echo $this->Paginator->sort('Dataset.name', '名稱', array('url' => $url)); ?></th>
                 <th><?php echo $this->Paginator->sort('Dataset.foreign_id', '原始編號', array('url' => $url)); ?></th>
-                <th><?php echo $this->Paginator->sort('Dataset.foreign_uri', '原始網址', array('url' => $url)); ?></th>
                 <th><?php echo $this->Paginator->sort('Dataset.modified', '更新時間', array('url' => $url)); ?></th>
                 <th class="actions">操作</th>
             </tr>
@@ -62,13 +61,14 @@
                         echo $this->Html->link($item['Dataset']['name'], array('action' => 'index', $item['Dataset']['id']));
                         ?></td>
                     <td><?php
-                        echo $item['Dataset']['foreign_id'];
+                        if (!empty($item['Dataset']['foreign_uri'])) {
+                            echo $this->Html->link($item['Dataset']['foreign_id'], $item['Dataset']['foreign_uri'], array('target' => '_blank'));
+                        } else {
+                            echo $item['Dataset']['foreign_id'];
+                        }
                         ?></td>
                     <td><?php
-                        echo $item['Dataset']['foreign_uri'];
-                        ?></td>
-                    <td><?php
-                        echo $item['Dataset']['modified'];
+                    echo $item['Dataset']['modified'];
                         ?></td>
                     <td>
                         <div class="btn-group">
@@ -78,7 +78,7 @@
                         </div>
                     </td>
                 </tr>
-            <?php } // End of foreach ($items as $item) {  ?>
+            <?php } // End of foreach ($items as $item) {   ?>
         </tbody>
     </table>
     <div class="paging"><?php echo $this->element('paginator'); ?></div>

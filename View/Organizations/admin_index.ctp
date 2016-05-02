@@ -26,7 +26,6 @@
             <tr>
                 <th><?php echo $this->Paginator->sort('Organization.name', '名稱', array('url' => $url)); ?></th>
                 <th><?php echo $this->Paginator->sort('Organization.foreign_id', '原始編號', array('url' => $url)); ?></th>
-                <th><?php echo $this->Paginator->sort('Organization.foreign_uri', '原始網址', array('url' => $url)); ?></th>
                 <th class="actions">操作</th>
             </tr>
         </thead>
@@ -44,10 +43,11 @@
                         echo $this->Html->link($item['Organization']['name'], array('action' => 'index', $item['Organization']['id']));
                         ?></td>
                     <td><?php
-                        echo $item['Organization']['foreign_id'];
-                        ?></td>
-                    <td><?php
-                        echo $item['Organization']['foreign_uri'];
+                        if (!empty($item['Organization']['foreign_uri'])) {
+                            echo $this->Html->link($item['Organization']['foreign_id'], $item['Organization']['foreign_uri'], array('target' => '_blank'));
+                        } else {
+                            echo $item['Organization']['foreign_id'];
+                        }
                         ?></td>
                     <td>
                         <div class="btn-group">
@@ -57,7 +57,7 @@
                         </div>
                     </td>
                 </tr>
-            <?php } // End of foreach ($items as $item) {   ?>
+            <?php } // End of foreach ($items as $item) {    ?>
         </tbody>
     </table>
     <div class="paging"><?php echo $this->element('paginator'); ?></div>

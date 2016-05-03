@@ -47,18 +47,22 @@ class MembersController extends AppController {
                 $this->request->data['Member']['group_id'] = $this->Group->id;
                 $this->request->data['Member']['user_status'] = 'Y';
                 $this->Member->create();
-                if ($this->Member->save($this->request->data)) {
-                    $this->loadModel('Permissible.PermissibleAro');
-                    $this->PermissibleAro->reset();
-                    $this->loadModel('Permissible.PermissibleAco');
-                    if ($this->PermissibleAco->reset()) {
-                        $this->Acl->deny('everyone', 'app');
-                        $this->Acl->allow('Group1', 'app');
+                if ($this->request->data['Member']['username']!=""&&$this->request->data['Member']['password']!="") {
+                    if ($this->Member->save($this->request->data)) {
+                        $this->loadModel('Permissible.PermissibleAro');
+                        $this->PermissibleAro->reset();
+                        $this->loadModel('Permissible.PermissibleAco');
+                        if ($this->PermissibleAco->reset()) {
+                            $this->Acl->deny('everyone', 'app');
+                            $this->Acl->allow('Group1', 'app');
+                        }
+                        $this->Session->setFlash(__('The administrator created, please login with the id/password you entered.', true));
+                        $this->redirect('/members/login');
+                    } else {
+                        $this->Session->setFlash(__('Administrator created failed.', true));
                     }
-                    $this->Session->setFlash(__('The administrator created, please login with the id/password you entered.', true));
-                    $this->redirect('/members/login');
                 } else {
-                    $this->Session->setFlash(__('Administrator created failed.', true));
+                     $this->Session->setFlash(__('Username or Password empty! Administrator created failed.', true));
                 }
             } else {
                 $this->Session->setFlash(__('Administrator created failed.', true));

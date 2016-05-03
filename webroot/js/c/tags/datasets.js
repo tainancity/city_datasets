@@ -11,7 +11,6 @@ $(function () {
                     dataType: "json",
                     data: {},
                     success: function (data) {
-                        response(data.result);
                         $('#list_all_ul').html('');
                         for (i = 0; i < data.result.length; i++)
                         {

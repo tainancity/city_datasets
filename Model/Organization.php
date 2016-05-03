@@ -25,7 +25,7 @@ class Organization extends AppModel {
     );
     var $hasMany = array(
         'Dataset' => array(
-            'foreignKey' => 'Organization_id',
+            'foreignKey' => 'organization_id',
             'dependent' => false,
             'className' => 'Dataset',
         ),

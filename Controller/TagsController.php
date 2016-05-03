@@ -156,18 +156,40 @@ class TagsController extends AppController {
                     ),
                 ),
             ));
+            $tags = array();
             foreach ($items AS $k => $item) {
                 $path = $this->Tag->{$tagModel}->getPath($items[$k][$tagModel]['id'], array('id', 'name'));
                 $items[$k][$tagModel]['name'] = implode(' > ', Set::extract("{n}.{$tagModel}.name", $path));
-                $items[$k][$tagModel]['datasets'] = $this->Tag->Dataset->find('all', array(
+                $datasets = $this->Tag->Dataset->find('all', array(
                     'fields' => array('Dataset.id', 'Dataset.name'),
                     'conditions' => array(
-                        'organization_id' => $items[$k][$tagModel]['id'],
+                        'Dataset.parent_id IS NULL',
+                        'Dataset.organization_id' => $items[$k][$tagModel]['id'],
+                    ),
+                    'contain' => array(
+                        'LinksTag' => array(
+                            'fields' => array('tag_id'),
+                        ),
                     ),
                 ));
+                foreach ($datasets AS $dataset) {
+                    if (!empty($dataset['LinksTag'])) {
+                        foreach ($dataset['LinksTag'] AS $link) {
+                            if (!isset($tags[$link['tag_id']])) {
+                                $tags[$link['tag_id']] = $this->Tag->read(array('name'), $link['tag_id']);
+                                $tags[$link['tag_id']][$tagModel] = array();
+                            }
+                            if (!isset($tags[$link['tag_id']][$tagModel][$items[$k][$tagModel]['id']])) {
+                                $tags[$link['tag_id']][$tagModel][$items[$k][$tagModel]['id']] = array();
+                            }
+                            $tags[$link['tag_id']][$tagModel][$items[$k][$tagModel]['id']][] = $dataset;
+                        }
+                    }
+                }
+                $items[$k][$tagModel]['datasets'] = $datasets;
             }
-            //print_r($items);
             $this->set('items', $items);
+            $this->set('tags', $tags);
         }
 
         if (empty($this->data)) {
@@ -396,7 +418,11 @@ class TagsController extends AppController {
         foreach ($items AS $k => $item) {
             $items[$k]['Organization'] = $this->Tag->Organization->find('all', array(
                 'fields' => array('Organization.id', 'Organization.name', 'Parent.name'),
-                'contain' => array('Parent'),
+                'contain' => array(
+                    'Parent' => array(
+                        'fields' => array('name'),
+                    ),
+                ),
                 'conditions' => array(
                     'Organization.parent_id IS NOT NULL',
                     'LinksTag.tag_id' => $item['Tag']['id'],
@@ -414,11 +440,14 @@ class TagsController extends AppController {
                 ),
             ));
         }
-        $this->set('items', $items);
 
         $allOrganization = $this->Tag->Organization->find('all', array(
             'fields' => array('Organization.id', 'Organization.name', 'Parent.name'),
-            'contain' => array('Parent'),
+            'contain' => array(
+                'Parent' => array(
+                    'fields' => array('name'),
+                ),
+            ),
             'conditions' => array(
                 'Organization.parent_id IS NOT NULL',
                 'LinksTag.id IS NULL',
@@ -438,6 +467,8 @@ class TagsController extends AppController {
                 'Organization.name' => 'ASC',
             ),
         ));
+
+        $this->set('items', $items);
         $this->set('allOrganizations', $allOrganization);
     }
 

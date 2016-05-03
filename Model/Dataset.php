@@ -23,5 +23,15 @@ class Dataset extends AppModel {
             'className' => 'Organization',
         ),
     );
+    var $hasMany = array(
+        'LinksTag' => array(
+            'foreignKey' => 'foreign_id',
+            'dependent' => false,
+            'className' => 'LinksTag',
+            'conditions' => array(
+                'LinksTag.model' => 'Dataset',
+            ),
+        ),
+    );
 
 }

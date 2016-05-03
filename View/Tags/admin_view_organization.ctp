@@ -10,50 +10,49 @@
             $this->data['Tag']['name'] . ' / ' . $this->data['Tag']['model'],
         ));
         ?></h3><hr />
-    <!--	
-<table class="table table-bordered" id="TagsAdminIndexTable">
-    <thead>
-        <tr>
-            <th>名稱</th>
-            <th class="actions">操作</th>
-        </tr>
-    </thead>
-    <tbody>
+    <h4>已標籤資料</h4>
     <?php
-    $i = 0;
-    foreach ($items as $item) {
-        $class = null;
-        if ($i++ % 2 == 0) {
-            $class = ' class="altrow"';
+    foreach ($tags AS $tag) {
+        echo '<div class="col-md-12">';
+        echo '<b>' . $tag['Tag']['name'] . '</b><br />';
+        foreach ($items as $item) {
+            if (!empty($tag['Organization'][$item['Organization']['id']])) {
+                $msg_datasets = '';
+                foreach ($tag['Organization'][$item['Organization']['id']] AS $dataset) {
+                    $msg_datasets.= '<div class="list_dataset">';
+                    $msg_datasets.= $this->Html->link($dataset['Dataset']['name'], '/admin/datasets/view/' . $dataset['Dataset']['id'], array('target' => '_blank'));
+                    $msg_datasets.= '</div>';
+                }
+            } else {
+                $msg_datasets = '<div class="list_dataset"> ~ 無 ~ </div>';
+            }
+            echo '<div class="list">';
+            echo $this->Html->link($item['Organization']['name'], '/admin/organizations/view/' . $item['Organization']['id'], array('target' => '_blank'));
+            echo $msg_datasets;
+            echo '</div>';
         }
-        ?>
-                        <tr<?php echo $class; ?>>
-                            <td><?php
-        echo $this->Html->link($item['Organization']['name'], '/admin/organizations/view/' . $item['Organization']['id']);
-        ?></td>
-                            <td>
-                                <div class="btn-group">
-                                    <a href="#" class="removeTag btn btn-default" data-tag-id="<?php echo $this->data['Tag']['id']; ?>" data-id="<?php echo $item['Organization']['id']; ?>">移除</a>
-                                </div>
-                            </td>
-                        </tr>
-    <?php } // End of foreach ($items as $item) {   ?>
-    </tbody>
-</table>
-    -->
+        echo '</div>';
+    }
+    ?>
+    <div class="clearfix"></div>
+    <hr />
+    <h4>未標籤資料</h4>
     <?php
     foreach ($items as $item) {
-        echo '<div  class="list" >';
-
         $packages = 0;
         $msg_datasets = "";
-        foreach ($item['Organization']['datasets'] as $item_datasets) {
-            //print_r($item_datasets);
-            $msg_datasets.= '<div class="list_dataset">';
-            $msg_datasets.= $this->Html->link($item_datasets['Dataset']['name'], '/admin/datasets/view/' . $item_datasets['Dataset']['id'], array('target' => '_blank'));
-            $msg_datasets.= '</div>';
+        foreach ($item['Organization']['datasets'] as $dataset) {
+            if (empty($dataset['Dataset']['name'])) {
+                continue;
+            }
+            if (empty($dataset['LinksTag'])) {
+                $msg_datasets.= '<div class="list_dataset">';
+                $msg_datasets.= $this->Html->link($dataset['Dataset']['name'], '/admin/datasets/view/' . $dataset['Dataset']['id'], array('target' => '_blank'));
+                $msg_datasets.= '</div>';
+            }
             $packages++;
         }
+        echo '<div class="list">';
         echo $this->Html->link($item['Organization']['name'] . "(" . $packages . ")", '/admin/organizations/view/' . $item['Organization']['id'], array('target' => '_blank'));
         echo $msg_datasets;
         echo '</div>';

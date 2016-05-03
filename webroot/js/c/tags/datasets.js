@@ -1,24 +1,25 @@
 var selectedItem = false;
+var tagCount = tagComplted = 0;
 $(function () {
     $('input#datasetHelper').autocomplete({
         source: function (request, response) {
-			if($('#auto_btn').prop( "checked" ))
-			{
-				currentTerm = request.term;
-				$.ajax({
-					url: queryUrl + request.term,
-					dataType: "json",
-					data: {},
-					success: function (data) {
-						response(data.result);
-						$('#list_all_ul').html('');
-						for(i=0;i<data.result.length;i++)
-						{
-							$('#list_all_ul').append('<li class="ui-state-default"  id="' + data.result[i].id + '"><input name="item_ids" class="item_ids" type="checkbox" value=1 item_id="'+data.result[i].id+'">' + data.result[i].label + '</li>');
-						}
-					}
-				});
-			}
+            if ($('#auto_btn').prop("checked"))
+            {
+                currentTerm = request.term;
+                $.ajax({
+                    url: queryUrl + request.term,
+                    dataType: "json",
+                    data: {},
+                    success: function (data) {
+                        response(data.result);
+                        $('#list_all_ul').html('');
+                        for (i = 0; i < data.result.length; i++)
+                        {
+                            $('#list_all_ul').append('<li class="ui-state-default"  id="' + data.result[i].id + '"><input name="item_ids" class="item_ids" type="checkbox" value=1 item_id="' + data.result[i].id + '">' + data.result[i].label + '</li>');
+                        }
+                    }
+                });
+            }
         },
         select: function (event, ui) {
             selectedItem = ui.item;
@@ -45,21 +46,20 @@ $(function () {
         minLength: 1
     });
     $('a#tagAdd').click(function () {
+        $('div#waiting').dialog();
         $.post(tagAddUrl, {Tag: {
                 model: 'Dataset',
                 name: $('input#datasetHelper').val()
             }}, function (r) {
             if (r.result === 'ok') {
-				alert("處理中...請稍後");
-				$('[name="item_ids"]:checked').each(function() {
-				   $.get(tagSetUrl + $(this).attr('item_id') + '/' + r.id + '/on');
-				});
-				setTimeout(function(){location.href = currentUrl},3000);//延遲3秒確認get都已經送出
-				/*
-                $.get(tagSetUrl + selectedItem.id + '/' + r.id + '/on', {}, function () {
-                    location.href = currentUrl;
+                tagCount = $('[name="item_ids"]:checked').length;
+                $('[name="item_ids"]:checked').each(function () {
+                    $.get(tagSetUrl + $(this).attr('item_id') + '/' + r.id + '/on', {}, function () {
+                        if (++tagComplted === tagCount) {
+                            location.href = currentUrl
+                        }
+                    });
                 });
-				*/
             }
         }, 'json');
         return false;
@@ -92,21 +92,18 @@ $(function () {
             }
         }
     });
-	
-	$('#item_ids_all').on("click",function(){
-		if($('#item_ids_all').prop( "checked" ))
-		{
-			
-			console.log("on");
-			$('.item_ids').prop('checked',true);
-			
-		}
-		else{
-			console.log("off");
-			$('.item_ids').prop('checked',false);
-		}
-		
-	});
+
+    $('#item_ids_all').on("click", function () {
+        if ($('#item_ids_all').prop("checked"))
+        {
+            $('.item_ids').prop('checked', true);
+
+        }
+        else {
+            $('.item_ids').prop('checked', false);
+        }
+
+    });
 
 });
 function showsave()

@@ -1,5 +1,5 @@
 <div id="OrganizationsAdminTags">
-    <h2>待標籤地方組織</h2>
+    <h2>待標籤地方縣市</h2>
     <div class="btn-group">
         <?php echo $this->Html->link('新增', array('action' => 'add'), array('class' => 'btn btn-default')); ?>
         <?php echo $this->Html->link('列表', array('action' => 'index'), array('class' => 'btn btn-default')); ?>

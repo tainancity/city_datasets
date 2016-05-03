@@ -19,7 +19,7 @@
                     echo '<th>&nbsp;</th>';
                 }
                 ?>
-                <th>組織</th>
+                <th>地方縣市</th>
                 <th>名稱</th>
                 <th><?php echo $this->Paginator->sort('Dataset.modified', '更新時間', array('url' => $url)); ?></th>
             </tr>

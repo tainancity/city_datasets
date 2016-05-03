@@ -2,7 +2,7 @@
     <h2>標籤</h2>
     <div class="btn-group">
         <?php echo $this->Html->link('列表', array('action' => 'index'), array('class' => 'btn btn-default')); ?>
-        <?php echo $this->Html->link('組織', array('action' => 'organizations'), array('class' => 'btn btn-default')); ?>
+        <?php echo $this->Html->link('地方縣市', array('action' => 'organizations'), array('class' => 'btn btn-default')); ?>
         <?php echo $this->Html->link('資料集', array('action' => 'datasets'), array('class' => 'btn btn-primary')); ?>
     </div>
     <div><?php

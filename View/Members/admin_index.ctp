@@ -14,11 +14,11 @@
     <div class="paging"><?php echo $this->element('paginator'); ?></div>
     <table class="table table-bordered" id="MembersAdminIndexTable">
         <tr>
-            <th><?php echo $this->Paginator->sort(__('Id', true), 'id'); ?></th>
-            <th><?php echo $this->Paginator->sort(__('Account', true), 'username'); ?></th>
-            <th><?php echo $this->Paginator->sort(__('Status', true), 'user_status'); ?></th>
-            <th><?php echo $this->Paginator->sort(__('Created time', true), 'created'); ?></th>
-            <th><?php echo $this->Paginator->sort(__('Modified time', true), 'modified'); ?></th>
+            <th><?php echo $this->Paginator->sort(__('Id', true), '序號'); ?></th>
+            <th><?php echo $this->Paginator->sort(__('Account', true), '帳號名稱'); ?></th>
+            <th><?php echo $this->Paginator->sort(__('Status', true), '狀態'); ?></th>
+            <th><?php echo $this->Paginator->sort(__('Created time', true), '建立時間'); ?></th>
+            <th><?php echo $this->Paginator->sort(__('Modified time', true), '修改時間'); ?></th>
             <th class="actions">操作</th>
         </tr>
         <?php

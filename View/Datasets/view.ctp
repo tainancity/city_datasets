@@ -1,7 +1,7 @@
 <div id="DatasetsView">
     <h3><?php echo __('View 資料集', true); ?></h3><hr />
     <div class="col-md-12">
-        <div class="col-md-2">組織</div>
+        <div class="col-md-2">地方縣市</div>
         <div class="col-md-9"><?php
             if (empty($this->data['Organization']['id'])) {
                 echo '--';

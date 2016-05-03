@@ -5,7 +5,7 @@ if (!isset($url)) {
 }
 ?>
 <div id="OrganizationsAdminIndex">
-    <h2><?php echo __('地方組織', true); ?></h2>
+    <h2><?php echo __('地方縣市', true); ?></h2>
     <div class="btn-group">
         <?php echo $this->Html->link('新增', array('action' => 'add'), array('class' => 'btn btn-default')); ?>
     </div>

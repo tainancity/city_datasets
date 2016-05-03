@@ -29,7 +29,7 @@
                     echo '<th>&nbsp;</th>';
                 }
                 ?>
-                <th><?php echo $this->Paginator->sort('Dataset.organization_id', '組織', array('url' => $url)); ?></th>
+                <th><?php echo $this->Paginator->sort('Dataset.organization_id', '地方縣市', array('url' => $url)); ?></th>
                 <th><?php echo $this->Paginator->sort('Dataset.name', '名稱', array('url' => $url)); ?></th>
                 <th><?php echo $this->Paginator->sort('Dataset.foreign_id', '原始編號', array('url' => $url)); ?></th>
                 <th><?php echo $this->Paginator->sort('Dataset.modified', '更新時間', array('url' => $url)); ?></th>

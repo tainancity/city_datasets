@@ -1,5 +1,5 @@
 <div id="OrganizationsAdminView">
-    <h3>檢視地方組織</h3><hr />
+    <h3>檢視地方縣市</h3><hr />
     <div class="col-md-12">
         <div class="col-md-2">父項目</div>
         <div class="col-md-9">&nbsp;<?php

@@ -4,9 +4,9 @@
         <?php if ($parentId > 0): ?>
             <?php echo $this->Html->link(__('Upper level', true), array('action' => 'index', $upperLevelId), array('class' => 'btn')); ?>
         <?php endif; ?>
-        <?php echo $this->Html->link(__('New', true), array('action' => 'add', $parentId), array('class' => 'btn')); ?>
-        <?php echo $this->Html->link(__('Members', true), array('controller' => 'members'), array('class' => 'btn')); ?>
-        <?php echo $this->Html->link(__('Group Permissions', true), array('controller' => 'group_permissions'), array('class' => 'btn')); ?>
+        <?php echo $this->Html->link(__('新增群組', true), array('action' => 'add', $parentId), array('class' => 'btn')); ?>
+        <?php echo $this->Html->link(__('帳號資料', true), array('controller' => 'members'), array('class' => 'btn')); ?>
+        <?php echo $this->Html->link(__('群組權限', true), array('controller' => 'group_permissions'), array('class' => 'btn')); ?>
     </div>
     <p>
         <?php
@@ -18,8 +18,8 @@
     <div class="paging"><?php echo $this->element('paginator'); ?></div>
     <table class="table table-bordered" id="GroupsAdminIndexTable">
         <tr>
-            <th><?php echo $this->Paginator->sort(__('Id', true), 'id'); ?></th>
-            <th><?php echo $this->Paginator->sort(__('Name', true), 'name'); ?></th>
+            <th><?php echo $this->Paginator->sort(__('Id', true), '序號'); ?></th>
+            <th><?php echo $this->Paginator->sort(__('Name', true), '帳號名稱'); ?></th>
             <th class="actions"><?php __('Actions'); ?></th>
         </tr>
         <?php
@@ -41,7 +41,7 @@
                     <div class="btn-group">
                         <?php echo $this->Html->link('編輯', array('action' => 'edit', $group['Group']['id']), array('class' => 'btn btn-default')); ?>
                         <?php echo $this->Html->link('刪除', array('action' => 'delete', $group['Group']['id']), array('class' => 'btn btn-default'), '確定要刪除？'); ?>
-                        <?php echo $this->Html->link(__('Sub group', true), array('action' => 'index', $group['Group']['id']), array('class' => 'btn btn-default')); ?>
+                        <?php echo $this->Html->link(__('子群組', true), array('action' => 'index', $group['Group']['id']), array('class' => 'btn btn-default')); ?>
                         <?php
                         if ($group['Group']['id'] != 1) {
                             echo $this->Html->link(__('Permission', true), array('controller' => 'group_permissions', 'action' => 'group', $group['Group']['id']), array('class' => 'btn btn-default'));

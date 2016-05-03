@@ -1,7 +1,7 @@
 <div id="OrganizationsAdminIndex">
     <?php
     $links = array(
-        $this->Html->link('地方組織', '/admin/organizations/index'),
+        $this->Html->link('地方縣市', '/admin/organizations/index'),
     );
     if (!empty($path)) {
         foreach ($path AS $item) {

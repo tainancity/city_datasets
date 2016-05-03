@@ -26,7 +26,7 @@
             <div id="content">
                 <div class="btn-group">
                     <?php if ($this->Session->read('Auth.User.id')): ?>
-                        <?php echo $this->Html->link('地方組織', '/admin/organizations', array('class' => 'btn btn-default')); ?>
+                        <?php echo $this->Html->link('地方縣市', '/admin/organizations', array('class' => 'btn btn-default')); ?>
                         <?php echo $this->Html->link('資料集', '/admin/datasets', array('class' => 'btn btn-default')); ?>
                         <?php echo $this->Html->link('標籤', '/admin/tags', array('class' => 'btn btn-default')); ?>
                         <?php echo $this->Html->link('帳號管理', '/admin/members', array('class' => 'btn btn-default')); ?>

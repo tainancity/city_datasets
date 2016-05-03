@@ -1,5 +1,5 @@
 <div id="OrganizationsView">
-    <h3><?php echo __('View 地方組織', true); ?></h3><hr />
+    <h3><?php echo __('View 地方縣市', true); ?></h3><hr />
     <div class="col-md-12">
 
         <div class="col-md-2">父項目</div>
@@ -36,7 +36,7 @@
         </div>
     </div>
     <div class="btn-group">
-        <?php echo $this->Html->link(__('地方組織 List', true), array('action' => 'index'), array('class' => 'btn btn-default')); ?>
+        <?php echo $this->Html->link(__('地方縣市 List', true), array('action' => 'index'), array('class' => 'btn btn-default')); ?>
         <?php echo $this->Html->link(__('View Related 資料集', true), array('controller' => 'datasets', 'action' => 'index', 'Organization', $this->data['Organization']['id']), array('class' => 'btn btn-default OrganizationsAdminViewControl')); ?>
         <?php echo $this->Html->link(__('View Related 標籤', true), array('controller' => 'tags', 'action' => 'index', 'Organization', $this->data['Organization']['id']), array('class' => 'btn btn-default OrganizationsAdminViewControl')); ?>
     </div>

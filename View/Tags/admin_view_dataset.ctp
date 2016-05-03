@@ -8,7 +8,7 @@
     <table class="table table-bordered" id="TagsAdminIndexTable">
         <thead>
             <tr>
-                <th>組織</th>
+                <th>地方縣市</th>
                 <th>資料集</th>
                 <th class="actions">操作</th>
             </tr>

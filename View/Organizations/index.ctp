@@ -1,5 +1,5 @@
 <div id="OrganizationsIndex">
-    <h2><?php echo __('地方組織', true); ?></h2>
+    <h2><?php echo __('地方縣市', true); ?></h2>
     <div class="btn-group">
     </div>
     <p>

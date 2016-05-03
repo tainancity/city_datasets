@@ -27,7 +27,7 @@ if (!empty($foreignId) && !empty($foreignModel)) {
                 }
                 ?>
                 <?php if (empty($scope['Dataset.organization_id'])): ?>
-                    <th><?php echo $this->Paginator->sort('Dataset.organization_id', '組織', array('url' => $url)); ?></th>
+                    <th><?php echo $this->Paginator->sort('Dataset.organization_id', '地方縣市', array('url' => $url)); ?></th>
                 <?php endif; ?>
 
                 <th><?php echo $this->Paginator->sort('Dataset.parent_id', '父項目', array('url' => $url)); ?></th>

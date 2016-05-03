@@ -2,7 +2,7 @@
     <h2>標籤</h2>
     <div class="btn-group">
         <?php echo $this->Html->link('列表', array('action' => 'index'), array('class' => 'btn btn-default')); ?>
-        <?php echo $this->Html->link('組織', array('action' => 'organizations'), array('class' => 'btn btn-primary')); ?>
+        <?php echo $this->Html->link('地方縣市', array('action' => 'organizations'), array('class' => 'btn btn-primary')); ?>
         <?php echo $this->Html->link('資料集', array('action' => 'datasets'), array('class' => 'btn btn-default')); ?>
     </div>
     <div><?php
@@ -45,7 +45,7 @@
     <hr />
     <?php
     echo '<div class=list_all>';
-    echo '尚未歸類組織';
+    echo '尚未歸類地方縣市';
     echo '<div style="text-align:right"><input name="item_ids_all" id="item_ids_all" type="checkbox" value=1  >全選</div>';
     echo '<ul class="sortable droptrue" id="list_all_ul" data-tag-id="" >';
     $teno_o_organ_index = 0;

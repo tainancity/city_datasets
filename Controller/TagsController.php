@@ -156,18 +156,39 @@ class TagsController extends AppController {
                     ),
                 ),
             ));
+            $tags = array();
             foreach ($items AS $k => $item) {
                 $path = $this->Tag->{$tagModel}->getPath($items[$k][$tagModel]['id'], array('id', 'name'));
                 $items[$k][$tagModel]['name'] = implode(' > ', Set::extract("{n}.{$tagModel}.name", $path));
-                $items[$k][$tagModel]['datasets'] = $this->Tag->Dataset->find('all', array(
+                $datasets = $this->Tag->Dataset->find('all', array(
                     'fields' => array('Dataset.id', 'Dataset.name'),
                     'conditions' => array(
                         'organization_id' => $items[$k][$tagModel]['id'],
                     ),
+                    'contain' => array(
+                        'LinksTag' => array(
+                            'fields' => array('tag_id'),
+                        ),
+                    ),
                 ));
+                foreach ($datasets AS $dataset) {
+                    if (!empty($dataset['LinksTag'])) {
+                        foreach ($dataset['LinksTag'] AS $link) {
+                            if (!isset($tags[$link['tag_id']])) {
+                                $tags[$link['tag_id']] = $this->Tag->read(array('name'), $link['tag_id']);
+                                $tags[$link['tag_id']][$tagModel] = array();
+                            }
+                            if(!isset($tags[$link['tag_id']][$tagModel][$items[$k][$tagModel]['id']])) {
+                                $tags[$link['tag_id']][$tagModel][$items[$k][$tagModel]['id']] = array();
+                            }
+                            $tags[$link['tag_id']][$tagModel][$items[$k][$tagModel]['id']][] = $dataset;
+                        }
+                    }
+                }
+                $items[$k][$tagModel]['datasets'] = $datasets;
             }
-            //print_r($items);
             $this->set('items', $items);
+            $this->set('tags', $tags);
         }
 
         if (empty($this->data)) {

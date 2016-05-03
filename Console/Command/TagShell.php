@@ -11,30 +11,35 @@ class TagShell extends AppShell {
     public function datasetImport() {
         $config = array(
             'tainan' => array(
+                'name' => '臺南市',
                 'url' => 'http://data.tainan.gov.tw/',
                 'dataset' => 'http://data.tainan.gov.tw/dataset/',
                 'resource' => 'http://data.tainan.gov.tw/dataset/{DATASET_ID}/resource/{RESOURCE_ID}',
                 'org' => 'http://data.tainan.gov.tw/organization/',
             ),
             'taoyuan' => array(
+                'name' => '桃園市',
                 'url' => 'http://data.tycg.gov.tw/',
                 'dataset' => 'http://ckan.tycg.gov.tw/dataset/',
                 'resource' => 'http://ckan.tycg.gov.tw/dataset/{DATASET_ID}/resource/{RESOURCE_ID}',
                 'org' => 'http://ckan.tycg.gov.tw/organization/',
             ),
             'nantou' => array(
+                'name' => '南投縣',
                 'url' => 'http://data.nantou.gov.tw/',
                 'dataset' => 'http://data.nantou.gov.tw/dataset/',
                 'resource' => 'http://data.nantou.gov.tw/dataset/{DATASET_ID}/resource/{RESOURCE_ID}',
                 'org' => 'http://data.tycg.gov.tw/organization/',
             ),
             'hccg' => array(
+                'name' => '新竹市',
                 'url' => 'http://opendata.hccg.gov.tw/',
                 'dataset' => 'http://opendata.hccg.gov.tw/dataset/',
                 'resource' => 'http://opendata.hccg.gov.tw/dataset/{DATASET_ID}/resource/{RESOURCE_ID}',
                 'org' => 'http://opendata.hccg.gov.tw/organization/',
             ),
             'taipei' => array(
+                'name' => '臺北市',
                 'url' => 'http://data.taipei/',
                 'dataset' => 'http://data.taipei/opendata/datalist/datasetMeta?oid=',
                 'resource' => 'http://data.taipei/opendata/datalist/datasetMeta/preview?id={DATASET_ID}&rid={RESOURCE_ID}',
@@ -47,14 +52,14 @@ class TagShell extends AppShell {
             ),
             'fields' => array('Organization.name', 'Organization.id'),
         ));
-        foreach (glob('/home/kiang/public_html/ckan/datasets/*.json') AS $jsonFile) {
+        foreach (glob('/home/kiang/public_html/city_datasets_crawlers/datasets/*.json') AS $jsonFile) {
             $json = json_decode(file_get_contents($jsonFile), true);
             $info = pathinfo($jsonFile);
             $baseConfig = $config[$info['filename']];
             if (!isset($orgRoots[$info['filename']])) {
                 $this->Tag->Organization->create();
                 $this->Tag->Organization->save(array('Organization' => array(
-                        'name' => $info['filename'],
+                        'name' => $baseConfig['name'],
                         'foreign_id' => $info['filename'],
                         'foreign_uri' => $baseConfig['url'],
                 )));

@@ -163,7 +163,8 @@ class TagsController extends AppController {
                 $datasets = $this->Tag->Dataset->find('all', array(
                     'fields' => array('Dataset.id', 'Dataset.name'),
                     'conditions' => array(
-                        'organization_id' => $items[$k][$tagModel]['id'],
+                        'Dataset.parent_id IS NULL',
+                        'Dataset.organization_id' => $items[$k][$tagModel]['id'],
                     ),
                     'contain' => array(
                         'LinksTag' => array(

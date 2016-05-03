@@ -99,51 +99,61 @@ class TagShell extends AppShell {
                 $organizationId = false;
                 foreach ($data['datasets'] AS $datasetId => $dataset) {
                     if (false === $organizationId) {
+                        $orgData = array('Organization' => array(
+                                'parent_id' => $orgRoots[$info['filename']],
+                                'name' => $org,
+                                'foreign_id' => $dataset['organization_id'],
+                                'foreign_uri' => $baseConfig['org'] . $dataset['organization_id'],
+                        ));
                         $orgKey = "{$info['filename']}/{$dataset['organization_id']}";
                         if (isset($orgRef[$orgKey])) {
                             $organizationId = $orgRef[$orgKey];
+                            $this->Tag->Organization->id = $organizationId;
+                            $this->Tag->Organization->save($orgData);
                         } else {
                             $this->Tag->Organization->create();
-                            $this->Tag->Organization->save(array('Organization' => array(
-                                    'parent_id' => $orgRoots[$info['filename']],
-                                    'name' => $org,
-                                    'foreign_id' => $dataset['organization_id'],
-                                    'foreign_uri' => $baseConfig['org'] . $dataset['organization_id'],
-                            )));
+                            $this->Tag->Organization->save($orgData);
                             $organizationId = $this->Tag->Organization->getInsertID();
                         }
                     }
                     $datasetKey = "{$info['filename']}/{$datasetId}";
+                    $datasetData = array('Dataset' => array(
+                            'organization_id' => $organizationId,
+                            'name' => $dataset['title'],
+                            'foreign_id' => $datasetId,
+                            'foreign_uri' => $baseConfig['dataset'] . $datasetId,
+                            'created' => date('Y-m-d H:i:s', $dataset['timeBegin']),
+                    ));
                     if (isset($datasetRef[$datasetKey])) {
                         $datasetDB = $datasetRef[$datasetKey];
+                        $this->Tag->Dataset->id = $datasetDB;
+                        $this->Tag->Dataset->save($datasetData);
                     } else {
                         $this->Tag->Dataset->create();
-                        $this->Tag->Dataset->save(array('Dataset' => array(
-                                'organization_id' => $organizationId,
-                                'name' => $dataset['title'],
-                                'foreign_id' => $datasetId,
-                                'foreign_uri' => $baseConfig['dataset'] . $datasetId,
-                                'created' => date('Y-m-d H:i:s', $dataset['timeBegin']),
-                        )));
+                        $this->Tag->Dataset->save($datasetData);
                         $datasetDB = $this->Tag->Dataset->getInsertID();
                     }
 
                     foreach ($dataset['resources'] AS $resourceId => $resource) {
                         $resourceKey = "{$info['filename']}/{$resourceId}";
-                        if (!isset($datasetRef[$resourceKey])) {
+                        $resourceData = array('Dataset' => array(
+                                'parent_id' => $datasetDB,
+                                'organization_id' => $organizationId,
+                                'name' => $resource['name'],
+                                'foreign_id' => $resourceId,
+                                'foreign_uri' => str_replace(array(
+                                    '{DATASET_ID}', '{RESOURCE_ID}'
+                                        ), array(
+                                    $datasetId, $resourceId
+                                        ), $baseConfig['resource']),
+                                'created' => date('Y-m-d H:i:s', strtotime($resource['created'])),
+                        ));
+                        if (isset($datasetRef[$resourceKey])) {
+                            $this->Tag->Dataset->id = $datasetRef[$resourceKey];
+                            $this->Tag->Dataset->save($resourceData);
+                        } else {
                             $this->Tag->Dataset->create();
-                            $this->Tag->Dataset->save(array('Dataset' => array(
-                                    'parent_id' => $datasetDB,
-                                    'organization_id' => $organizationId,
-                                    'name' => $resource['name'],
-                                    'foreign_id' => $resourceId,
-                                    'foreign_uri' => str_replace(array(
-                                        '{DATASET_ID}', '{RESOURCE_ID}'
-                                            ), array(
-                                        $datasetId, $resourceId
-                                            ), $baseConfig['resource']),
-                                    'created' => date('Y-m-d H:i:s', strtotime($resource['created'])),
-                            )));
+                            $this->Tag->Dataset->save($resourceData);
                         }
                     }
                 }

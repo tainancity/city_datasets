@@ -1,10 +1,11 @@
 <?php
+
 if (!isset($url)) {
     $url = array();
 }
 ?>
 <div id="OrganizationsAdminIndex">
-    <h2><?php echo __('組織', true); ?></h2>
+    <h2><?php echo __('地方組織', true); ?></h2>
     <div class="btn-group">
         <?php echo $this->Html->link('新增', array('action' => 'add'), array('class' => 'btn btn-default')); ?>
     </div>
@@ -38,7 +39,7 @@ if (!isset($url)) {
                     $class = ' class="altrow"';
                 }
                 ?>
-                <tr<?php echo $class; ?>>
+            <tr<?php echo $class; ?>>
                     <?php
                     if (!empty($op)) {
                         echo '<td>';
@@ -51,26 +52,26 @@ if (!isset($url)) {
                     }
                     ?>
 
-                    <td><?php
+                <td><?php
                         echo $item['Organization']['parent_id'];
                         ?></td>
-                    <td><?php
+                <td><?php
                         echo $item['Organization']['name'];
                         ?></td>
-                    <td><?php
+                <td><?php
                         echo $item['Organization']['foreign_id'];
                         ?></td>
-                    <td><?php
+                <td><?php
                         echo $item['Organization']['foreign_uri'];
                         ?></td>
-                    <td>
-                        <div class="btn-group">
+                <td>
+                    <div class="btn-group">
                             <?php echo $this->Html->link('檢視', array('action' => 'view', $item['Organization']['id']), array('class' => 'btn btn-default')); ?>
                             <?php echo $this->Html->link('編輯', array('action' => 'edit', $item['Organization']['id']), array('class' => 'btn btn-default')); ?>
                             <?php echo $this->Html->link('刪除', array('action' => 'delete', $item['Organization']['id']), array('class' => 'btn btn-default'), '確定要刪除？'); ?>
-                        </div>
-                    </td>
-                </tr>
+                    </div>
+                </td>
+            </tr>
             <?php } // End of foreach ($items as $item) {  ?>
         </tbody>
     </table>
@@ -83,15 +84,15 @@ if (!isset($url)) {
 if (!empty($op)) {
     $remoteUrl = $this->Html->url(array('action' => 'habtmSet', $foreignModel, $foreignId));
     ?>
-                $('#OrganizationsAdminIndexTable input.habtmSet').click(function () {
-                    var remoteUrl = '<?php echo $remoteUrl; ?>/' + this.value + '/';
-                    if (this.checked == true) {
-                        remoteUrl = remoteUrl + 'on';
-                    } else {
-                        remoteUrl = remoteUrl + 'off';
-                    }
-                    $('div#messageSet' + this.value).load(remoteUrl);
-                });
+            $('#OrganizationsAdminIndexTable input.habtmSet').click(function () {
+                var remoteUrl = '<?php echo $remoteUrl; ?>/' + this.value + '/';
+                if (this.checked == true) {
+                    remoteUrl = remoteUrl + 'on';
+                } else {
+                    remoteUrl = remoteUrl + 'off';
+                }
+                $('div#messageSet' + this.value).load(remoteUrl);
+            });
     <?php
 }
 ?>

@@ -6,7 +6,7 @@
         <?php echo $this->Html->link('權限更新', array('action' => 'acos'), array('class' => 'btn')); ?>
     </div>
     <?php
-    echo 'Filter: ' . $this->Form->text('Member.filter', array(
+    echo '篩選: ' . $this->Form->text('Member.filter', array(
         'id' => 'memberFilter',
         'value' => $keyword,
     ));

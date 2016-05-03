@@ -1,1 +1,3 @@
-<?php echo $habtmMessage; ?>
+<?php
+
+echo $habtmMessage; ?>

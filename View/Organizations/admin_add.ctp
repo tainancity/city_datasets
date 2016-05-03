@@ -1,5 +1,5 @@
 <div id="OrganizationsAdminAdd">
-    <h3>新增組織</h3>
+    <h3>新增地方組織</h3>
     <div class="btn-group">
         <?php echo $this->Html->link('新增', array('action' => 'add', $parentId), array('class' => 'btn btn-primary')); ?>
         <?php echo $this->Html->link('列表', array('action' => 'index'), array('class' => 'btn btn-default')); ?>

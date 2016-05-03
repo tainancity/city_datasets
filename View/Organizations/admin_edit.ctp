@@ -1,5 +1,5 @@
 <div id="OrganizationsAdminEdit">
-    <h3>編輯組織</h3>
+    <h3>編輯地方地方組織</h3>
     <?php echo $this->Form->create('Organization', array('type' => 'file')); ?>
     <div class="Organizations form">
         <?php

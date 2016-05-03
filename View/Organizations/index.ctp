@@ -1,5 +1,5 @@
 <div id="OrganizationsIndex">
-    <h2><?php echo __('組織', true); ?></h2>
+    <h2><?php echo __('地方組織', true); ?></h2>
     <div class="btn-group">
     </div>
     <p>
@@ -31,26 +31,26 @@
                     $class = ' class="altrow"';
                 }
                 ?>
-                <tr<?php echo $class; ?>>
+            <tr<?php echo $class; ?>>
 
-                    <td><?php
+                <td><?php
                         echo $item['Organization']['parent_id'];
                         ?></td>
-                    <td><?php
+                <td><?php
                         echo $item['Organization']['name'];
                         ?></td>
-                    <td><?php
+                <td><?php
                         echo $item['Organization']['foreign_id'];
                         ?></td>
-                    <td><?php
+                <td><?php
                         echo $item['Organization']['foreign_uri'];
                         ?></td>
-                    <td>
-                        <div class="btn-group">
+                <td>
+                    <div class="btn-group">
                             <?php echo $this->Html->link('檢視', array('action' => 'view', $item['Organization']['id']), array('class' => 'btn btn-default OrganizationsIndexControl')); ?>
-                        </div>
-                    </td>
-                </tr>
+                    </div>
+                </td>
+            </tr>
             <?php }; // End of foreach ($items as $item) {  ?>
         </tbody>
     </table>

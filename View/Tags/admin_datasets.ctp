@@ -57,6 +57,7 @@
 
 
     <div id="savemsg" style="display: none;">已儲存</div>
+    <div id="waiting" style="display: none;">處理中...請稍後</div>
     <div class="paging"><?php echo $this->element('paginator'); ?></div>
 </div>
 <script>

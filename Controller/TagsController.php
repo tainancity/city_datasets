@@ -376,9 +376,13 @@ class TagsController extends AppController {
         }
     }
 
-    public function admin_datasets() {
+    public function admin_datasets($keyword = null) {
         $scope = array('Tag.model' => 'Dataset');
-        $this->paginate['Tag']['limit'] = 9;
+        $keyword = trim($keyword);
+        if (!empty($keyword)) {
+            $scope['Tag.name LIKE'] = '%' . $keyword . '%';
+        }
+        $this->paginate['Tag']['limit'] = 20;
         $items = $this->paginate($this->Tag, $scope);
         $organizations = array();
         foreach ($items AS $k => $item) {
@@ -409,11 +413,16 @@ class TagsController extends AppController {
             }
         }
         $this->set('items', $items);
+        $this->set('keyword', $keyword);
     }
 
-    public function admin_organizations() {
+    public function admin_organizations($keyword = null) {
         $scope = array('Tag.model' => 'Organization');
-        $this->paginate['Tag']['limit'] = 9;
+        $keyword = trim($keyword);
+        if (!empty($keyword)) {
+            $scope['Tag.name LIKE'] = '%' . $keyword . '%';
+        }
+        $this->paginate['Tag']['limit'] = 20;
         $items = $this->paginate($this->Tag, $scope);
         foreach ($items AS $k => $item) {
             $items[$k]['Organization'] = $this->Tag->Organization->find('all', array(
@@ -470,6 +479,7 @@ class TagsController extends AppController {
 
         $this->set('items', $items);
         $this->set('allOrganizations', $allOrganization);
+        $this->set('keyword', $keyword);
     }
 
 }

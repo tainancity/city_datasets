@@ -5,6 +5,14 @@
         <?php echo $this->Html->link('地方縣市', array('action' => 'organizations'), array('class' => 'btn btn-primary')); ?>
         <?php echo $this->Html->link('資料集', array('action' => 'datasets'), array('class' => 'btn btn-default')); ?>
     </div>
+    <div class="pull-right"><?php
+        echo $this->Form->input('Tag.keyword', array(
+            'label' => '查詢',
+            'div' => 'form-group',
+            'class' => 'form-control',
+            'value' => $keyword,
+        ));
+        ?></div>
     <div><?php
         echo $this->Paginator->counter(array(
             'format' => '第 {:page} 頁 / 共 {:pages} 頁，總數： {:count}  筆'
@@ -15,8 +23,6 @@
     $teno_o_organ_index = 0;
     foreach ($items AS $item) {
         ++$teno_o_organ_index;
-        //echo '<div class="col-md-3 list">';		
-        //echo '<input type=text class="col-md-12 tagName" value="' . $item['Tag']['name'] . '" data-id="' . $item['Tag']['id'] . '" />';
         echo '<div class="list">';
         echo '<input type=text class="tagName" value="' . $item['Tag']['name'] . '" data-id="' . $item['Tag']['id'] . '" size=15 />';
         echo '<ul class="sortable droptrue" data-tag-id="' . $item['Tag']['id'] . '" >';
@@ -66,7 +72,7 @@
     <div class="paging"><?php echo $this->element('paginator'); ?></div>
 </div>
 <script>
-    var currentUrl = '<?php echo $this->Html->url(array()); ?>';
+    var currentUrl = '<?php echo $this->Html->url(array('')); ?>';
     var queryUrl = '<?php echo $this->Html->url('/organizations/q/'); ?>';
     var viewUrl = '<?php echo $this->Html->url('/admin/organizations/view/'); ?>';
     var tagAddUrl = '<?php echo $this->Html->url('/admin/tags/add/'); ?>';

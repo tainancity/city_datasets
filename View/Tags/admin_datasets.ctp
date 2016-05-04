@@ -5,6 +5,14 @@
         <?php echo $this->Html->link('地方縣市', array('action' => 'organizations'), array('class' => 'btn btn-default')); ?>
         <?php echo $this->Html->link('資料集', array('action' => 'datasets'), array('class' => 'btn btn-primary')); ?>
     </div>
+    <div class="pull-right"><?php
+        echo $this->Form->input('Tag.keyword', array(
+            'label' => '查詢',
+            'div' => 'form-group',
+            'class' => 'form-control',
+            'value' => $keyword,
+        ));
+        ?></div>
     <div><?php
         echo $this->Paginator->counter(array(
             'format' => '第 {:page} 頁 / 共 {:pages} 頁，總數： {:count}  筆'
@@ -61,7 +69,7 @@
     <div class="paging"><?php echo $this->element('paginator'); ?></div>
 </div>
 <script>
-    var currentUrl = '<?php echo $this->Html->url(array()); ?>';
+    var currentUrl = '<?php echo $this->Html->url(array('')); ?>';
     var queryUrl = '<?php echo $this->Html->url('/datasets/q/'); ?>';
     var viewUrl = '<?php echo $this->Html->url('/admin/datasets/view/'); ?>';
     var tagAddUrl = '<?php echo $this->Html->url('/admin/tags/add/'); ?>';

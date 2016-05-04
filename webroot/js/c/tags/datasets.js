@@ -104,6 +104,13 @@ $(function () {
 
     });
 
+    $('input#TagKeyword').autocomplete({
+        source: function (request) {
+            location.href = currentUrl + '/' + request.term;
+        },
+        minLength: 0
+    });
+
 });
 function showsave()
 {

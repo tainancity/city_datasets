@@ -33,7 +33,7 @@
                         <?php echo $this->Html->link('帳號群組', '/admin/groups', array('class' => 'btn btn-default')); ?>
                         <?php echo $this->Html->link('登出', '/members/logout', array('class' => 'btn btn-default')); ?>
                     <?php else: ?>
-                        <?php echo $this->Html->link('登入', '/members/login', array('class' => 'btn btn-default')); ?>
+                        <?php echo $this->Html->link('請先登入', '/members/login', array('class' => 'btn btn-default')); ?>
                     <?php endif; ?>
                     <?php
                     if (!empty($actions_for_layout)) {

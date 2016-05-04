@@ -40,9 +40,9 @@
         </div>
         <div class="col-md-2">原始網址</div>
         <div class="col-md-9">&nbsp;<?php
-            if ($this->data['Dataset']['foreign_uri']) {
+            if (!empty($this->data['Dataset']['foreign_uri'])) {
 
-                echo $this->data['Dataset']['foreign_uri'];
+                echo $this->Html->link($this->data['Dataset']['foreign_uri'], $this->data['Dataset']['foreign_uri'], array('target' => '_blank'));
             }
             ?>&nbsp;
         </div>

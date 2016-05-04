@@ -24,7 +24,7 @@
                     $msg_datasets.= '</div>';
                 }
             } else {
-                $msg_datasets = '<div class="list_dataset"> ~ 無 ~ </div>';
+                $msg_datasets = '<div class="list_dataset" style="color: red;"> ~ 無 ~ </div>';
             }
             echo '<div class="list">';
             echo $this->Html->link($item['Organization']['name'], '/admin/organizations/view/' . $item['Organization']['id'], array('target' => '_blank'));

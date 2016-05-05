@@ -11,7 +11,7 @@ class TagsController extends AppController {
     public function beforeFilter() {
         parent::beforeFilter();
         if (isset($this->Auth)) {
-            $this->Auth->allow(array('q', 'index'));
+            $this->Auth->allow(array('q', 'index', 'view'));
         }
     }
 
@@ -43,11 +43,90 @@ class TagsController extends AppController {
     }
 
     function index() {
-        
+        $this->set('items', $this->Tag->find('all', array(
+                    'fields' => array(
+                        'Tag.*', 'count(LinksTag.id) AS count'
+                    ),
+                    'group' => array('Tag.id'),
+                    'joins' => array(
+                        array(
+                            'table' => 'links_tags',
+                            'alias' => 'LinksTag',
+                            'type' => 'inner',
+                            'conditions' => array(
+                                'LinksTag.tag_id = Tag.id',
+                                'LinksTag.model' => 'Organization',
+                            ),
+                        )
+                    ),
+                    'order' => array('Tag.modified' => 'DESC'),
+        )));
     }
 
     function view($id = null) {
-        
+        if (!empty($id)) {
+            $this->data = $this->Tag->find('first', array(
+                'conditions' => array(
+                    'Tag.id' => $id,
+                ),
+            ));
+            $tagModel = $this->data['Tag']['model'];
+            $items = $this->Tag->{$tagModel}->find('all', array(
+                'conditions' => array(
+                    'LinksTag.tag_id' => $id,
+                ),
+                'joins' => array(
+                    array(
+                        'table' => 'links_tags',
+                        'alias' => 'LinksTag',
+                        'type' => 'inner',
+                        'conditions' => array(
+                            'LinksTag.model' => $tagModel,
+                            "LinksTag.foreign_id = {$tagModel}.id",
+                        ),
+                    ),
+                ),
+            ));
+            $tags = array();
+            foreach ($items AS $k => $item) {
+                $path = $this->Tag->{$tagModel}->getPath($items[$k][$tagModel]['id'], array('id', 'name'));
+                $items[$k][$tagModel]['name'] = implode(' > ', Set::extract("{n}.{$tagModel}.name", $path));
+                $datasets = $this->Tag->Dataset->find('all', array(
+                    'fields' => array('Dataset.id', 'Dataset.name', 'Dataset.foreign_uri'),
+                    'conditions' => array(
+                        'Dataset.parent_id IS NULL',
+                        'Dataset.organization_id' => $items[$k][$tagModel]['id'],
+                    ),
+                    'contain' => array(
+                        'LinksTag' => array(
+                            'fields' => array('tag_id'),
+                        ),
+                    ),
+                ));
+                foreach ($datasets AS $dataset) {
+                    if (!empty($dataset['LinksTag'])) {
+                        foreach ($dataset['LinksTag'] AS $link) {
+                            if (!isset($tags[$link['tag_id']])) {
+                                $tags[$link['tag_id']] = $this->Tag->read(array('name'), $link['tag_id']);
+                                $tags[$link['tag_id']][$tagModel] = array();
+                            }
+                            if (!isset($tags[$link['tag_id']][$tagModel][$items[$k][$tagModel]['id']])) {
+                                $tags[$link['tag_id']][$tagModel][$items[$k][$tagModel]['id']] = array();
+                            }
+                            $tags[$link['tag_id']][$tagModel][$items[$k][$tagModel]['id']][] = $dataset;
+                        }
+                    }
+                }
+                $items[$k][$tagModel]['datasets'] = $datasets;
+            }
+            $this->set('items', $items);
+            $this->set('tags', $tags);
+        }
+
+        if (empty($this->data)) {
+            $this->Session->setFlash('請依照網址指示操作');
+            $this->redirect(array('action' => 'index'));
+        }
     }
 
     function admin_index($foreignModel = null, $foreignId = null, $op = null) {

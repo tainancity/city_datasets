@@ -20,14 +20,23 @@
                 $msg_datasets = '';
                 foreach ($tag['Organization'][$item['Organization']['id']] AS $dataset) {
                     $msg_datasets.= '<div class="list_dataset">';
-                    $msg_datasets.= $this->Html->link($dataset['Dataset']['name'], '/admin/datasets/view/' . $dataset['Dataset']['id'], array('target' => '_blank'));
+                    if (!empty($dataset['Dataset']['foreign_uri'])) {
+                        $msg_datasets.= $this->Html->link($dataset['Dataset']['name'], $dataset['Dataset']['foreign_uri'], array('target' => '_blank'));
+                    } else {
+                        $msg_datasets.= $this->Html->link($dataset['Dataset']['name'], '/admin/datasets/view/' . $dataset['Dataset']['id'], array('target' => '_blank'));
+                    }
                     $msg_datasets.= '</div>';
                 }
             } else {
                 $msg_datasets = '<div class="list_dataset" style="color: red;"> ~ 無 ~ </div>';
             }
             echo '<div class="list">';
-            echo $this->Html->link($item['Organization']['name'], '/admin/organizations/view/' . $item['Organization']['id'], array('target' => '_blank'));
+            if (!empty($item['Organization']['foreign_uri'])) {
+                echo $this->Html->link($item['Organization']['name'], $item['Organization']['foreign_uri'], array('target' => '_blank'));
+            } else {
+                echo $this->Html->link($item['Organization']['name'], '/admin/organizations/view/' . $item['Organization']['id'], array('target' => '_blank'));
+            }
+
             echo $msg_datasets;
             echo '</div>';
         }
@@ -47,13 +56,22 @@
             }
             if (empty($dataset['LinksTag'])) {
                 $msg_datasets.= '<div class="list_dataset">';
-                $msg_datasets.= $this->Html->link($dataset['Dataset']['name'], '/admin/datasets/view/' . $dataset['Dataset']['id'], array('target' => '_blank'));
+                if (!empty($dataset['Dataset']['foreign_uri'])) {
+                    $msg_datasets.= $this->Html->link($dataset['Dataset']['name'], $dataset['Dataset']['foreign_uri'], array('target' => '_blank'));
+                } else {
+                    $msg_datasets.= $this->Html->link($dataset['Dataset']['name'], '/admin/datasets/view/' . $dataset['Dataset']['id'], array('target' => '_blank'));
+                }
                 $msg_datasets.= '</div>';
             }
             $packages++;
         }
         echo '<div class="list">';
-        echo $this->Html->link($item['Organization']['name'] . "(" . $packages . ")", '/admin/organizations/view/' . $item['Organization']['id'], array('target' => '_blank'));
+        if (!empty($item['Organization']['foreign_uri'])) {
+            echo $this->Html->link($item['Organization']['name'] . "(" . $packages . ")", $item['Organization']['foreign_uri'], array('target' => '_blank'));
+        } else {
+            echo $this->Html->link($item['Organization']['name'] . "(" . $packages . ")", '/admin/organizations/view/' . $item['Organization']['id'], array('target' => '_blank'));
+        }
+
         echo $msg_datasets;
         echo '</div>';
     }

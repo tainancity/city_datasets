@@ -109,6 +109,9 @@ class TagsController extends AppController {
         }
         $this->set('scope', $scope);
         $this->paginate['Tag']['limit'] = 20;
+        $this->paginate['Tag']['order'] = array(
+            'Tag.modified' => 'DESC'
+        );
         $items = $this->paginate($this->Tag, $scope);
 
         if ($op == 'set' && !empty($joins[$foreignModel]) && !empty($foreignModel) && !empty($foreignId) && !empty($items)) {
@@ -161,7 +164,7 @@ class TagsController extends AppController {
                 $path = $this->Tag->{$tagModel}->getPath($items[$k][$tagModel]['id'], array('id', 'name'));
                 $items[$k][$tagModel]['name'] = implode(' > ', Set::extract("{n}.{$tagModel}.name", $path));
                 $datasets = $this->Tag->Dataset->find('all', array(
-                    'fields' => array('Dataset.id', 'Dataset.name'),
+                    'fields' => array('Dataset.id', 'Dataset.name', 'Dataset.foreign_uri'),
                     'conditions' => array(
                         'Dataset.parent_id IS NULL',
                         'Dataset.organization_id' => $items[$k][$tagModel]['id'],
@@ -383,6 +386,9 @@ class TagsController extends AppController {
             $scope['Tag.name LIKE'] = '%' . $keyword . '%';
         }
         $this->paginate['Tag']['limit'] = 20;
+        $this->paginate['Tag']['order'] = array(
+            'Tag.modified' => 'DESC'
+        );
         $items = $this->paginate($this->Tag, $scope);
         $organizations = array();
         foreach ($items AS $k => $item) {

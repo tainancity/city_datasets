@@ -6,7 +6,7 @@
 <div id="TagsAdminView">
     <h3><?php
         echo implode(' > ', array(
-            $this->Html->link('標籤', '/admin/tags/index'),
+            $this->Html->link('標籤', '/tags/index'),
             $this->data['Tag']['name'] . ' / ' . $this->data['Tag']['model'],
         ));
         ?></h3><hr />
@@ -23,7 +23,7 @@
                     if (!empty($dataset['Dataset']['foreign_uri'])) {
                         $msg_datasets.= $this->Html->link($dataset['Dataset']['name'], $dataset['Dataset']['foreign_uri'], array('target' => '_blank'));
                     } else {
-                        $msg_datasets.= $this->Html->link($dataset['Dataset']['name'], '/admin/datasets/view/' . $dataset['Dataset']['id'], array('target' => '_blank'));
+                        $msg_datasets.= $dataset['Dataset']['name'];
                     }
                     $msg_datasets.= '</div>';
                 }
@@ -34,7 +34,7 @@
             if (!empty($item['Organization']['foreign_uri'])) {
                 echo $this->Html->link($item['Organization']['name'], $item['Organization']['foreign_uri'], array('target' => '_blank'));
             } else {
-                echo $this->Html->link($item['Organization']['name'], '/admin/organizations/view/' . $item['Organization']['id'], array('target' => '_blank'));
+                echo $item['Organization']['name'];
             }
 
             echo $msg_datasets;
@@ -59,7 +59,7 @@
                 if (!empty($dataset['Dataset']['foreign_uri'])) {
                     $msg_datasets.= $this->Html->link($dataset['Dataset']['name'], $dataset['Dataset']['foreign_uri'], array('target' => '_blank'));
                 } else {
-                    $msg_datasets.= $this->Html->link($dataset['Dataset']['name'], '/admin/datasets/view/' . $dataset['Dataset']['id'], array('target' => '_blank'));
+                    $msg_datasets.= $dataset['Dataset']['name'];
                 }
                 $msg_datasets.= '</div>';
             }
@@ -69,7 +69,7 @@
         if (!empty($item['Organization']['foreign_uri'])) {
             echo $this->Html->link($item['Organization']['name'] . "(" . $packages . ")", $item['Organization']['foreign_uri'], array('target' => '_blank'));
         } else {
-            echo $this->Html->link($item['Organization']['name'] . "(" . $packages . ")", '/admin/organizations/view/' . $item['Organization']['id'], array('target' => '_blank'));
+            echo $item['Organization']['name'] . "(" . $packages . ")";
         }
 
         echo $msg_datasets;
@@ -78,18 +78,3 @@
     ?>
     <div class="clearfix"></div>
 </div>
-<script>
-    var tagSetUrl = '<?php echo $this->Html->url('/admin/tags/habtmSet/Organization/'); ?>';
-    var clickedLine = null;
-    $(function () {
-        $('a.removeTag').click(function () {
-            var organizationId = $(this).attr('data-id');
-            var tagId = $(this).attr('data-tag-id');
-            clickedLine = $(this).parents('tr');
-            $.get(tagSetUrl + organizationId + '/' + tagId + '/off', {}, function () {
-                clickedLine.remove();
-            });
-            return false;
-        });
-    })
-</script>

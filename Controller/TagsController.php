@@ -186,6 +186,14 @@ class TagsController extends AppController {
         if (!empty($foreignModel)) {
             $scope['Tag.model'] = $foreignModel;
         }
+        $keyword = '';
+        if (!empty($this->request->params['named']['keyword'])) {
+            if (is_array($this->request->params['named']['keyword'])) {
+                $this->request->params['named']['keyword'] = $this->request->params['named']['keyword'][0];
+            }
+            $keyword = trim($this->request->params['named']['keyword']);
+            $scope['Tag.name LIKE'] = "%{$keyword}%";
+        }
         $this->set('scope', $scope);
         $this->paginate['Tag']['limit'] = 20;
         $this->paginate['Tag']['order'] = array(
@@ -212,6 +220,8 @@ class TagsController extends AppController {
         $this->set('items', $items);
         $this->set('foreignId', $foreignId);
         $this->set('foreignModel', $foreignModel);
+        $this->set('url', array($foreignModel, $foreignId, $op, 'keyword:' . $keyword));
+        $this->set('keyword', $keyword);
     }
 
     public function admin_view_organization($id = null) {

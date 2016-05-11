@@ -1,10 +1,18 @@
-<?php
-if (!isset($url)) {
-    $url = array();
-}
-?>
 <div id="TagsAdminIndex">
     <h2>標籤</h2>
+    <div class="pull-right col-md-6">
+        <div class="col-md-9"><?php
+            echo $this->Form->input('Tag.keyword', array(
+                'label' => false,
+                'value' => $keyword,
+                'div' => false,
+                'class' => 'form-control',
+            ));
+            ?></div>
+        <div class="col-md-3"><?php
+            echo $this->Html->link('搜尋', $url, array('class' => 'btn btn-default', 'id' => 'btnTagKeyword'));
+            ?></div>
+    </div>
     <div class="btn-group">
         <?php echo $this->Html->link('列表', array('action' => 'index'), array('class' => 'btn btn-primary')); ?>
         <?php echo $this->Html->link('地方縣市', array('action' => 'organizations'), array('class' => 'btn btn-default')); ?>
@@ -59,7 +67,7 @@ if (!isset($url)) {
                         echo $item['Tag']['name'];
                         ?></td>
                     <td><?php
-                       echo tag_to_str($item['Tag']['model']);//defined in Config/bootstrap.php
+                        echo tag_to_str($item['Tag']['model']); //defined in Config/bootstrap.php
                         ?></td>
                     <td>
                         <div class="btn-group">
@@ -83,6 +91,13 @@ if (!isset($url)) {
     <script type="text/javascript">
         //<![CDATA[
         $(function () {
+            $('a#btnTagKeyword').click(function () {
+                var keyword = $('input#TagKeyword').val();
+                if (keyword !== '') {
+                    location.href = '<?php echo $this->Html->url('/admin/tags/index'); ?>/keyword:' + $('input#TagKeyword').val();
+                }
+                return false;
+            });
 <?php
 if (!empty($op)) {
     $remoteUrl = $this->Html->url(array('action' => 'habtmSet', $foreignModel, $foreignId));

@@ -7,6 +7,7 @@
     </div>
     <?php echo $this->Form->create('Organization', array('type' => 'file')); ?>
     <div class="Organizations form">
+        <div class="page_content">
         <?php
         echo $this->Form->input('Organization.name', array(
             'label' => '名稱',
@@ -25,8 +26,12 @@
             'class' => 'form-control',
         ));
         ?>
-    </div>
+            
+    
     <?php
-    echo $this->Form->end('儲存');
+    $options = array('label' => '儲存', 'class' => 'btn btn-primary');
+    echo $this->Form->end($options);
     ?>
+        </div>
+        </div>
 </div>

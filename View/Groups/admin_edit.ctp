@@ -1,13 +1,18 @@
 <div class="groups form">
+    <div class="page_content">
     <?php echo $this->Form->create('Group'); ?>
     <fieldset>
-        <legend><?php echo __('Edit group', true); ?></legend>
+        <legend><?php echo __('編輯群組', true); ?></legend>
         <?php
         echo $this->Form->input('id');
-        echo $this->Form->input('name', array('label' => __('Name', true)));
+        echo $this->Form->input('name', array('label' => __('群組名稱', true)));
         ?>
     </fieldset>
-    <?php echo $this->Form->end('儲存'); ?>
+    <?php 
+    $options = array('label' => '儲存', 'class' => 'btn btn-primary');
+    echo $this->Form->end($options);
+    ?>
+    </div>
 </div>
 <div class="actions">
     <ul>

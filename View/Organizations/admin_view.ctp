@@ -1,37 +1,39 @@
 <div id="OrganizationsAdminView">
     <h3>檢視地方縣市</h3><hr />
-    <div class="col-md-12">
-        <div class="col-md-2">父項目</div>
-        <div class="col-md-9">&nbsp;<?php
+    <div class="page_content">
+        <div class="col-md-12">
+            <div class="col-md-2">父項目</div>
+            <div class="col-md-9">&nbsp;<?php
             if ($this->data['Organization']['parent_id']) {
 
                 echo $this->data['Organization']['parent_id'];
             }
             ?>&nbsp;
-        </div>
-        <div class="col-md-2">名稱</div>
-        <div class="col-md-9">&nbsp;<?php
+            </div>
+            <div class="col-md-2">名稱</div>
+            <div class="col-md-9">&nbsp;<?php
             if ($this->data['Organization']['name']) {
 
                 echo $this->data['Organization']['name'];
             }
             ?>&nbsp;
-        </div>
-        <div class="col-md-2">原始編號</div>
-        <div class="col-md-9">&nbsp;<?php
+            </div>
+            <div class="col-md-2">原始編號</div>
+            <div class="col-md-9">&nbsp;<?php
             if ($this->data['Organization']['foreign_id']) {
 
                 echo $this->data['Organization']['foreign_id'];
             }
             ?>&nbsp;
-        </div>
-        <div class="col-md-2">原始網址</div>
-        <div class="col-md-9">&nbsp;<?php
+            </div>
+            <div class="col-md-2">原始網址</div>
+            <div class="col-md-9">&nbsp;<?php
             if ($this->data['Organization']['foreign_uri']) {
 
                 echo $this->data['Organization']['foreign_uri'];
             }
             ?>&nbsp;
+            </div>
         </div>
     </div>
     <hr />

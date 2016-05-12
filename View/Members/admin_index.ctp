@@ -1,16 +1,24 @@
 <div id="MembersAdminIndex">
-    <h2><?php echo __('Members', true); ?></h2>
+    <h2><?php echo __('帳號管理', true); ?></h2>
     <div class="btn-group">
-        <?php echo $this->Html->link('新增', array('action' => 'add'), array('class' => 'btn')); ?>
-        <?php echo $this->Html->link('群組', array('controller' => 'groups'), array('class' => 'btn')); ?>
-        <?php echo $this->Html->link('權限更新', array('action' => 'acos'), array('class' => 'btn')); ?>
+        <?php echo $this->Html->link('新增', array('action' => 'add'), array('class' => 'btn btn-default')); ?>
+        <?php echo $this->Html->link('群組', array('controller' => 'groups'), array('class' => 'btn btn-default')); ?>
+        <?php echo $this->Html->link('權限更新', array('action' => 'acos'), array('class' => 'btn btn-default')); ?>
     </div>
-    <?php
-    echo '篩選: ' . $this->Form->text('Member.filter', array(
-        'id' => 'memberFilter',
-        'value' => $keyword,
-    ));
-    ?>
+
+    <div class="pull-right col-md-6">
+        <div class="col-md-9"><?php
+            echo $this->Form->input('Member.filter', array(
+                'id' => 'memberFilter',
+                'value' => $keyword,
+                'div' => false,
+                'label' => false,
+                'class' => 'form-control',
+            ));
+            ?></div>
+        <div class="col-md-3"></div>
+    </div>
+    
     <div class="paging"><?php echo $this->element('paginator'); ?></div>
     <table class="table table-bordered" id="MembersAdminIndexTable">
         <tr>

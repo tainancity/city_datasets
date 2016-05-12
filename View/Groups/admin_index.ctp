@@ -4,9 +4,9 @@
         <?php if ($parentId > 0): ?>
             <?php echo $this->Html->link(__('Upper level', true), array('action' => 'index', $upperLevelId), array('class' => 'btn')); ?>
         <?php endif; ?>
-        <?php echo $this->Html->link(__('新增群組', true), array('action' => 'add', $parentId), array('class' => 'btn')); ?>
-        <?php echo $this->Html->link(__('帳號資料', true), array('controller' => 'members'), array('class' => 'btn')); ?>
-        <?php echo $this->Html->link(__('群組權限', true), array('controller' => 'group_permissions'), array('class' => 'btn')); ?>
+        <?php echo $this->Html->link(__('新增群組', true), array('action' => 'add', $parentId), array('class' => 'btn btn-default')); ?>
+        <?php echo $this->Html->link(__('帳號資料', true), array('controller' => 'members'), array('class' => 'btn btn-default')); ?>
+        <?php echo $this->Html->link(__('群組權限', true), array('controller' => 'group_permissions'), array('class' => 'btn btn-default')); ?>
     </div>
     <p>
         <?php

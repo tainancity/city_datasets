@@ -40,12 +40,14 @@ div.paging {
 	background:#fff;
 	color: #ccc;
 	margin-bottom: 2em;
+        text-align: center;
 }
 div.paging div.disabled {
 	color: #ddd;
 	display: inline;
 }
 div.paging span {
+    padding:3px;
 }
 div.paging span.current {
 	color: #000;

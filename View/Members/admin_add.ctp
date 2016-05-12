@@ -1,7 +1,8 @@
 <div class="members form">
+    <div class="page_content">
     <?php echo $this->Form->create('Member'); ?>
     <fieldset>
-        <legend><?php echo __('New Member', true); ?></legend>
+        <legend><?php echo __('新增帳號', true); ?></legend>
         <?php
         echo $this->Form->input('Member.username', array(
             'type' => 'text',
@@ -32,5 +33,9 @@
         ));
         ?>
     </fieldset>
-    <?php echo $this->Form->end('送出'); ?>
+    <?php 
+    $options = array('label' => '送出', 'class' => 'btn btn-primary');
+    echo $this->Form->end($options);
+    ?>
+</div>
 </div>

@@ -54,9 +54,11 @@
                     <?php echo $member['Member']['modified']; ?>
                 </td>
                 <td class="actions">
-                    <?php echo $this->Html->link('檢視', array('action' => 'view', $member['Member']['id']), array('class' => 'dialogControl')); ?>
-                    <?php echo $this->Html->link('編輯', array('action' => 'edit', $member['Member']['id']), array('class' => 'dialogControl')); ?>
-                    <?php echo $this->Html->link('刪除', array('action' => 'delete', $member['Member']['id']), null, '確定要刪除？'); ?>
+                    <div class="btn-group">
+                    <?php echo $this->Html->link('檢視', array('action' => 'view', $member['Member']['id']), array('class' => 'btn btn-default')); ?>
+                    <?php echo $this->Html->link('編輯', array('action' => 'edit', $member['Member']['id']), array('class' => 'btn btn-default')); ?>
+                    <?php echo $this->Html->link('刪除', array('action' => 'delete', $member['Member']['id']), array('class' => 'btn btn-default'), '確定要刪除？'); ?>
+                        </div>
                 </td>
             </tr>
         <?php endforeach; ?>

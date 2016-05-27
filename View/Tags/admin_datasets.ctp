@@ -26,6 +26,7 @@
     foreach ($items AS $item) {
         ++$teno_o_organ_index;
         echo '<div class="list">';
+        echo $this->Html->link('X', array('action' => 'delete', $item['Tag']['id']), array('class' => 'btn btn-default pull-right', 'style' => 'font-size:8px;'), '確定要刪除？');
         echo '<input type=text class="tagName" value="' . $item['Tag']['name'] . '" data-id="' . $item['Tag']['id'] . '" size=15 />';
         echo '<ul class="sortable droptrue" data-tag-id="' . $item['Tag']['id'] . '" id="tagList' . $item['Tag']['id'] . '">';
         foreach ($item['Dataset'] AS $dataset) {
